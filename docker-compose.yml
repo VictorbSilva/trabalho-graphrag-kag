@@ -1,0 +1,68 @@
+# Ambiente Neo4j do projeto GraphRAG/KAG (requisito R09).
+#
+#   docker compose up -d                 -> sobe o Neo4j (APOC + GDS) e aplica o schema
+#   docker compose run --rm neo4j-gds    -> roda PageRank e Louvain depois da ingestão
+#   docker compose down                  -> para tudo (os dados ficam no volume)
+#   docker compose down -v               -> para tudo e APAGA os dados
+#
+# Antes da primeira vez: copie .env.example para .env e defina a senha.
+# A primeira subida constrói a imagem (baixa o GDS uma vez). Depois de mudar
+# o neo4j/Dockerfile, rode: docker compose up -d --build
+
+name: graphrag-kag
+
+# Neo4j 5.26 é a versão LTS (suporte longo). Versão fixada para todos rodarem o mesmo banco.
+# Os serviços que só executam scripts usam a imagem oficial (precisam apenas do cypher-shell).
+# Ao mudar a versão aqui, mude também o FROM em neo4j/Dockerfile.
+x-neo4j-image: &neo4j-image neo4j:5.26.32-community
+
+# Serviço que só executa arquivos .cypher de uma pasta e termina.
+x-cypher-runner: &cypher-runner
+  image: *neo4j-image
+  depends_on:
+    neo4j:
+      condition: service_healthy
+  environment:
+    NEO4J_URI: bolt://neo4j:7687
+    NEO4J_PASSWORD: ${NEO4J_PASSWORD:?Defina NEO4J_PASSWORD no arquivo .env}
+  volumes:
+    - ./neo4j:/neo4j:ro
+  entrypoint: ["bash", "/neo4j/run_cypher_dir.sh"]
+  restart: "no"
+
+services:
+  neo4j:
+    build: ./neo4j            # imagem oficial + APOC + GDS (ver neo4j/Dockerfile)
+    container_name: graphrag-neo4j
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"   # Neo4j Browser: http://localhost:7474
+      - "${NEO4J_BOLT_PORT:-7687}:7687"   # Bolt (drivers): bolt://localhost:7687
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:?Defina NEO4J_PASSWORD no arquivo .env}
+      NEO4J_server_memory_heap_initial__size: 512m
+      NEO4J_server_memory_heap_max__size: ${NEO4J_HEAP_MAX:-2G}
+      NEO4J_server_memory_pagecache_size: ${NEO4J_PAGECACHE:-512m}
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p \"$${NEO4J_AUTH#neo4j/}\" 'RETURN 1' > /dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 15s
+      retries: 30
+      start_period: 20s
+
+  # Aplica constraints e índices (idempotente: pode rodar quantas vezes quiser).
+  neo4j-schema:
+    <<: *cypher-runner
+    command: ["/neo4j/schema"]
+
+  # Algoritmos de grafo (R20). Só roda quando chamado explicitamente.
+  neo4j-gds:
+    <<: *cypher-runner
+    command: ["/neo4j/gds"]
+    profiles: ["gds"]
+
+volumes:
+  neo4j_data:
+  neo4j_logs:

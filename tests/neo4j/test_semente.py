@@ -4,6 +4,7 @@ Os testes de arquivo não precisam do banco. Os de banco ingerem a semente com
 os ids prefixados por teste:: e apagam tudo no final.
 """
 
+import json
 import re
 from collections import deque
 
@@ -12,12 +13,14 @@ import pytest
 from conftest import (
     PASTA_NEO4J,
     PREFIXO,
+    RAIZ,
     carregar_cypher,
     carregar_dominio,
     carregar_semente,
     com_prefixo,
     id_canonico,
     ingerir,
+    slug,
 )
 
 SEMENTE = carregar_semente()
@@ -70,7 +73,7 @@ def test_arquivo_segue_o_contrato(nome):
 def test_ids_seguem_a_regra(nome):
     artigo = SEMENTE[nome]
     doc_id = artigo["documento"]["id"]
-    assert doc_id.startswith("wikipedia:")
+    assert doc_id == slug(artigo["documento"]["title"]), "id do documento = slug do título, como no manifesto"
     assert [c["index"] for c in artigo["chunks"]] == list(range(len(artigo["chunks"])))
     for c in artigo["chunks"]:
         assert c["id"] == f"{doc_id}#{c['index']}"
@@ -116,6 +119,20 @@ def test_trechos_citam_as_entidades_anotadas(nome):
             assert citado(ent[ponta], texto[r["chunk_id"]]), f"{ponta} não aparece em {r['chunk_id']}"
 
 
+def test_documentos_batem_com_o_manifesto_do_pipeline():
+    """Mesmo id, título e URL do data/bruto/manifesto.json, para a semente e o pipeline concordarem."""
+    caminho = RAIZ / "data" / "bruto" / "manifesto.json"
+    if not caminho.exists():
+        pytest.skip("data/bruto/manifesto.json ainda não está nesta branch")
+    manifesto = {a["id"]: a for a in json.loads(caminho.read_text(encoding="utf-8"))}
+    for nome, artigo in SEMENTE.items():
+        doc = artigo["documento"]
+        assert doc["id"] in manifesto, f"{doc['id']} não está no manifesto"
+        assert nome == f"{doc['id']}.json"
+        assert doc["title"] == manifesto[doc["id"]]["titulo"]
+        assert doc["source"] == manifesto[doc["id"]]["url"]
+
+
 def test_mesma_entidade_tem_os_mesmos_dados_em_todos_os_artigos():
     vistos: dict[str, tuple] = {}
     for artigo in SEMENTE.values():
@@ -138,7 +155,7 @@ def test_existe_caminho_de_3_saltos_entre_artigos_diferentes():
     for origem, _, destino in relacoes_distintas():
         vizinhos.setdefault(origem, set()).add(destino)
         vizinhos.setdefault(destino, set()).add(origem)
-    inicio, fim = "tecnologia:c_plus_plus", "premio:premio_turing"
+    inicio, fim = "tecnologia:c_mais_mais", "premio:premio_turing"
     distancia = {inicio: 0}
     fila = deque([inicio])
     while fila:
@@ -149,8 +166,8 @@ def test_existe_caminho_de_3_saltos_entre_artigos_diferentes():
                 fila.append(prox)
     assert distancia.get(fim) == 3
     artigos_com = lambda eid: {n for n, a in SEMENTE.items() if eid in {e["id"] for e in a["entidades"]}}
-    assert "c_plus_plus.json" in artigos_com(inicio)
-    assert "c_plus_plus.json" not in artigos_com(fim)
+    assert "c_mais_mais.json" in artigos_com(inicio)
+    assert "c_mais_mais.json" not in artigos_com(fim)
 
 
 # ---------- Banco ----------
@@ -177,17 +194,17 @@ def test_relacao_repetida_guarda_trechos_dos_dois_artigos(semente_no_banco):
     registros, _, _ = semente_no_banco.execute_query(
         """MATCH (:Entity {id: $cpp})-[r:INFLUENCIADA_POR]->(:Entity {id: $c})
            RETURN r.source_chunk_ids AS fontes""",
-        cpp=PREFIXO + "tecnologia:c_plus_plus", c=PREFIXO + "tecnologia:c",
+        cpp=PREFIXO + "tecnologia:c_mais_mais", c=PREFIXO + "tecnologia:c",
     )
     fontes = {f.removeprefix(PREFIXO).split("#")[0] for f in registros[0]["fontes"]}
-    assert fontes == {"wikipedia:c_plus_plus", "wikipedia:c_linguagem_de_programacao"}
+    assert fontes == {"c_mais_mais", "c"}
 
 
 def test_consulta_de_caminho_mais_curto_acha_3_saltos(semente_no_banco):
     """Critério da issue #4: a consulta 4 de exemplos.cypher acha o caminho entre artigos."""
     consulta = carregar_cypher(PASTA_NEO4J / "consultas" / "exemplos.cypher")[3]
     registros, _, _ = semente_no_banco.execute_query(
-        consulta, origem=PREFIXO + "tecnologia:c_plus_plus", destino=PREFIXO + "premio:premio_turing"
+        consulta, origem=PREFIXO + "tecnologia:c_mais_mais", destino=PREFIXO + "premio:premio_turing"
     )
     assert registros[0]["saltos"] == 3
     assert registros[0]["nos"][0] == "C++" and registros[0]["nos"][-1] == "Prêmio Turing"
@@ -198,6 +215,6 @@ def test_caminho_cpp_c_ritchie_turing_existe(semente_no_banco):
         """MATCH (:Entity {id: $cpp})-[:INFLUENCIADA_POR]->(c:Entity)<-[:CRIOU]-(p:Pessoa)
                  -[:RECEBEU]->(:Entity {id: $turing})
            RETURN c.name AS linguagem, p.name AS pessoa""",
-        cpp=PREFIXO + "tecnologia:c_plus_plus", turing=PREFIXO + "premio:premio_turing",
+        cpp=PREFIXO + "tecnologia:c_mais_mais", turing=PREFIXO + "premio:premio_turing",
     )
     assert {(r["linguagem"], r["pessoa"]) for r in registros} == {("C", "Dennis Ritchie")}

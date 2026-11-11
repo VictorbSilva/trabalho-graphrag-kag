@@ -1,17 +1,17 @@
 {
   "documento": {
-    "id": "wikipedia:ken_thompson",
+    "id": "ken_thompson",
     "title": "Ken Thompson",
     "source": "https://pt.wikipedia.org/wiki/Ken_Thompson"
   },
   "chunks": [
     {
-      "id": "wikipedia:ken_thompson#0",
+      "id": "ken_thompson#0",
       "index": 0,
       "text": "Kenneth Thompson (Nova Orleães, 4 de fevereiro de 1943) é um cientista da computação, conhecido pela sua influência na criação do sistema operacional UNIX, pela invenção da linguagem de programação B, antecessora da linguagem de programação C."
     },
     {
-      "id": "wikipedia:ken_thompson#1",
+      "id": "ken_thompson#1",
       "index": 1,
       "text": "Originalmente contratado em 1966 para trabalhar no projeto Multics da Bell Labs, Thompson conheceu Dennis Ritchie e trabalhou junto com Ritchie para criar o sistema operacional UNIX. Thompson também criou a linguagem de programação B, uma precursora da linguagem C de Dennis Ritchie."
     }
@@ -26,8 +26,8 @@
       ],
       "description": "Cientista da computação norte-americano, cocriador do Unix e criador da linguagem B.",
       "chunk_ids": [
-        "wikipedia:ken_thompson#0",
-        "wikipedia:ken_thompson#1"
+        "ken_thompson#0",
+        "ken_thompson#1"
       ]
     },
     {
@@ -39,8 +39,8 @@
       ],
       "description": "Sistema operacional multiusuário criado no Bell Labs.",
       "chunk_ids": [
-        "wikipedia:ken_thompson#0",
-        "wikipedia:ken_thompson#1"
+        "ken_thompson#0",
+        "ken_thompson#1"
       ]
     },
     {
@@ -52,8 +52,8 @@
       ],
       "description": "Linguagem de programação antecessora do C.",
       "chunk_ids": [
-        "wikipedia:ken_thompson#0",
-        "wikipedia:ken_thompson#1"
+        "ken_thompson#0",
+        "ken_thompson#1"
       ]
     },
     {
@@ -66,8 +66,8 @@
       ],
       "description": "Linguagem de programação compilada de propósito geral, criada em 1972.",
       "chunk_ids": [
-        "wikipedia:ken_thompson#0",
-        "wikipedia:ken_thompson#1"
+        "ken_thompson#0",
+        "ken_thompson#1"
       ]
     },
     {
@@ -81,7 +81,7 @@
       ],
       "description": "Laboratório de pesquisa da AT&T onde surgiram o Unix, o C e o C++.",
       "chunk_ids": [
-        "wikipedia:ken_thompson#1"
+        "ken_thompson#1"
       ]
     },
     {
@@ -94,7 +94,7 @@
       ],
       "description": "Cientista da computação norte-americano, criador da linguagem C e cocriador do Unix.",
       "chunk_ids": [
-        "wikipedia:ken_thompson#1"
+        "ken_thompson#1"
       ]
     }
   ],
@@ -103,31 +103,31 @@
       "origem": "pessoa:ken_thompson",
       "destino": "tecnologia:unix",
       "tipo": "CRIOU",
-      "chunk_id": "wikipedia:ken_thompson#1"
+      "chunk_id": "ken_thompson#1"
     },
     {
       "origem": "pessoa:dennis_ritchie",
       "destino": "tecnologia:unix",
       "tipo": "CRIOU",
-      "chunk_id": "wikipedia:ken_thompson#1"
+      "chunk_id": "ken_thompson#1"
     },
     {
       "origem": "pessoa:ken_thompson",
       "destino": "tecnologia:b",
       "tipo": "CRIOU",
-      "chunk_id": "wikipedia:ken_thompson#0"
+      "chunk_id": "ken_thompson#0"
     },
     {
       "origem": "pessoa:ken_thompson",
       "destino": "organizacao:bell_labs",
       "tipo": "TRABALHOU_EM",
-      "chunk_id": "wikipedia:ken_thompson#1"
+      "chunk_id": "ken_thompson#1"
     },
     {
       "origem": "tecnologia:c",
       "destino": "tecnologia:b",
       "tipo": "INFLUENCIADA_POR",
-      "chunk_id": "wikipedia:ken_thompson#1"
+      "chunk_id": "ken_thompson#1"
     }
   ]
 }

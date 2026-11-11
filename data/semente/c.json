@@ -1,22 +1,22 @@
 {
   "documento": {
-    "id": "wikipedia:c_linguagem_de_programacao",
+    "id": "c",
     "title": "C (linguagem de programação)",
     "source": "https://pt.wikipedia.org/wiki/C_(linguagem_de_programa%C3%A7%C3%A3o)"
   },
   "chunks": [
     {
-      "id": "wikipedia:c_linguagem_de_programacao#0",
+      "id": "c#0",
       "index": 0,
       "text": "C é uma linguagem de programação compilada de propósito geral, estruturada, imperativa, procedural, padronizada pela Organização Internacional para Padronização (ISO), criada em 1972 por Dennis Ritchie na empresa AT&T Bell Labs para desenvolvimento do sistema operacional Unix (originalmente escrito em Assembly)."
     },
     {
-      "id": "wikipedia:c_linguagem_de_programacao#1",
+      "id": "c#1",
       "index": 1,
       "text": "O desenvolvimento inicial de C ocorreu no AT&T Bell Labs entre 1969 e 1973. De acordo com Ritchie, o período mais criativo ocorreu em 1972. A linguagem foi chamada \"C\", porque suas características foram obtidas a partir de uma linguagem anteriormente chamada de \"B\", que de acordo com Ken Thompson era a versão reduzida da linguagem de programação BCPL."
     },
     {
-      "id": "wikipedia:c_linguagem_de_programacao#2",
+      "id": "c#2",
       "index": 2,
       "text": "Durante os finais da década de 1970, a linguagem C começou a substituir a linguagem BASIC como a linguagem de programação de microcomputadores mais usada. Durante a década de 1980, foi adaptada para uso no PC IBM, e a sua popularidade começou a aumentar significativamente. Ao mesmo tempo, Bjarne Stroustrup, juntamente com outros nos laboratórios Bell, começou a trabalhar num projecto onde se adicionavam extras para programação orientada por objectos à linguagem C. A linguagem que eles produziram, chamada C++, é nos dias de hoje a linguagem de programação de aplicações mais comum no sistema operativo Windows da companhia Microsoft. A linguagem C permanece a mais popular no mundo Unix."
     }
@@ -32,9 +32,9 @@
       ],
       "description": "Linguagem de programação compilada de propósito geral, criada em 1972.",
       "chunk_ids": [
-        "wikipedia:c_linguagem_de_programacao#0",
-        "wikipedia:c_linguagem_de_programacao#1",
-        "wikipedia:c_linguagem_de_programacao#2"
+        "c#0",
+        "c#1",
+        "c#2"
       ]
     },
     {
@@ -47,8 +47,8 @@
       ],
       "description": "Cientista da computação norte-americano, criador da linguagem C e cocriador do Unix.",
       "chunk_ids": [
-        "wikipedia:c_linguagem_de_programacao#0",
-        "wikipedia:c_linguagem_de_programacao#1"
+        "c#0",
+        "c#1"
       ]
     },
     {
@@ -62,9 +62,9 @@
       ],
       "description": "Laboratório de pesquisa da AT&T onde surgiram o Unix, o C e o C++.",
       "chunk_ids": [
-        "wikipedia:c_linguagem_de_programacao#0",
-        "wikipedia:c_linguagem_de_programacao#1",
-        "wikipedia:c_linguagem_de_programacao#2"
+        "c#0",
+        "c#1",
+        "c#2"
       ]
     },
     {
@@ -76,7 +76,7 @@
       ],
       "description": "Sistema operacional multiusuário criado no Bell Labs.",
       "chunk_ids": [
-        "wikipedia:c_linguagem_de_programacao#0"
+        "c#0"
       ]
     },
     {
@@ -88,7 +88,7 @@
       ],
       "description": "Linguagem de programação antecessora do C.",
       "chunk_ids": [
-        "wikipedia:c_linguagem_de_programacao#1"
+        "c#1"
       ]
     },
     {
@@ -98,7 +98,7 @@
       "aliases": [],
       "description": "Linguagem de programação da qual o B é uma versão reduzida.",
       "chunk_ids": [
-        "wikipedia:c_linguagem_de_programacao#1"
+        "c#1"
       ]
     },
     {
@@ -110,7 +110,7 @@
       ],
       "description": "Cientista da computação norte-americano, cocriador do Unix e criador da linguagem B.",
       "chunk_ids": [
-        "wikipedia:c_linguagem_de_programacao#1"
+        "c#1"
       ]
     },
     {
@@ -122,11 +122,11 @@
       ],
       "description": "Cientista da computação dinamarquês, criador da linguagem C++.",
       "chunk_ids": [
-        "wikipedia:c_linguagem_de_programacao#2"
+        "c#2"
       ]
     },
     {
-      "id": "tecnologia:c_plus_plus",
+      "id": "tecnologia:c_mais_mais",
       "name": "C++",
       "type": "Tecnologia",
       "aliases": [
@@ -135,7 +135,7 @@
       ],
       "description": "Linguagem de programação criada como extensão do C com recursos de orientação a objetos.",
       "chunk_ids": [
-        "wikipedia:c_linguagem_de_programacao#2"
+        "c#2"
       ]
     }
   ],
@@ -144,37 +144,37 @@
       "origem": "pessoa:dennis_ritchie",
       "destino": "tecnologia:c",
       "tipo": "CRIOU",
-      "chunk_id": "wikipedia:c_linguagem_de_programacao#0"
+      "chunk_id": "c#0"
     },
     {
       "origem": "tecnologia:c",
       "destino": "organizacao:bell_labs",
       "tipo": "DESENVOLVIDA_EM",
-      "chunk_id": "wikipedia:c_linguagem_de_programacao#0"
+      "chunk_id": "c#0"
     },
     {
       "origem": "tecnologia:c",
       "destino": "tecnologia:b",
       "tipo": "INFLUENCIADA_POR",
-      "chunk_id": "wikipedia:c_linguagem_de_programacao#1"
+      "chunk_id": "c#1"
     },
     {
       "origem": "tecnologia:b",
       "destino": "tecnologia:bcpl",
       "tipo": "INFLUENCIADA_POR",
-      "chunk_id": "wikipedia:c_linguagem_de_programacao#1"
+      "chunk_id": "c#1"
     },
     {
       "origem": "pessoa:bjarne_stroustrup",
       "destino": "organizacao:bell_labs",
       "tipo": "TRABALHOU_EM",
-      "chunk_id": "wikipedia:c_linguagem_de_programacao#2"
+      "chunk_id": "c#2"
     },
     {
-      "origem": "tecnologia:c_plus_plus",
+      "origem": "tecnologia:c_mais_mais",
       "destino": "tecnologia:c",
       "tipo": "INFLUENCIADA_POR",
-      "chunk_id": "wikipedia:c_linguagem_de_programacao#2"
+      "chunk_id": "c#2"
     }
   ]
 }

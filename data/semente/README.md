@@ -4,8 +4,8 @@ Grafo pequeno, no mesmo formato que o pipeline vai entregar (ver `arquivo_por_ar
 
 | Arquivo | Artigo | Trechos | Entidades | Relações |
 |---|---|---|---|---|
-| `c_linguagem_de_programacao.json` | C (linguagem de programação) | 3 | 9 | 6 |
-| `c_plus_plus.json` | C++ | 2 | 7 | 5 |
+| `c.json` | C (linguagem de programação) | 3 | 9 | 6 |
+| `c_mais_mais.json` | C++ | 2 | 7 | 5 |
 | `dennis_ritchie.json` | Dennis Ritchie | 5 | 9 | 11 |
 | `ken_thompson.json` | Ken Thompson | 2 | 6 | 5 |
 
@@ -17,8 +17,9 @@ Exemplo de caminho de 3 saltos entre artigos diferentes: C++ `INFLUENCIADA_POR` 
 
 - **Trechos:** parágrafos copiados sem alteração dos artigos, escolhidos por conterem os fatos anotados. Os trechos de cada arquivo não são parágrafos vizinhos no artigo original.
 - **Entidades e relações:** anotadas à mão. Toda relação aponta, em `chunk_id`, para um trecho do mesmo arquivo cujo texto sustenta o fato.
-- **Ids:** seguem a regra de id canônico de `neo4j/dominio.json`.
+- **Ids:** seguem a regra de id canônico de `neo4j/dominio.json`, a mesma do pipeline. O id e o nome de cada arquivo são os mesmos do `data/bruto/manifesto.json` (ex.: `c_mais_mais`).
 - **Sem embedding:** quem calcula os embeddings é o ingestor.
+- **Não carregue junto com `data/processado/`:** a semente usa os mesmos ids de documento e de trecho que o pipeline, mas com outros parágrafos. Quando o dataset completo for ingerido (issue #13), o banco é recriado só com os dados processados.
 
 Os testes em `tests/neo4j/test_semente.py` conferem o formato, a cobertura do domínio, o caminho de 3 saltos e a ingestão no banco.
 

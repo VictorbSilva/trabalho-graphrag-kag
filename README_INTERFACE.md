@@ -58,3 +58,19 @@ backend o endereço e a confirmação de que o endpoint está funcionando.
 - A visualização interativa do subgrafo será adicionada na tarefa G3.
 - O prompt oficial do Mentor está versionado em `src/mentor/system_prompt.txt`;
   a conexão com um LLM depende de configuração própria e não é simulada aqui.
+
+
+## G3 — Visualização interativa
+
+A interface agora mostra o subgrafo do JSON com nós arrastáveis, seleção por clique, cores por tipo, tamanho baseado no PageRank, rótulos de relações e destaque dos caminhos citados.
+
+Instale as dependências atualizadas e execute a aplicação:
+
+```powershell
+pip install -r requirements-interface.txt
+python -m streamlit run src/interface/app.py
+```
+
+A biblioteca usada é **streamlit-agraph** (baseada em vis-network). A seleção de um nó apresenta seus detalhes abaixo do grafo. Se o JSON não tiver `descricao`, a interface informa isso. O destaque do caminho é baseado em nomes dos nós, conforme o contrato demonstrativo; nomes duplicados podem ser ambíguos.
+
+Os dados continuam demonstrativos; não há consulta real ao Neo4j nesta etapa.

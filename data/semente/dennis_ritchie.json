@@ -1,0 +1,227 @@
+{
+  "documento": {
+    "id": "wikipedia:dennis_ritchie",
+    "title": "Dennis Ritchie",
+    "source": "https://pt.wikipedia.org/wiki/Dennis_Ritchie"
+  },
+  "chunks": [
+    {
+      "id": "wikipedia:dennis_ritchie#0",
+      "index": 0,
+      "text": "Dennis MacAlistair Ritchie (Bronxville, 9 de setembro de 1941 – Berkeley Heights, c. 12 de outubro de 2011) foi um cientista da computação norte-americano. Criou, em colaboração com o seu amigo de longa data Ken Thompson, o sistema operacional Unix, e as linguagens de programação B e C."
+    },
+    {
+      "id": "wikipedia:dennis_ritchie#1",
+      "index": 1,
+      "text": "Dennis Ritchie e Ken Thompson receberam o Prêmio Turing da Association for Computing Machinery (ACM) em 1983, a Medalha IEEE Richard W. Hamming do Institute of Electrical and Electronics Engineers (IEEE) em 1990 e a Medalha Nacional de Tecnologia e Inovação, concedida pelo presidente Bill Clinton em 1999."
+    },
+    {
+      "id": "wikipedia:dennis_ritchie#2",
+      "index": 2,
+      "text": "Dennis Ritchie ocupava o cargo de chefe do Departamento de Pesquisa em Software de Sistemas da Lucent Technologies quando se aposentou, em 2007."
+    },
+    {
+      "id": "wikipedia:dennis_ritchie#3",
+      "index": 3,
+      "text": "Em 1967, Dennis Ritchie iniciou as suas atividades no Bell Labs Computing Science Research Center. Em 1968, ele concluiu um rascunho de sua tese de doutorado intitulada Computational Complexity and Program Structure, na Universidade de Harvard, sob a orientação de Patrick C. Fischer. Contudo, Dennis Ritchie nunca chegou a receber oficialmente o título de doutor. Em 2020, o Computer History Museum, em colaboração com as famílias de Dennis Ritchie e Patrick C. Fischer, localizou uma cópia da dissertação considerada perdida."
+    },
+    {
+      "id": "wikipedia:dennis_ritchie#4",
+      "index": 4,
+      "text": "Durante a década de 1960, Ritchie e Ken Thompson trabalharam no sistema operacional Multics nos Bell Labs. Thompson então encontrou uma velha máquina PDP-7 e desenvolveu seus próprios programas de aplicação e sistema operacional do zero, auxiliado por Ritchie e outros. Em 1970, Brian Kernighan sugeriu o nome \"Unix\", um trocadilho com o nome \"Multics\". Para complementar a linguagem assembly com uma linguagem de programação de nível de sistema, Thompson criou B. Mais tarde, B foi substituído por C, criado por Ritchie, que continuou a contribuir para o desenvolvimento do Unix e C por muitos anos."
+    }
+  ],
+  "entidades": [
+    {
+      "id": "pessoa:dennis_ritchie",
+      "name": "Dennis Ritchie",
+      "type": "Pessoa",
+      "aliases": [
+        "Dennis MacAlistair Ritchie",
+        "DMR"
+      ],
+      "description": "Cientista da computação norte-americano, criador da linguagem C e cocriador do Unix.",
+      "chunk_ids": [
+        "wikipedia:dennis_ritchie#0",
+        "wikipedia:dennis_ritchie#1",
+        "wikipedia:dennis_ritchie#2",
+        "wikipedia:dennis_ritchie#3",
+        "wikipedia:dennis_ritchie#4"
+      ]
+    },
+    {
+      "id": "pessoa:ken_thompson",
+      "name": "Ken Thompson",
+      "type": "Pessoa",
+      "aliases": [
+        "Kenneth Thompson"
+      ],
+      "description": "Cientista da computação norte-americano, cocriador do Unix e criador da linguagem B.",
+      "chunk_ids": [
+        "wikipedia:dennis_ritchie#0",
+        "wikipedia:dennis_ritchie#1",
+        "wikipedia:dennis_ritchie#4"
+      ]
+    },
+    {
+      "id": "tecnologia:unix",
+      "name": "Unix",
+      "type": "Tecnologia",
+      "aliases": [
+        "UNIX"
+      ],
+      "description": "Sistema operacional multiusuário criado no Bell Labs.",
+      "chunk_ids": [
+        "wikipedia:dennis_ritchie#0",
+        "wikipedia:dennis_ritchie#4"
+      ]
+    },
+    {
+      "id": "tecnologia:b",
+      "name": "B",
+      "type": "Tecnologia",
+      "aliases": [
+        "linguagem B"
+      ],
+      "description": "Linguagem de programação antecessora do C.",
+      "chunk_ids": [
+        "wikipedia:dennis_ritchie#0",
+        "wikipedia:dennis_ritchie#4"
+      ]
+    },
+    {
+      "id": "tecnologia:c",
+      "name": "C",
+      "type": "Tecnologia",
+      "aliases": [
+        "linguagem C",
+        "C K&R"
+      ],
+      "description": "Linguagem de programação compilada de propósito geral, criada em 1972.",
+      "chunk_ids": [
+        "wikipedia:dennis_ritchie#0",
+        "wikipedia:dennis_ritchie#4"
+      ]
+    },
+    {
+      "id": "premio:premio_turing",
+      "name": "Prêmio Turing",
+      "type": "Premio",
+      "aliases": [
+        "Prêmio Turing da ACM",
+        "prêmio Turing"
+      ],
+      "description": "Prêmio da Association for Computing Machinery (ACM).",
+      "chunk_ids": [
+        "wikipedia:dennis_ritchie#1"
+      ]
+    },
+    {
+      "id": "premio:medalha_nacional_de_tecnologia_e_inovacao",
+      "name": "Medalha Nacional de Tecnologia e Inovação",
+      "type": "Premio",
+      "aliases": [
+        "Medalha Nacional de Tecnologia"
+      ],
+      "description": "Distinção concedida pelo presidente dos Estados Unidos.",
+      "chunk_ids": [
+        "wikipedia:dennis_ritchie#1"
+      ]
+    },
+    {
+      "id": "organizacao:lucent_technologies",
+      "name": "Lucent Technologies",
+      "type": "Organizacao",
+      "aliases": [
+        "Lucent"
+      ],
+      "description": "Empresa criada na reestruturação da AT&T, para onde Dennis Ritchie foi transferido.",
+      "chunk_ids": [
+        "wikipedia:dennis_ritchie#2"
+      ]
+    },
+    {
+      "id": "organizacao:bell_labs",
+      "name": "Bell Labs",
+      "type": "Organizacao",
+      "aliases": [
+        "AT&T Bell Labs",
+        "Laboratórios Bell",
+        "Bell Laboratories"
+      ],
+      "description": "Laboratório de pesquisa da AT&T onde surgiram o Unix, o C e o C++.",
+      "chunk_ids": [
+        "wikipedia:dennis_ritchie#3",
+        "wikipedia:dennis_ritchie#4"
+      ]
+    }
+  ],
+  "relacoes": [
+    {
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "tecnologia:unix",
+      "tipo": "CRIOU",
+      "chunk_id": "wikipedia:dennis_ritchie#0"
+    },
+    {
+      "origem": "pessoa:ken_thompson",
+      "destino": "tecnologia:unix",
+      "tipo": "CRIOU",
+      "chunk_id": "wikipedia:dennis_ritchie#0"
+    },
+    {
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "tecnologia:c",
+      "tipo": "CRIOU",
+      "chunk_id": "wikipedia:dennis_ritchie#0"
+    },
+    {
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "premio:premio_turing",
+      "tipo": "RECEBEU",
+      "chunk_id": "wikipedia:dennis_ritchie#1"
+    },
+    {
+      "origem": "pessoa:ken_thompson",
+      "destino": "premio:premio_turing",
+      "tipo": "RECEBEU",
+      "chunk_id": "wikipedia:dennis_ritchie#1"
+    },
+    {
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "premio:medalha_nacional_de_tecnologia_e_inovacao",
+      "tipo": "RECEBEU",
+      "chunk_id": "wikipedia:dennis_ritchie#1"
+    },
+    {
+      "origem": "pessoa:ken_thompson",
+      "destino": "premio:medalha_nacional_de_tecnologia_e_inovacao",
+      "tipo": "RECEBEU",
+      "chunk_id": "wikipedia:dennis_ritchie#1"
+    },
+    {
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "organizacao:lucent_technologies",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "wikipedia:dennis_ritchie#2"
+    },
+    {
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "organizacao:bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "wikipedia:dennis_ritchie#3"
+    },
+    {
+      "origem": "pessoa:ken_thompson",
+      "destino": "organizacao:bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "wikipedia:dennis_ritchie#4"
+    },
+    {
+      "origem": "pessoa:ken_thompson",
+      "destino": "tecnologia:b",
+      "tipo": "CRIOU",
+      "chunk_id": "wikipedia:dennis_ritchie#4"
+    }
+  ]
+}

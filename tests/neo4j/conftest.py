@@ -29,15 +29,23 @@ def carregar_dominio() -> dict:
     return json.loads((PASTA_NEO4J / "dominio.json").read_text(encoding="utf-8"))
 
 
+def slug(texto: str) -> str:
+    """Nome normalizado: a mesma regra de gerar_slug() em src/pipeline/baixar_artigos.py.
+
+    slug("C++") -> "c_mais_mais"; slug("Java (linguagem de programação)") -> "java"
+    """
+    texto = re.sub(r"\s*\(.*?\)", "", texto)
+    texto = texto.replace("+", " mais ")
+    texto = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]+", "_", texto.lower()).strip("_")
+
+
 def id_canonico(prefixo: str, nome: str) -> str:
     """Implementação de referência da regra de id canônico descrita em neo4j/dominio.json.
 
-    id_canonico("tecnologia", "C++") -> "tecnologia:c_plus_plus"
+    id_canonico("tecnologia", "C++") -> "tecnologia:c_mais_mais"
     """
-    texto = nome.lower().replace("+", "_plus").replace("#", "_sharp")
-    texto = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode("ascii")
-    texto = re.sub(r"[^a-z0-9]+", "_", texto).strip("_")
-    return f"{prefixo}:{texto}"
+    return f"{prefixo}:{slug(nome)}"
 
 
 def carregar_cypher(caminho: Path) -> list[str]:

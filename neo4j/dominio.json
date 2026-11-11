@@ -9,21 +9,23 @@
   "id_canonico": {
     "regra": "<prefixo do rótulo>:<nome normalizado>",
     "normalizacao": [
-      "passa para minúsculas",
+      "remove a desambiguação entre parênteses ('Java (linguagem de programação)' vira 'Java')",
+      "'+' vira ' mais '",
       "remove acentos (ç vira c, ã vira a)",
-      "'+' vira '_plus' e '#' vira '_sharp'",
+      "passa para minúsculas",
       "toda sequência de caracteres que não é letra nem número vira '_'",
       "remove '_' do início e do fim"
     ],
+    "implementacao": "a normalização é a mesma de gerar_slug() em src/pipeline/baixar_artigos.py",
     "exemplos": {
       "Alan Turing": "pessoa:alan_turing",
       "Bell Labs": "organizacao:bell_labs",
-      "C++": "tecnologia:c_plus_plus",
-      "C#": "tecnologia:c_sharp",
+      "C++": "tecnologia:c_mais_mais",
+      "Java (linguagem de programação)": "tecnologia:java",
       "Prêmio Turing": "premio:premio_turing"
     },
-    "documento": "wikipedia:<título do artigo normalizado>, ex.: 'C++' vira 'wikipedia:c_plus_plus'",
-    "chunk": "<id do documento>#<índice do trecho>, ex.: 'wikipedia:c_plus_plus#0'"
+    "documento": "nome normalizado do título do artigo, sem prefixo: o mesmo id de data/bruto/manifesto.json. Ex.: 'C (linguagem de programação)' vira 'c' e 'C++' vira 'c_mais_mais'",
+    "chunk": "<id do documento>#<índice do trecho>, ex.: 'c_mais_mais#0'"
   },
   "rotulos": [
     {

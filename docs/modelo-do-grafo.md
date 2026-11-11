@@ -121,14 +121,14 @@ A direção das relações é a proposta deste schema e precisa ser confirmada p
 
 ### Ids canônicos
 
-O id de cada nó segue a regra `<prefixo>:<nome normalizado>`: minúsculas, sem acento, `+` vira `_plus`, `#` vira `_sharp` e qualquer outro caractere que não seja letra ou número vira `_`.
+O id de cada entidade segue a regra `<prefixo>:<nome normalizado>`. A normalização é a mesma do `gerar_slug()` do pipeline (`src/pipeline/baixar_artigos.py`): tira a desambiguação entre parênteses, `+` vira "mais", remove acentos, passa para minúsculas e qualquer outro caractere que não seja letra ou número vira `_`. O documento usa só o nome normalizado, igual ao id do `data/bruto/manifesto.json`.
 
 | Nome | Id |
 |---|---|
 | Alan Turing | `pessoa:alan_turing` |
-| C++ | `tecnologia:c_plus_plus` |
+| C++ | `tecnologia:c_mais_mais` |
 | Prêmio Turing | `premio:premio_turing` |
-| Artigo "C++" da Wikipédia | `wikipedia:c_plus_plus` |
-| Primeiro trecho desse artigo | `wikipedia:c_plus_plus#0` |
+| Artigo "C++" da Wikipédia | `c_mais_mais` |
+| Primeiro trecho desse artigo | `c_mais_mais#0` |
 
-A implementação de referência dessa regra está em `id_canonico()`, em `tests/neo4j/conftest.py`.
+A implementação de referência está em `id_canonico()`, em `tests/neo4j/conftest.py`, e um teste confere que ela concorda com o `gerar_slug()` do pipeline.

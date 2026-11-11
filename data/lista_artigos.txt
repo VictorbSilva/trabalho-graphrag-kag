@@ -1,0 +1,55 @@
+# Lista dos artigos do dataset (Wikipédia em português), um título por linha.
+# Linhas começando com # e linhas em branco são ignoradas.
+# O título precisa ser igual ao da página em pt.wikipedia.org (redirecionamentos são seguidos).
+#
+# Critério: história da computação, priorizando artigos que se citam entre si, com cadeias de relações que exigem 2 ou mais saltos
+# (Tecnologia INFLUENCIADA_POR Tecnologia, Pessoa CRIOU Tecnologia,
+#  Pessoa RECEBEU Premio, Tecnologia DESENVOLVIDA_EM Organizacao, Pessoa TRABALHOU_EM Organizacao).
+# Exemplo de cadeia: C++ -> C -> Dennis Ritchie -> Prêmio Turing.
+
+# Pioneiros e prêmio
+Alan Turing
+Prêmio Turing
+John McCarthy
+Alan Kay
+Niklaus Wirth
+Tim Berners-Lee
+
+# Família C e Unix
+C (linguagem de programação)
+C++
+Simula
+Dennis Ritchie
+Ken Thompson
+Brian Kernighan
+Bjarne Stroustrup
+Unix
+Bell Labs
+
+# Java e Sun
+Java (linguagem de programação)
+James Gosling
+Sun Microsystems
+Oracle Corporation
+
+# Python, Lisp e linguagens históricas
+Python
+Guido van Rossum
+Lisp
+Smalltalk
+Pascal (linguagem de programação)
+ALGOL
+
+# Linux e web
+Linux
+Linus Torvalds
+JavaScript
+Brendan Eich
+Netscape
+CERN
+Massachusetts Institute of Technology
+
+# Reservas (descomente se algum título acima falhar ou for pouco conectado):
+# Mozilla Foundation
+# Xerox PARC
+# World Wide Web

@@ -1,0 +1,31 @@
+Brian Kernighan ([ˈkɜːrnɪhæn]; (Toronto, 1942) é um cientista da computação canadense.
+Ele trabalhou na Bell Labs e contribuiu com o desenvolvimento do Unix junto dos criadores Ken Thompson e Dennis Ritchie. O nome de Brian Kernighan tornou-se conhecido por ser o co-autor do primeiro livro sobre a linguagem de programação C (The C Programming Language) com Dennis Ritchie. Kernighan teria dito que não contribuiu para o desenvolvimento da linguagem C ("O trabalho foi todo do Dennis Ritchie").
+Kernighan foi autor de muitos programas Unix, incluindo ditroff. Ele é co-autor das linguagens de programação AWK e AMPL. O "K" do "C K&R" e também o do AWK remetem para o seu nome.
+Nasceu em Toronto, Canadá, e concluiu o seu bacharelato em "Engenharia Física" na Universidade de Toronto. Obteve o seu doutoramento em Engenharia Electrotécnica na Universidade de Princeton, onde desde de 2004 é professor no departamento de Ciência da Computação.
+
+Carreira e pesquisa
+
+Livros e relatórios
+
+The Elements of Programming Style, with P. J. Plauger
+Software Tools, a book and set of tools for Ratfor, co-created in part with P. J. Plauger
+Software Tools in Pascal, a book and set of tools for Pascal, with P. J. Plauger
+The AWK Programming Language, with Alfred V. Aho, and Peter J. Weinberger
+The C Programming Language, with C creator Dennis Ritchie, the first book on C
+The Practice of Programming, with Rob Pike
+The Unix Programming Environment, a tutorial book, with Rob Pike
+"Why Pascal is Not My Favorite Programming Language", a popular criticism of Niklaus Wirth's Pascal. Some parts of the criticism are obsolete due to ISO 7185 (Programming Languages - Pascal); the criticism was written before ISO 7185 was created. (AT&T Computing Science Technical Report #100)
+UNIX: A History and a Memoir, a historical account of the development of Unix from the perspective of his role at Bell Labs
+
+Programas
+
+1972: The first documented "Hello, world!" program, in Kernighan's "A Tutorial Introduction to the Language B"
+1973: ditroff, or "device independent troff", which allowed troff to be used with any device
+1974: The eqn typesetting language for troff, with Lorinda Cherry
+1976: Ratfor
+1977: The m4 macro processing language, with Dennis Ritchie
+1977: The AWK programming language, with Alfred Aho and Peter J. Weinberger, and its book The AWK Programming Language
+1985: The AMPL programming language
+1988: The pic typesetting language for troff
+
+Publicações

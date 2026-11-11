@@ -1,0 +1,35 @@
+Bjarne Stroustrup (Århus, 30 de dezembro de 1950) é um cientista da computação dinamarquês e professor catedrático da Universidade do Texas A&M. É conhecido como o pai da linguagem de programação C++.
+Stroustrup, nas suas próprias palavras, "inventou a C++, escreveu as suas definições iniciais e produziu a sua primeira implementação, (…) escolheu e formulou os critérios de projeção da linguagem C++, desenhou todas as suas facilidades principais e foi responsável pelo processo de propostas de extensão no comité de padrões de C++." Stroustrup também escreveu o que muitos consideram a obra padrão  de introdução à linguagem, "A linguagem de programação C++", que se encontra na quarta edição. A obra possui revista para refletir a evolução da linguagem e o trabalho do comité de padrões de C++.
+
+Educação
+
+Stroustrup é cand. scient. (o equivalente dinamarquês do grau de mestre) em matemática e ciência da computação (1975) pela Universidade de Aarhus, Dinamarca, e doutor em ciência da computação (1979) pela Universidade de Cambridge, Inglaterra.
+
+Carreira
+
+Ele desempenhou o cargo de diretor do Departamento de Investigação de Programação em Grande Escala dos Laboratórios Bell da AT&T, desde a sua criação até aos finais de 2002. Stroustrup foi eleito membro da Academia Nacional de Engenharia em 2004. Ele foi eleito membro da Association for Computing Machinery (ACM) em 1994 e no Instituto de Engenheiros Eletricistas e Eletrônicos (IEEE). De 2002 a 2014, Stroustrup foi o Presidente da Faculdade de Engenharia e Professor de Ciência da Computação da Texas A&M University. Desde janeiro de 2014, Stroustrup é diretor administrativo da divisão de tecnologia do Morgan Stanley na cidade de Nova York e professor visitante em ciência da computação na Columbia University.
+
+Prémios e realizações
+
+1990 - Nomeado um dos "American's twelve top young scientists" pela revista Fortune.
+1993 - Prêmio Grace Murray Hopper da Association for Computing Machinery (ACM) pelo seu trabalho na linguagem C++
+1995 - A revista Byte nomeou-o uma das 20 pessoas mais influentes na indústria de informática
+1996 - Foi nomeado "Fellow" da AT&T "pelas contribuições fundamentais para o desenvolvimento de linguagens de programação e programação orientada à objetos, culminando na linguagem de programação C++"
+1998 - Foi nomeado "Fellow" da ACM: pelo seu trabalho inicial que formaram as fundações da linguagem de programação C++. Apoiado nas fundações e no esforço contínuo do Dr. Stroustrup, a linguagem C++ tornou-se numa das linguagens de programação mais influentes na história da computação.
+2004 - National Academy of Engineering, 2004
+2004 - IEEE Computer Society 2004 Computer Entrepreneur Award.
+
+Publicações
+
+Bjarne Stroustrup (2013). A Tour of C++ 1 ed. [S.l.]: Addison-Wesley Professional. 192 páginas. ISBN 0-321-95831-4
+Bjarne Stroustrup (2008). Programming: Principles and Practice Using C++ 1 ed. [S.l.]: Addison-Wesley Professional. 1272 páginas. ISBN 0-321-54372-6
+Bjarne Stroustrup (2013). The C++ Programming Language 4 ed. [S.l.]: Addison-Wesley Professional. 1368 páginas. ISBN 0-321-563840
+Bjarne Stroustrup (1994). The Design and Evolution of C++ 1 ed. [S.l.]: Addison-Wesley Professional. 480 páginas. ISBN 0-201-54330-3
+Margaret A. Ellis e Bjarne Stroustrup (1990). The Annotated C++ Reference Manual. [S.l.]: Addison-Wesley Professional. 480 páginas. ISBN 0-201-51459-1
+Andrei Alexandrescu, Andrew Koenig, Stanley B. Lippman, Bjarne Stroustrup, Herb Sutter e Barbara E. Moo (2001). C++ In-Depth Box Set. [S.l.]: Addison-Wesley Professional. 1568 páginas. ISBN 0201775816  !CS1 manut: Nomes múltiplos: lista de autores (link)
+
+Citações
+
+C faz com que seja muito fácil atirar nos próprios pés. C++ faz com que isso se torne mais difícil, mas quando você consegue, destrói toda a perna."
+"Sempre desejei que o meu computador fosse tão fácil de usar como o meu telefone. O meu desejo realizou-se. Já não sei usar o meu telefone."
+"Nós podemos sobreviver com o necessário. Mas não é proibido viver com mais que o necessário."

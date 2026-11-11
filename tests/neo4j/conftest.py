@@ -6,7 +6,10 @@ Os dados reais do banco não são alterados (exceto pagerank/community, que o
 próprio script do GDS recalcula).
 """
 
+import json
 import os
+import re
+import unicodedata
 from pathlib import Path
 
 import pytest
@@ -15,9 +18,26 @@ from neo4j import GraphDatabase
 
 RAIZ = Path(__file__).resolve().parents[2]
 PASTA_NEO4J = RAIZ / "neo4j"
+PASTA_SEMENTE = RAIZ / "data" / "semente"
 PREFIXO = "teste::"
 
 load_dotenv(RAIZ / ".env")
+
+
+def carregar_dominio() -> dict:
+    """Schema do domínio (neo4j/dominio.json), a fonte única de rótulos e relações."""
+    return json.loads((PASTA_NEO4J / "dominio.json").read_text(encoding="utf-8"))
+
+
+def id_canonico(prefixo: str, nome: str) -> str:
+    """Implementação de referência da regra de id canônico descrita em neo4j/dominio.json.
+
+    id_canonico("tecnologia", "C++") -> "tecnologia:c_plus_plus"
+    """
+    texto = nome.lower().replace("+", "_plus").replace("#", "_sharp")
+    texto = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode("ascii")
+    texto = re.sub(r"[^a-z0-9]+", "_", texto).strip("_")
+    return f"{prefixo}:{texto}"
 
 
 def carregar_cypher(caminho: Path) -> list[str]:

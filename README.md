@@ -47,6 +47,20 @@ pip install -r requirements-dev.txt
 python -m pytest
 ```
 
+API (FastAPI), com o ambiente virtual ativo:
+
+```bash
+uvicorn src.api.app:app --reload --port 8000
+```
+
+- `GET http://localhost:8000/saude` responde se a API está no ar.
+- `POST http://localhost:8000/perguntar` recebe `{"pergunta": "...", "modo": "graphrag"}` (`modo` é `graphrag` ou `vetorial`) e devolve o objeto do contrato da resposta. Documentação interativa em http://localhost:8000/docs.
+- Por padrão a API devolve o JSON de exemplo do contrato (`data/exemplo_resposta.json`), sem banco nem LLM. Com `API_FONTE=recuperacao` e `API_RESPONDER=modulo:funcao` no `.env`, ela chama a recuperação de verdade. As outras variáveis (`API_TIMEOUT_S`, `API_CORS_ORIGENS`) estão no `.env.example`.
+
+```bash
+curl -X POST http://localhost:8000/perguntar -H "Content-Type: application/json" -d "{\"pergunta\": \"Quem criou o C?\", \"modo\": \"graphrag\"}"
+```
+
 Detalhes do banco em [neo4j/README.md](neo4j/README.md) e do modelo do grafo em [docs/modelo-do-grafo.md](docs/modelo-do-grafo.md).
 
 ## Fluxo de trabalho

@@ -47,6 +47,16 @@ pip install -r requirements-dev.txt
 python -m pytest
 ```
 
+`python -m pytest` roda a suíte inteira (banco, pipeline, recuperação e API). Os testes que dependem de serviço externo têm marcador e podem ser rodados à parte:
+
+| Comando | O que roda |
+|---|---|
+| `python -m pytest -m neo4j` | só os testes que precisam do Neo4j no ar (tudo em `tests/neo4j/`) |
+| `python -m pytest -m llm` | só os testes que precisam de chave de LLM |
+| `python -m pytest -m "not neo4j and not llm"` | só os que rodam em qualquer máquina (é o que o CI roda) |
+
+Se o Neo4j estiver fora do ar, os testes do banco aparecem como pulados, com o motivo no resumo. Para exigir o banco, rode com `EXIGIR_NEO4J=1`. Teste novo que chama um LLM deve levar `@pytest.mark.llm`. O CI do GitHub ([.github/workflows/testes.yml](.github/workflows/testes.yml)) roda a cada push na `main` e em todo pull request.
+
 API (FastAPI), com o ambiente virtual ativo:
 
 ```bash

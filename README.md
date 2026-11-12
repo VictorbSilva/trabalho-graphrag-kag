@@ -51,7 +51,7 @@ python -m pytest
 
 | Comando | O que roda |
 |---|---|
-| `python -m pytest -m neo4j` | só os testes que precisam do Neo4j no ar (tudo em `tests/neo4j/`) |
+| `python -m pytest -m neo4j` | só os testes que precisam do Neo4j no ar (os que usam a conexão com o banco) |
 | `python -m pytest -m llm` | só os testes que precisam de chave de LLM |
 | `python -m pytest -m "not neo4j and not llm"` | só os que rodam em qualquer máquina (é o que o CI roda) |
 

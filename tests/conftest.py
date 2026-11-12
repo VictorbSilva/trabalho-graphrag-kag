@@ -7,7 +7,10 @@ externo ficam marcados e podem ser rodados à parte:
     python -m pytest -m llm                 só os que precisam de chave de LLM
     python -m pytest -m "not neo4j and not llm"   só os que rodam em qualquer máquina (CI)
 
-Tudo que está em tests/neo4j/ recebe o marcador `neo4j` automaticamente. Se o Neo4j
+Todo teste que usa a fixture `driver` (direta ou indiretamente, como `banco` e
+`grafo_exemplo` de tests/neo4j/conftest.py) recebe o marcador `neo4j`
+automaticamente. Testes de tests/neo4j/ que não abrem conexão (ex.: os que só leem
+neo4j/dominio.json ou data/semente/) rodam em qualquer máquina e no CI. Se o Neo4j
 não estiver acessível, esses testes são pulados com o motivo no resumo, em vez de
 derrubar a suíte inteira. Para exigir o banco (falhar em vez de pular), use
 EXIGIR_NEO4J=1.
@@ -20,7 +23,7 @@ import pytest
 from dotenv import load_dotenv
 
 RAIZ = Path(__file__).resolve().parents[1]
-PASTA_NEO4J = RAIZ / "tests" / "neo4j"
+FIXTURE_DO_BANCO = "driver"
 
 load_dotenv(RAIZ / ".env")
 
@@ -43,7 +46,8 @@ def _motivo_neo4j_indisponivel() -> str | None:
 
 def pytest_collection_modifyitems(config, items):
     for item in items:
-        if PASTA_NEO4J in Path(item.fspath).parents:
+        # fixturenames inclui as fixtures indiretas (banco -> driver).
+        if FIXTURE_DO_BANCO in getattr(item, "fixturenames", ()):
             item.add_marker(pytest.mark.neo4j)
 
     selecionados = [item for item in items if item.get_closest_marker("neo4j")]

@@ -1,0 +1,143 @@
+{
+  "documento": {
+    "id": "c_mais_mais",
+    "title": "C++",
+    "source": "https://pt.wikipedia.org/wiki/C%2B%2B"
+  },
+  "chunks": [
+    {
+      "id": "c_mais_mais#0",
+      "index": 0,
+      "text": "Bjarne Stroustrup desenvolveu o C++ (originalmente com o nome C with Classes, que significa C com classes em português) em 1983 no Bell Labs como um adicional à linguagem C. Novas características foram adicionadas com o tempo, como funções virtuais, sobrecarga de operadores, herança múltipla, gabaritos e tratamento de exceções. Após a padronização ISO realizada em 1998 e a posterior revisão realizada em 2003, uma nova versão da especificação da linguagem foi lançada em dezembro de 2014, conhecida informalmente como C++14."
+    },
+    {
+      "id": "c_mais_mais#1",
+      "index": 1,
+      "text": "O C++ foi inicialmente desenvolvido por Bjarne Stroustrup dos Bell Labs, durante a década de 1980 com o objetivo de implementar uma versão distribuída do núcleo Unix. Como o Unix era escrito em C, deveria-se manter a compatibilidade, ainda que adicionando novos recursos. Alguns dos desafios incluíam simular a infraestrutura da comunicação entre processos num sistema distribuído ou de memória compartilhada e escrever drivers para tal sistema. Stroustrup percebeu que a linguagem Simula 67 possuía características bastante úteis para o desenvolvimento de software, mas que era muito lenta para uso prático. Por outro lado, a linguagem BCPL era rápida, mas possuía demasiado baixo nível, dificultando sua utilização no desenvolvimento de aplicações. A partir de sua experiência de doutorado, começou a acrescentar elementos do Simula 67 no C, especialmente os recursos de criação e manipulação de objetos. O C foi escolhido como base de desenvolvimento da nova linguagem pois possuía uma proposta de uso genérico, era rápido e também portável para diversas plataformas. Algumas outras linguagens que também serviram de inspiração para o cientista da computação foram ALGOL 68, Ada, CLU e ML."
+    }
+  ],
+  "entidades": [
+    {
+      "id": "tecnologia:c_mais_mais",
+      "name": "C++",
+      "type": "Tecnologia",
+      "aliases": [
+        "C with Classes",
+        "C com classes"
+      ],
+      "description": "Linguagem de programação criada como extensão do C com recursos de orientação a objetos.",
+      "chunk_ids": [
+        "c_mais_mais#0",
+        "c_mais_mais#1"
+      ]
+    },
+    {
+      "id": "pessoa:bjarne_stroustrup",
+      "name": "Bjarne Stroustrup",
+      "type": "Pessoa",
+      "aliases": [
+        "Stroustrup"
+      ],
+      "description": "Cientista da computação dinamarquês, criador da linguagem C++.",
+      "chunk_ids": [
+        "c_mais_mais#0",
+        "c_mais_mais#1"
+      ]
+    },
+    {
+      "id": "organizacao:bell_labs",
+      "name": "Bell Labs",
+      "type": "Organizacao",
+      "aliases": [
+        "AT&T Bell Labs",
+        "Laboratórios Bell",
+        "Bell Laboratories"
+      ],
+      "description": "Laboratório de pesquisa da AT&T onde surgiram o Unix, o C e o C++.",
+      "chunk_ids": [
+        "c_mais_mais#0",
+        "c_mais_mais#1"
+      ]
+    },
+    {
+      "id": "tecnologia:c",
+      "name": "C",
+      "type": "Tecnologia",
+      "aliases": [
+        "linguagem C",
+        "C K&R"
+      ],
+      "description": "Linguagem de programação compilada de propósito geral, criada em 1972.",
+      "chunk_ids": [
+        "c_mais_mais#0",
+        "c_mais_mais#1"
+      ]
+    },
+    {
+      "id": "tecnologia:simula",
+      "name": "Simula",
+      "type": "Tecnologia",
+      "aliases": [
+        "Simula 67"
+      ],
+      "description": "Linguagem de programação cujos recursos de objetos inspiraram o C++.",
+      "chunk_ids": [
+        "c_mais_mais#1"
+      ]
+    },
+    {
+      "id": "tecnologia:unix",
+      "name": "Unix",
+      "type": "Tecnologia",
+      "aliases": [
+        "UNIX"
+      ],
+      "description": "Sistema operacional multiusuário criado no Bell Labs.",
+      "chunk_ids": [
+        "c_mais_mais#1"
+      ]
+    },
+    {
+      "id": "tecnologia:bcpl",
+      "name": "BCPL",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação da qual o B é uma versão reduzida.",
+      "chunk_ids": [
+        "c_mais_mais#1"
+      ]
+    }
+  ],
+  "relacoes": [
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "destino": "tecnologia:c_mais_mais",
+      "tipo": "CRIOU",
+      "chunk_id": "c_mais_mais#0"
+    },
+    {
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "organizacao:bell_labs",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "c_mais_mais#0"
+    },
+    {
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:c",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c_mais_mais#0"
+    },
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "destino": "organizacao:bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "c_mais_mais#1"
+    },
+    {
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:simula",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c_mais_mais#1"
+    }
+  ]
+}

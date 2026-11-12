@@ -29,6 +29,31 @@ def carregar_dominio() -> dict:
     return json.loads((PASTA_NEO4J / "dominio.json").read_text(encoding="utf-8"))
 
 
+def carregar_semente() -> dict[str, dict]:
+    """Arquivos de data/semente/, por nome de arquivo."""
+    return {
+        caminho.name: json.loads(caminho.read_text(encoding="utf-8"))
+        for caminho in sorted(PASTA_SEMENTE.glob("*.json"))
+    }
+
+
+def com_prefixo(artigo: dict, prefixo: str = PREFIXO) -> dict:
+    """Cópia do artigo com todos os ids prefixados, para os testes não tocarem dados reais."""
+    p = prefixo
+    return {
+        "documento": {**artigo["documento"], "id": p + artigo["documento"]["id"]},
+        "chunks": [{**c, "id": p + c["id"]} for c in artigo["chunks"]],
+        "entidades": [
+            {**e, "id": p + e["id"], "chunk_ids": [p + c for c in e["chunk_ids"]]}
+            for e in artigo["entidades"]
+        ],
+        "relacoes": [
+            {**r, "origem": p + r["origem"], "destino": p + r["destino"], "chunk_id": p + r["chunk_id"]}
+            for r in artigo["relacoes"]
+        ],
+    }
+
+
 def slug(texto: str) -> str:
     """Nome normalizado: a mesma regra de gerar_slug() em src/pipeline/baixar_artigos.py.
 

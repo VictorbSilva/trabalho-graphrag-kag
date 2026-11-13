@@ -1,0 +1,263 @@
+{
+  "versao": 1,
+  "descricao": "15 perguntas de avaliação com gabarito (issue #27, PE3). Escritas a partir dos artigos de data/bruto/, sem olhar respostas do sistema. Usadas na comparação RAG vetorial vs GraphRAG (V7).",
+  "formato": {
+    "id": "P01 a P15",
+    "pergunta": "texto enviado ao sistema",
+    "tipo": "um_salto | multi_hop | sem_resposta",
+    "saltos": "número de relações na menor cadeia que liga a pergunta à resposta (0 nas sem resposta)",
+    "resposta_esperada": "gabarito em texto livre",
+    "entidades_resposta": "ids canônicos das entidades que respondem a pergunta (vazio nas sem resposta)",
+    "caminho_esperado": "triplas {origem, tipo, destino} com ids canônicos, na direção do schema",
+    "artigos_origem": "ids dos documentos (nome do arquivo em data/bruto/, sem .txt) que contêm os fatos",
+    "evidencias": "trechos literais dos artigos que sustentam cada fato",
+    "termos_ausentes": "só nas sem resposta: termos que não aparecem em nenhum artigo do dataset",
+    "observacao": "opcional: nuances para quem for corrigir"
+  },
+  "perguntas": [
+    {
+      "id": "P01",
+      "pergunta": "Quem criou a linguagem de programação Python?",
+      "tipo": "um_salto",
+      "saltos": 1,
+      "resposta_esperada": "Guido van Rossum.",
+      "entidades_resposta": ["pessoa:guido_van_rossum"],
+      "caminho_esperado": [
+        {"origem": "pessoa:guido_van_rossum", "tipo": "CRIOU", "destino": "tecnologia:python"}
+      ],
+      "artigos_origem": ["python", "guido_van_rossum"],
+      "evidencias": [
+        {"artigo": "python", "trecho": "O Python foi concebido no final de 1989 por Guido van Rossum"}
+      ]
+    },
+    {
+      "id": "P02",
+      "pergunta": "Em qual organização a linguagem Java foi desenvolvida?",
+      "tipo": "um_salto",
+      "saltos": 1,
+      "resposta_esperada": "Na Sun Microsystems, a partir de 1991.",
+      "entidades_resposta": ["organizacao:sun_microsystems"],
+      "caminho_esperado": [
+        {"origem": "tecnologia:java", "tipo": "DESENVOLVIDA_EM", "destino": "organizacao:sun_microsystems"}
+      ],
+      "artigos_origem": ["java"],
+      "evidencias": [
+        {"artigo": "java", "trecho": "desenvolvida por uma equipe liderada por James Gosling na Sun Microsystems a partir de 1991"}
+      ]
+    },
+    {
+      "id": "P03",
+      "pergunta": "Quem desenvolveu o núcleo Linux?",
+      "tipo": "um_salto",
+      "saltos": 1,
+      "resposta_esperada": "O programador finlandês Linus Torvalds.",
+      "entidades_resposta": ["pessoa:linus_torvalds"],
+      "caminho_esperado": [
+        {"origem": "pessoa:linus_torvalds", "tipo": "CRIOU", "destino": "tecnologia:linux"}
+      ],
+      "artigos_origem": ["linux", "linus_torvalds"],
+      "evidencias": [
+        {"artigo": "linux", "trecho": "núcleo Linux, desenvolvido pelo programador finlandês Linus Torvalds"}
+      ]
+    },
+    {
+      "id": "P04",
+      "pergunta": "Que prêmio Niklaus Wirth recebeu em 1984?",
+      "tipo": "um_salto",
+      "saltos": 1,
+      "resposta_esperada": "O Prêmio Turing, pelo desenvolvimento de uma sequência de linguagens de programação, incluindo o Pascal.",
+      "entidades_resposta": ["premio:premio_turing"],
+      "caminho_esperado": [
+        {"origem": "pessoa:niklaus_wirth", "tipo": "RECEBEU", "destino": "premio:premio_turing"}
+      ],
+      "artigos_origem": ["niklaus_wirth"],
+      "evidencias": [
+        {"artigo": "niklaus_wirth", "trecho": "Em 1984, ele ganhou o Prêmio Turing"}
+      ]
+    },
+    {
+      "id": "P05",
+      "pergunta": "Em qual organização Brian Kernighan trabalhou?",
+      "tipo": "um_salto",
+      "saltos": 1,
+      "resposta_esperada": "No Bell Labs, onde contribuiu com o desenvolvimento do Unix.",
+      "entidades_resposta": ["organizacao:bell_labs"],
+      "caminho_esperado": [
+        {"origem": "pessoa:brian_kernighan", "tipo": "TRABALHOU_EM", "destino": "organizacao:bell_labs"}
+      ],
+      "artigos_origem": ["brian_kernighan"],
+      "evidencias": [
+        {"artigo": "brian_kernighan", "trecho": "Ele trabalhou na Bell Labs e contribuiu com o desenvolvimento do Unix"}
+      ]
+    },
+    {
+      "id": "P06",
+      "pergunta": "Que prêmio recebeu o criador da linguagem Lisp?",
+      "tipo": "multi_hop",
+      "saltos": 2,
+      "resposta_esperada": "John McCarthy, criador do Lisp, recebeu o Prêmio Turing (1972, segundo o artigo).",
+      "entidades_resposta": ["premio:premio_turing"],
+      "caminho_esperado": [
+        {"origem": "pessoa:john_mccarthy", "tipo": "CRIOU", "destino": "tecnologia:lisp"},
+        {"origem": "pessoa:john_mccarthy", "tipo": "RECEBEU", "destino": "premio:premio_turing"}
+      ],
+      "artigos_origem": ["lisp", "john_mccarthy"],
+      "evidencias": [
+        {"artigo": "lisp", "trecho": "Lisp é uma família de linguagens de programação concebida por John McCarthy"},
+        {"artigo": "john_mccarthy", "trecho": "Recebeu o Prêmio Turing de 1972"}
+      ]
+    },
+    {
+      "id": "P07",
+      "pergunta": "Além do C, o C++ foi influenciado por outra linguagem de programação. Que prêmio receberam os criadores dessa linguagem?",
+      "tipo": "multi_hop",
+      "saltos": 3,
+      "resposta_esperada": "A linguagem é o Simula (Simula 67), criada por Kristen Nygaard e Ole-Johan Dahl, que receberam o Prêmio Turing de 2001.",
+      "entidades_resposta": ["premio:premio_turing"],
+      "caminho_esperado": [
+        {"origem": "tecnologia:c_mais_mais", "tipo": "INFLUENCIADA_POR", "destino": "tecnologia:simula"},
+        {"origem": "pessoa:kristen_nygaard", "tipo": "CRIOU", "destino": "tecnologia:simula"},
+        {"origem": "pessoa:ole_johan_dahl", "tipo": "CRIOU", "destino": "tecnologia:simula"},
+        {"origem": "pessoa:kristen_nygaard", "tipo": "RECEBEU", "destino": "premio:premio_turing"},
+        {"origem": "pessoa:ole_johan_dahl", "tipo": "RECEBEU", "destino": "premio:premio_turing"}
+      ],
+      "artigos_origem": ["c_mais_mais", "simula"],
+      "evidencias": [
+        {"artigo": "c_mais_mais", "trecho": "começou a acrescentar elementos do Simula 67 no C"},
+        {"artigo": "simula", "trecho": "criada entre 1962 e 1968 por Kristen Nygaard e Ole-Johan Dahl"},
+        {"artigo": "simula", "trecho": "eles receberam o premio 2001 Turing A.M."}
+      ],
+      "observacao": "A resolução de entidades pode gerar 'Simula 67' como entidade separada de 'Simula'. Aceitar qualquer um dos dois como a linguagem intermediária."
+    },
+    {
+      "id": "P08",
+      "pergunta": "Que prêmio recebeu quem criou a linguagem que deu origem ao C?",
+      "tipo": "multi_hop",
+      "saltos": 3,
+      "resposta_esperada": "O C derivou da linguagem B, criada por Ken Thompson, que recebeu o Prêmio Turing em 1983 (junto com Dennis Ritchie).",
+      "entidades_resposta": ["premio:premio_turing"],
+      "caminho_esperado": [
+        {"origem": "tecnologia:c", "tipo": "INFLUENCIADA_POR", "destino": "tecnologia:b"},
+        {"origem": "pessoa:ken_thompson", "tipo": "CRIOU", "destino": "tecnologia:b"},
+        {"origem": "pessoa:ken_thompson", "tipo": "RECEBEU", "destino": "premio:premio_turing"}
+      ],
+      "artigos_origem": ["c", "ken_thompson", "dennis_ritchie"],
+      "evidencias": [
+        {"artigo": "c", "trecho": "suas características foram obtidas a partir de uma linguagem anteriormente chamada de \"B\""},
+        {"artigo": "ken_thompson", "trecho": "Thompson também criou a linguagem de programação B"},
+        {"artigo": "dennis_ritchie", "trecho": "Dennis Ritchie e Ken Thompson receberam o Prêmio Turing"}
+      ]
+    },
+    {
+      "id": "P09",
+      "pergunta": "Qual pessoa que trabalhou no CERN recebeu o Prêmio Turing?",
+      "tipo": "multi_hop",
+      "saltos": 2,
+      "resposta_esperada": "Tim Berners-Lee, que recebeu o Prêmio Turing de 2016 pela criação da World Wide Web.",
+      "entidades_resposta": ["pessoa:tim_berners_lee"],
+      "caminho_esperado": [
+        {"origem": "pessoa:tim_berners_lee", "tipo": "TRABALHOU_EM", "destino": "organizacao:cern"},
+        {"origem": "pessoa:tim_berners_lee", "tipo": "RECEBEU", "destino": "premio:premio_turing"}
+      ],
+      "artigos_origem": ["tim_berners_lee"],
+      "evidencias": [
+        {"artigo": "tim_berners_lee", "trecho": "CERN como contratado independente"},
+        {"artigo": "tim_berners_lee", "trecho": "Ganhou o Prêmio Turing de 2016"}
+      ],
+      "observacao": "O artigo do dataset se chama 'Organização Europeia para a Investigação Nuclear'. O id do CERN depende da resolução de entidades (organizacao:cern ou organizacao:organizacao_europeia_para_a_investigacao_nuclear)."
+    },
+    {
+      "id": "P10",
+      "pergunta": "Em qual organização trabalhava um dos inventores do Smalltalk quando se envolveu no projeto da linguagem?",
+      "tipo": "multi_hop",
+      "saltos": 2,
+      "resposta_esperada": "Na Xerox PARC, onde Alan Kay era pesquisador desde 1971.",
+      "entidades_resposta": ["organizacao:xerox_parc"],
+      "caminho_esperado": [
+        {"origem": "pessoa:alan_kay", "tipo": "CRIOU", "destino": "tecnologia:smalltalk"},
+        {"origem": "pessoa:alan_kay", "tipo": "TRABALHOU_EM", "destino": "organizacao:xerox_parc"}
+      ],
+      "artigos_origem": ["alan_kay", "smalltalk"],
+      "evidencias": [
+        {"artigo": "alan_kay", "trecho": "um dos inventores da linguagem de programação Smalltalk"},
+        {"artigo": "alan_kay", "trecho": "passou a ser pesquisador da empresa em 1971. Envolveu-se com o projeto da linguagem de programação Smalltalk"}
+      ],
+      "observacao": "A extração pode registrar a organização como 'Xerox' ou 'Xerox PARC'. As duas respostas estão certas."
+    },
+    {
+      "id": "P11",
+      "pergunta": "Quais pessoas que trabalharam no Bell Labs receberam o Prêmio Turing?",
+      "tipo": "multi_hop",
+      "saltos": 2,
+      "resposta_esperada": "Dennis Ritchie e Ken Thompson, que receberam o Prêmio Turing em 1983. Brian Kernighan e Bjarne Stroustrup também trabalharam no Bell Labs, mas o dataset não diz que receberam o prêmio.",
+      "entidades_resposta": ["pessoa:dennis_ritchie", "pessoa:ken_thompson"],
+      "caminho_esperado": [
+        {"origem": "pessoa:dennis_ritchie", "tipo": "TRABALHOU_EM", "destino": "organizacao:bell_labs"},
+        {"origem": "pessoa:ken_thompson", "tipo": "TRABALHOU_EM", "destino": "organizacao:bell_labs"},
+        {"origem": "pessoa:dennis_ritchie", "tipo": "RECEBEU", "destino": "premio:premio_turing"},
+        {"origem": "pessoa:ken_thompson", "tipo": "RECEBEU", "destino": "premio:premio_turing"}
+      ],
+      "artigos_origem": ["dennis_ritchie", "ken_thompson"],
+      "evidencias": [
+        {"artigo": "dennis_ritchie", "trecho": "Dennis Ritchie iniciou as suas atividades no Bell Labs"},
+        {"artigo": "ken_thompson", "trecho": "para trabalhar no projeto Multics da Bell Labs"},
+        {"artigo": "dennis_ritchie", "trecho": "Dennis Ritchie e Ken Thompson receberam o Prêmio Turing"}
+      ],
+      "observacao": "Pergunta de agregação: a resposta só está completa com as duas pessoas."
+    },
+    {
+      "id": "P12",
+      "pergunta": "A linguagem Python tem parte da sintaxe derivada de outra linguagem. Em qual organização essa outra linguagem foi criada?",
+      "tipo": "multi_hop",
+      "saltos": 2,
+      "resposta_esperada": "A linguagem é o C, criado em 1972 por Dennis Ritchie no Bell Labs (AT&T).",
+      "entidades_resposta": ["organizacao:bell_labs"],
+      "caminho_esperado": [
+        {"origem": "tecnologia:python", "tipo": "INFLUENCIADA_POR", "destino": "tecnologia:c"},
+        {"origem": "tecnologia:c", "tipo": "DESENVOLVIDA_EM", "destino": "organizacao:bell_labs"}
+      ],
+      "artigos_origem": ["python", "c"],
+      "evidencias": [
+        {"artigo": "python", "trecho": "possui parte da sintaxe derivada do C"},
+        {"artigo": "c", "trecho": "criada em 1972 por Dennis Ritchie na empresa AT&T Bell Labs"}
+      ]
+    },
+    {
+      "id": "P13",
+      "pergunta": "Quem criou a linguagem de programação Rust?",
+      "tipo": "sem_resposta",
+      "saltos": 0,
+      "resposta_esperada": "O sistema deve dizer que não encontrou a informação no dataset (nenhum artigo trata de Rust).",
+      "entidades_resposta": [],
+      "caminho_esperado": [],
+      "artigos_origem": [],
+      "evidencias": [],
+      "termos_ausentes": ["Rust"]
+    },
+    {
+      "id": "P14",
+      "pergunta": "Que prêmio Margaret Hamilton recebeu?",
+      "tipo": "sem_resposta",
+      "saltos": 0,
+      "resposta_esperada": "O sistema deve dizer que não encontrou a informação no dataset (Margaret Hamilton não aparece nos artigos).",
+      "entidades_resposta": [],
+      "caminho_esperado": [],
+      "artigos_origem": [],
+      "evidencias": [],
+      "termos_ausentes": ["Margaret Hamilton", "Hamilton"],
+      "observacao": "Armadilha: a pergunta tem a mesma forma das perguntas de prêmio que têm resposta. Responder 'Prêmio Turing' é alucinação."
+    },
+    {
+      "id": "P15",
+      "pergunta": "Em qual organização foi desenvolvida a linguagem Kotlin?",
+      "tipo": "sem_resposta",
+      "saltos": 0,
+      "resposta_esperada": "O sistema deve dizer que não encontrou a informação no dataset (nenhum artigo trata de Kotlin).",
+      "entidades_resposta": [],
+      "caminho_esperado": [],
+      "artigos_origem": [],
+      "evidencias": [],
+      "termos_ausentes": ["Kotlin"]
+    }
+  ]
+}

@@ -1,99 +1,149 @@
-import os
+"""PA2: divide cada artigo de data/bruto/ em trechos (chunks) para o grafo e para os embeddings.
+
+Uso, na raiz do repositório:
+
+    python src/pipeline/chunking.py
+    python src/pipeline/chunking.py --max-chunks 40   # opcional: limita os trechos por artigo
+
+Lê data/bruto/manifesto.json e grava um arquivo por artigo em data/processado/chunks/<id>.json:
+
+    {"documento": {"id": "...", "title": "...", "source": "<URL do artigo>"},
+     "chunks": [{"id": "<id>#0", "index": 0, "text": "..."}, ...]}
+
+É o formato de documento e chunks do contrato (neo4j/dominio.json, "arquivo_por_artigo").
+A extração (PA3) acrescenta entidades e relações a esse mesmo formato. Sem embeddings:
+quem calcula é o ingestor.
+
+Como os trechos são cortados:
+- Nunca no meio de uma frase (só uma frase maior que o limite é quebrada, entre palavras).
+- Até TAMANHO_MAXIMO caracteres: o modelo de embeddings de 384 dimensões lê cerca de 128 tokens,
+  e o que passa disso é ignorado na busca vetorial.
+- A última frase de cada trecho se repete no começo do seguinte (sobreposição de uma frase).
+- Título de seção fica colado ao primeiro parágrafo dele.
+"""
+
+import argparse
 import json
+import re
+import sys
 from pathlib import Path
 
-def carregar_configuracoes():
-    # Parâmetros recomendados para GraphRAG
-    return {
-        "chunk_size": 1000,    # Quantidade de caracteres por pedaço
-        "chunk_overlap": 200,  # Sobreposição para não perder contexto entre os cortes
-        "dir_entrada": Path("data/bruto"),
-        "dir_saida": Path("data/processado/chunks")
-    }
+RAIZ = Path(__file__).resolve().parents[2]
+MANIFESTO = RAIZ / "data" / "bruto" / "manifesto.json"
+ENTRADA = RAIZ / "data" / "bruto"
+SAIDA = RAIZ / "data" / "processado" / "chunks"
 
-def dividir_em_chunks(texto, chunk_size, chunk_overlap):
-    """
-    Divide o texto em pedaços menores com base em caracteres, 
-    garantindo o overlap entre eles.
-    """
-    if not texto:
-        return []
-    
-    chunks = []
-    inicio = 0
-    tamanho_texto = len(texto)
+TAMANHO_MAXIMO = 450       # caracteres por trecho (conferir com o tokenizer quando o V1 fixar o modelo)
+SOBREPOSICAO_MAXIMA = 150  # a frase repetida do trecho anterior não pode passar disso
 
-    while inicio < tamanho_texto:
-        fim = inicio + chunk_size
-        chunk = texto[inicio:fim]
-        chunks.append(chunk)
-        # Avança o ponteiro considerando o overlap
-        inicio += chunk_size - chunk_overlap
+FIM_DE_FRASE = re.compile(r"(?<=[.!?])\s+(?=[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ\"«(\[])")  # sem dígitos: não corta 'c. 12 de outubro'
 
-    return chunks
 
-def processar_chunking():
-    config = carregar_configuracoes()
-    
-    # Cria a pasta de saída caso não exista
-    config["dir_saida"].mkdir(parents=True, exist_ok=True)
-    
-    if not config["dir_entrada"].exists():
-        print(f"[Erro] A pasta de entrada '{config['dir_entrada']}' não foi encontrada.")
-        print("Certifique-se de que os artigos brutos estão no local correto.")
-        return
+def e_titulo(paragrafo: str) -> bool:
+    """Linha curta sem pontuação final, como 'Biografia' ou 'Prêmios e honrarias'."""
+    return len(paragrafo) <= 60 and "\n" not in paragrafo and not paragrafo.endswith((".", "!", "?", ":", ";", ","))
 
-    arquivos_txt = list(config["dir_entrada"].glob("*.txt"))
-    
-    if not arquivos_txt:
-        print(f"[Aviso] Nenhum arquivo .txt encontrado em '{config['dir_entrada']}'.")
-        return
 
-    print(f"Iniciando o chunking de {len(arquivos_txt)} arquivos...")
-    
-    total_chunks_gerados = 0
-    manifesto_chunks = []
+def juntar_titulos(paragrafos: list[str]) -> list[str]:
+    """Cola cada título ao parágrafo seguinte. Título sem parágrafo depois (seção vazia) é descartado."""
+    juntos, pendentes = [], []
+    for paragrafo in paragrafos:
+        if e_titulo(paragrafo):
+            pendentes.append(paragrafo)
+        else:
+            juntos.append("\n".join(pendentes + [paragrafo]))
+            pendentes = []
+    return juntos
 
-    for arquivo_path in arquivos_txt:
-        nome_arquivo = arquivo_path.name
-        texto_completo = arquivo_path.read_text(encoding="utf-8")
-        
-        # Realiza o fatiamento
-        pedacos = dividir_em_chunks(
-            texto_completo, 
-            config["chunk_size"], 
-            config["chunk_overlap"]
-        )
-        
-        print(f" -> {nome_arquivo}: gerou {len(pedacos)} chunks.")
 
-        # Salva os pedaços individualmente
-        for i, conteudo_chunk in enumerate(pedacos):
-            chunk_id = f"{arquivo_path.stem}_chunk_{i:03d}"
-            caminho_chunk = config["dir_saida"] / f"{chunk_id}.txt"
-            
-            # Salva o arquivo de texto do chunk
-            caminho_chunk.write_text(conteudo_chunk, encoding="utf-8")
-            
-            # Guarda metadados para rastreabilidade
-            manifesto_chunks.append({
-                "chunk_id": chunk_id,
-                "origem": nome_arquivo,
-                "indice": i,
-                "caminho_arquivo": str(caminho_chunk)
-            })
-            total_chunks_gerados += 1
+def quebrar_frase_longa(frase: str, tamanho_maximo: int) -> list[str]:
+    """Frase maior que o limite: quebra entre palavras, nunca no meio de uma."""
+    if len(frase) <= tamanho_maximo:
+        return [frase]
+    partes, atual = [], ""
+    for palavra in frase.split(" "):
+        if atual and len(atual) + 1 + len(palavra) > tamanho_maximo:
+            partes.append(atual)
+            atual = palavra
+        else:
+            atual = f"{atual} {palavra}" if atual else palavra
+    if atual:
+        partes.append(atual)
+    return partes
 
-    # Salva o manifesto geral dos chunks gerados
-    caminho_manifesto = config["dir_saida"].parent / "manifesto_chunks.json"
-    caminho_manifesto.write_text(
-        json.dumps(manifesto_chunks, ensure_ascii=False, indent=4), 
-        encoding="utf-8"
-    )
 
-    print("\n--- Chunking Concluído com Sucesso! ---")
-    print(f"Total de chunks criados: {total_chunks_gerados}")
-    print(f"Manifesto salvo em: {caminho_manifesto}")
+def dividir_em_trechos(texto: str, tamanho_maximo: int = TAMANHO_MAXIMO,
+                       sobreposicao_maxima: int = SOBREPOSICAO_MAXIMA) -> list[str]:
+    paragrafos = [p.strip() for p in re.split(r"\n\s*\n", texto) if p.strip()]
+    unidades = []
+    for paragrafo in juntar_titulos(paragrafos):
+        for frase in FIM_DE_FRASE.split(paragrafo):
+            unidades.extend(quebrar_frase_longa(frase.strip(), tamanho_maximo))
+
+    trechos, atual = [], []
+    for unidade in unidades:
+        if atual and len(" ".join(atual + [unidade])) > tamanho_maximo:
+            trechos.append(" ".join(atual))
+            ultima = atual[-1]
+            cabe = len(ultima) <= sobreposicao_maxima and len(ultima) + 1 + len(unidade) <= tamanho_maximo
+            atual = [ultima] if cabe else []
+        atual.append(unidade)
+    if atual:
+        trechos.append(" ".join(atual))
+    return trechos
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Divide os artigos de data/bruto/ em trechos.")
+    parser.add_argument("--max-chunks", type=int, default=None, help="máximo de trechos por artigo (padrão: sem limite)")
+    args = parser.parse_args()
+
+    if not MANIFESTO.exists():
+        print(f"Manifesto não encontrado: {MANIFESTO}. Rode antes: python src/pipeline/baixar_artigos.py")
+        return 1
+    manifesto = json.loads(MANIFESTO.read_text(encoding="utf-8"))
+
+    SAIDA.mkdir(parents=True, exist_ok=True)
+    for antigo in SAIDA.glob("*.json"):  # refaz tudo: não deixa sobra de execuções anteriores
+        antigo.unlink()
+
+    problemas, contagens, maior = [], [], 0
+    for registro in manifesto:
+        caminho = RAIZ / registro["arquivo"]
+        if not caminho.exists():
+            problemas.append(f"{registro['id']}: arquivo {registro['arquivo']} não existe")
+            continue
+        trechos = dividir_em_trechos(caminho.read_text(encoding="utf-8"))
+        if args.max_chunks:
+            trechos = trechos[: args.max_chunks]
+        if not trechos:
+            problemas.append(f"{registro['id']}: nenhum trecho gerado (arquivo vazio?)")
+            continue
+
+        saida = {
+            "documento": {"id": registro["id"], "title": registro["titulo"], "source": registro["url"]},
+            "chunks": [{"id": f"{registro['id']}#{i}", "index": i, "text": t} for i, t in enumerate(trechos)],
+        }
+        (SAIDA / f"{registro['id']}.json").write_text(
+            json.dumps(saida, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        contagens.append((registro["id"], len(trechos)))
+        maior = max(maior, max(len(t) for t in trechos))
+
+    sem_registro = sorted({p.stem for p in ENTRADA.glob("*.txt")} - {r["id"] for r in manifesto})
+    if sem_registro:
+        problemas.append(f"em data/bruto/ sem registro no manifesto (ignorados): {', '.join(sem_registro)}")
+
+    total = sum(n for _, n in contagens)
+    print(f"{len(contagens)} artigos, {total} trechos em {SAIDA} (maior trecho: {maior} caracteres)")
+    for nome, n in sorted(contagens, key=lambda x: -x[1])[:5]:
+        print(f"  {n:>4} trechos  {nome}")
+    if problemas:
+        print("\nProblemas:")
+        for p in problemas:
+            print(f"  - {p}")
+        return 1
+    return 0
+
 
 if __name__ == "__main__":
-    processar_chunking()
+    sys.exit(main())

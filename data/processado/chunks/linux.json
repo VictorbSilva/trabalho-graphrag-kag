@@ -1,0 +1,479 @@
+{
+  "documento": {
+    "id": "linux",
+    "title": "Linux",
+    "source": "https://pt.wikipedia.org/wiki/Linux"
+  },
+  "chunks": [
+    {
+      "id": "linux#0",
+      "index": 0,
+      "text": "Linux, também chamado de GNU/Linux, é uma família de sistemas operacionais que utilizam o núcleo Linux, desenvolvido pelo programador finlandês Linus Torvalds, inspirado no sistema operacional Minix. O seu código-fonte está disponível sob a licença GPLv2 para que qualquer pessoa o possa utilizar, estudar, modificar e distribuir livremente de acordo com os termos da licença."
+    },
+    {
+      "id": "linux#1",
+      "index": 1,
+      "text": "O Projeto GNU, a Free Software Foundation e a comunidade de software livre recomenda o termo \"GNU/Linux\", porque o projeto GNU forneceu a maioria das ferramentas, bibliotecas e utilitários essenciais que, combinados ao núcleo, permitiram a existência de um sistema operacional completo e funcional."
+    },
+    {
+      "id": "linux#2",
+      "index": 2,
+      "text": "Segundo essa perspectiva, afirmado pelo próprio Torvalds, o kernel é apenas um componente, embora vital, de um sistema muito maior idealizado por Richard Stallman, Assim, o termo GNU/Linux é defendido para dar o devido crédito ao trabalho de décadas do Projeto GNU na construção da base de software livre que torna o sistema utilizável para o usuário final."
+    },
+    {
+      "id": "linux#3",
+      "index": 3,
+      "text": "Inicialmente desenvolvido e utilizado por grupos de entusiastas em computadores pessoais, as distribuições Linux passaram a ter a colaboração de grandes empresas como IBM, Sun Microsystems, Hewlett-Packard (HP), Red Hat, Novell, Oracle, Google, Microsoft e Canonical. O desenvolvimento do Linux é um dos exemplos mais proeminentes de colaboração de software livre e de código aberto."
+    },
+    {
+      "id": "linux#4",
+      "index": 4,
+      "text": "O desenvolvimento do Linux é um dos exemplos mais proeminentes de colaboração de software livre e de código aberto. O código-fonte pode ser usado, modificado e distribuído — com fins comerciais ou não — por qualquer um, respeitando as licenças, como a GNU General Public License versão 2, devolvendo o código desenvolvido de volta para o desenvolvimento do núcleo."
+    },
+    {
+      "id": "linux#5",
+      "index": 5,
+      "text": "Normalmente, o Linux é encontrado em uma distribuição Linux, seja para um computador ou para um servidor. Algumas distribuições Linux populares incluem Arch Linux, CentOS, Debian, Fedora Linux, Linux Mint, openSUSE, Ubuntu, Garuda Linux, além de distribuições focadas para usuários corporativos, como o Red Hat Enterprise Linux ou o SUSE Linux Enterprise Server."
+    },
+    {
+      "id": "linux#6",
+      "index": 6,
+      "text": "Uma distribuição Linux inclui o núcleo Linux, bibliotecas e utilidades, além de aplicações, como a suíte de escritório LibreOffice, um navegador web (geralmente Mozilla Firefox), entre outras aplicações. História\nAntecedentes\nO sistema operacional Unix foi concebido e implementado em 1969 pela AT&T Bell Laboratories nos Estados Unidos por Ken Thompson, Dennis Ritchie, Douglas McIlroy, e Joe Ossanna."
+    },
+    {
+      "id": "linux#7",
+      "index": 7,
+      "text": "Lançado pela primeira vez em 1971, o Unix foi escrito inteiramente em linguagem assembly uma prática comum para a época. Mais tarde, em 1973, o sistema foi reescrito na linguagem de programação C por Dennis Ritchie. A disponibilidade de uma implementação do Unix feita em linguagem de alto nível tornou mais fácil a sua portabilidade para diferentes plataformas de computador."
+    },
+    {
+      "id": "linux#8",
+      "index": 8,
+      "text": "Na época, a maioria dos programas era escrita em cartões perfurados que tinham de ser inseridos em lotes em computadores mainframe. Como parte de um acordo antitruste com o governo dos EUA, que restringia sua atuação fora do setor de telecomunicações, a AT&T foi levada a licenciar o código-fonte do sistema UNIX para universidades e instituições."
+    },
+    {
+      "id": "linux#9",
+      "index": 9,
+      "text": "Com o resultado, o Unix cresceu rapidamente e se tornou amplamente adotado por instituições acadêmicas e diversas empresas. Em 1984, a AT&T se desfez da Bell Labs; livres da obrigação legal exigindo o licenciamento do royalty, a Bell Labs começou a vender o Unix como um Software proprietário."
+    },
+    {
+      "id": "linux#10",
+      "index": 10,
+      "text": "O sistema foi continuado dentro da Bell Labs, chegando a poucas dezenas de instalações, porém só obteve grande crescimento após ter sido totalmente reescrito na linguagem C, o que permitiu uma portabilidade melhor para outras plataformas. A linguagem C foi derivada da linguagem B e criada por Dennis Ritchie e Brian Kernighan."
+    },
+    {
+      "id": "linux#11",
+      "index": 11,
+      "text": "A linguagem C foi derivada da linguagem B e criada por Dennis Ritchie e Brian Kernighan. Nesta época, o sistema já contava com mais de 60 comandos, muitos deles ainda utilizados até hoje, tais como: cd - trocar de diretórios, chmod - trocar permissões, wc - contar palavras em arquivos, roff - processar texto, etc. O seu crescimento e reconhecimento culminou com a publicação na renomada revista “ Communications of the ACM” , em julho de 1974."
+    },
+    {
+      "id": "linux#12",
+      "index": 12,
+      "text": "O seu crescimento e reconhecimento culminou com a publicação na renomada revista “ Communications of the ACM” , em julho de 1974. Com sua filosofia de simplicidade, padrões abertos e seu licenciamento facilitado pela AT&T, o Unix se espalhou e se desenvolveu rapidamente pelas universidades."
+    },
+    {
+      "id": "linux#13",
+      "index": 13,
+      "text": "Várias versões de Unix foram surgindo, sendo que a principal delas foi desenvolvida na Universidade de Berkeley, denominada BSD (Berkeley Software Distribution), um software liberado publicamente em 1977, predecessor dos atuais e bem-sucedidos BSD's (FreeBSD, OpenBSD e NetBSD)."
+    },
+    {
+      "id": "linux#14",
+      "index": 14,
+      "text": "Outras versões comerciais também foram surgindo, tais como: Irix pela SGI em 1982, XENIX pela SCO em 1983, HP-UX pela HP em 1986, SunOS pela Sun em 1987 e AIX pela IBM em 1990 . A maioria dos sistemas inclui ferramentas e utilitários baseados no BSD e tipicamente usam XFree86 ou X.Org para oferecer a funcionalidade do sistemas de janelas X — interface gráfica. Assim como também oferecem ferramentas desenvolvidas pelo projeto GNU."
+    },
+    {
+      "id": "linux#15",
+      "index": 15,
+      "text": "Assim como também oferecem ferramentas desenvolvidas pelo projeto GNU. O Projeto GNU, iniciado em 1983 por Richard Stallman, teve o objetivo de criar um \"sistema de software completamente compatível com o Unix\", composto inteiramente de software livre. O trabalho começou em 1984. Mais tarde, em 1985, Stallman começou a Free Software Foundation e escreveu a Licença Pública Geral GNU (GNU GPL) em 1989."
+    },
+    {
+      "id": "linux#16",
+      "index": 16,
+      "text": "Mais tarde, em 1985, Stallman começou a Free Software Foundation e escreveu a Licença Pública Geral GNU (GNU GPL) em 1989. No início da década de 1990, muitos dos programas necessários em um sistema operacional (como bibliotecas, compiladores, editores de texto, uma Unix shell, e um sistema de janelas) foram concluídos, embora os elementos de baixo nível, como drivers de dispositivo, daemons e as do kernel foram paralisadas e não completadas."
+    },
+    {
+      "id": "linux#17",
+      "index": 17,
+      "text": "Apesar de não ter sido lançado até 1992 devido a complicações legais, o desenvolvimento do 386BSD, que veio a partir do NetBSD, OpenBSD e FreeBSD, antecedeu ao do Linux. Linus Torvalds disse que se o 386BSD estivesse disponível naquele momento, ele provavelmente não teria criado o Linux. Vários fatores ajudaram a rápida expansão do Linux depois de seu lançamento"
+    },
+    {
+      "id": "linux#18",
+      "index": 18,
+      "text": "Vários fatores ajudaram a rápida expansão do Linux depois de seu lançamento Popularização dos computadores pessoais: o Unix era o S.O. padrão para estudos em universidades, porém, utilizavam plataformas proprietárias relativamente caras. O Linux se tornou uma opção para resolver esse problema, porque com ele foi possível a utilização de computadores pessoais mais baratos."
+    },
+    {
+      "id": "linux#19",
+      "index": 19,
+      "text": "O Linux se tornou uma opção para resolver esse problema, porque com ele foi possível a utilização de computadores pessoais mais baratos. Projeto GNU: o projeto GNU, criado por Richard Stallman em 1984, surgiu com o intuito de apoiar a liberdade de software (veja seção mais adiante sobre Software Livre)."
+    },
+    {
+      "id": "linux#20",
+      "index": 20,
+      "text": "Na época do surgimento do Linux, Stallman apoiava e pretendia adotar o kernel Hurd, porém este não estava utilizável, com isso, o Linux acabou sendo o kernel (componente central do sistema operacional ligando aplicativos e o processamento real de dados feito pelo hardware) preferido para rodar as centenas de programas livres disponibilizados pelo projeto, porém o Hurd continua sendo o kernel oficial do sistema operacional GNU."
+    },
+    {
+      "id": "linux#21",
+      "index": 21,
+      "text": "Distribuições Linux: no sentido de tornar o Linux o mais utilizável possível, surgiram instituições comerciais e não-comerciais que se dedicaram a criar uma combinação ideal de aplicativos (livres ou não) que rodassem no kernel Linux. As instituições com objetivos comerciais mantiveram o licenciamento livre, através de serviços agregados, tais como: suporte, treinamento e desenvolvimento personalizado."
+    },
+    {
+      "id": "linux#22",
+      "index": 22,
+      "text": "Veja seção mais adiante sobre distribuições Linux."
+    },
+    {
+      "id": "linux#23",
+      "index": 23,
+      "text": "Criação\nO núcleo Linux foi, originalmente, escrito por Linus Torvalds do Departamento de Ciência da Computação da Universidade de Helsinki, Finlândia, com a ajuda de vários programadores voluntários através da Usenet (uma espécie de sistema de listas de discussão existente desde os primórdios da Internet)\nLinus Torvalds começou o desenvolvimento do núcleo como um projeto particular, inspirado pelo seu interesse no Minix, um pequeno sistema UNIX"
+    },
+    {
+      "id": "linux#24",
+      "index": 24,
+      "text": "desenvolvido por Andrew S. Tanenbaum. Ele limitou-se a criar, nas suas próprias palavras, \"um Minix melhor que o Minix\" (\"a better Minix than Minix\"). E depois de algum tempo de trabalho no projecto, sozinho, enviou a seguinte mensagem para comp.os.minix: Você suspira pelos bons tempos do Minix-1.1, quando os homens eram homens e escreviam seus próprios \"device drivers\"?"
+    },
+    {
+      "id": "linux#25",
+      "index": 25,
+      "text": "Você suspira pelos bons tempos do Minix-1.1, quando os homens eram homens e escreviam seus próprios \"device drivers\"? Você está sem um bom projecto em mãos e deseja trabalhar num S.O. que possa modificar de acordo com as suas necessidades? Acha frustrante quando tudo funciona no Minix? Chega de noite ao computador para conseguir que os programas funcionem? Então esta mensagem pode ser exactamente para você."
+    },
+    {
+      "id": "linux#26",
+      "index": 26,
+      "text": "Então esta mensagem pode ser exactamente para você. Como eu mencionei há um mês atrás, estou trabalhando numa versão independente de um S.O. similar ao Minix para computadores AT-386. Ele está, finalmente, próximo do estado em que poderá ser utilizado (embora possa não ser o que você espera), e eu estou disposto a disponibilizar o código-fonte para ampla distribuição."
+    },
+    {
+      "id": "linux#27",
+      "index": 27,
+      "text": "Ele está na versão 0.02... contudo eu tive sucesso ao executar bash, gcc, gnu-make, gnu-sed, compress etc. nele. Curiosamente, o nome Linux foi criado por Ari Lemmke, administrador do site ftp.funet.fi que deu esse nome ao diretório FTP onde o núcleo Linux estava inicialmente disponível. Linus inicialmente tinha-o batizado como \"Freax\". No dia 5 de outubro de 1991 Linus Torvalds anunciou a primeira versão \"oficial\" do núcleo Linux, versão 0.02."
+    },
+    {
+      "id": "linux#28",
+      "index": 28,
+      "text": "No dia 5 de outubro de 1991 Linus Torvalds anunciou a primeira versão \"oficial\" do núcleo Linux, versão 0.02. No ano de 1992, Linus Torvalds mudou a licença do núcleo Linux, de uma licença própria para uma licença livre compatível com a GPL do projeto GNU. Desde então, muitos programadores têm contribuído com o desenvolvimento, ajudando a fazer do Linux o núcleo de enorme sucesso colaborativo que é hoje."
+    },
+    {
+      "id": "linux#29",
+      "index": 29,
+      "text": "Desde então, muitos programadores têm contribuído com o desenvolvimento, ajudando a fazer do Linux o núcleo de enorme sucesso colaborativo que é hoje. No início era utilizado por programadores ou só por quem tinha conhecimentos e usava linhas de comando."
+    },
+    {
+      "id": "linux#30",
+      "index": 30,
+      "text": "No início era utilizado por programadores ou só por quem tinha conhecimentos e usava linhas de comando. Hoje, isso mudou e existem diversos grupos que criam ambientes gráficos para as diversas distribuições GNU/Linux, que são cada vez mais amigáveis, de forma que, uma pessoa com poucos conhecimentos consegue usar o Linux, através de uma distribuição GNU/Linux, por exemplo."
+    },
+    {
+      "id": "linux#31",
+      "index": 31,
+      "text": "O Linux é um núcleo estável e consegue reconhecer muitos periféricos sem a necessidade de que o usuário precise instalar drivers de som, vídeo, modem, rede, entre outros. Principais carregadores de inicialização do Linux\nSYSLINUX\nO Projeto Syslinux é um conjunto de cinco carregadores de boot diferentes para inicializar distros Linux em computadores. Foi desenvolvido principalmente por H. Peter Anvin."
+    },
+    {
+      "id": "linux#32",
+      "index": 32,
+      "text": "Peter Anvin. O Projeto Syslinux consiste em uma junçao de cinco carregadores de inicialização diferentes: O homônimo SYSLINUX, utilizado para iniciar a partir do FAT. ISOLINUX, utilizado para iniciar a partir do ISO 9660\nPXELINUX, utilizado para iniciar a partir de um servidor de rede utilizando o Preboot Execution Environment. (PXE) system\nEXTLINUX, utilizado para iniciar a partir do Btrfs, ext2, ext3, ext4, FAT, NTFS, UFS/UFS2, e XFS."
+    },
+    {
+      "id": "linux#33",
+      "index": 33,
+      "text": "(PXE) system\nEXTLINUX, utilizado para iniciar a partir do Btrfs, ext2, ext3, ext4, FAT, NTFS, UFS/UFS2, e XFS. MEMDISK, emula um disco RAM para sistemas operacionais mais antigos como MS-DOS. O projeto também inclui dois sistemas de menu separados e um ambiente de desenvolvimento para módulos adicionais. SYSLINUX e ISOLINUX\nSYSLINUX foi originalmente destinado aos disquetes, live USBs e outros."
+    },
+    {
+      "id": "linux#34",
+      "index": 34,
+      "text": "SYSLINUX e ISOLINUX\nSYSLINUX foi originalmente destinado aos disquetes, live USBs e outros. ISOLINUX é destinado a live CDs e CDs de instalação do Linux. O SYSLINUX pode ser usado para iniciar várias distros a partir de um único lugar, como um pendrive. GRUB\nGNU GRUB (ou apenas GRUB) é um multicarregador de um sistema operacional (multi boot ou boot-loader) criado pelo projeto GNU."
+    },
+    {
+      "id": "linux#35",
+      "index": 35,
+      "text": "GRUB\nGNU GRUB (ou apenas GRUB) é um multicarregador de um sistema operacional (multi boot ou boot-loader) criado pelo projeto GNU. É utilizado, normalmente, quando se deseja que um computador tenha dual booting, ou seja, que o usuário possa escolher ao iniciar a máquina, um sistema operacional (SO) dentre dois ou mais sistemas instalados."
+    },
+    {
+      "id": "linux#36",
+      "index": 36,
+      "text": "Systemd-boot\nsystemd-boot, anteriormente conhecido como gummiboot, é um gerenciador de boot gratuito e de código aberto. Ele foi criado quando o gummiboot foi fundido com o systemd e renomeado para \"systemd-boot\" em maio de 2015."
+    },
+    {
+      "id": "linux#37",
+      "index": 37,
+      "text": "Ele foi criado quando o gummiboot foi fundido com o systemd e renomeado para \"systemd-boot\" em maio de 2015. Núcleo\nO termo Linux refere-se ao núcleo (em inglês: \"kernel\") do sistema operativo que inicia e gerencia outros programas que fornecem o acesso aos recursos do sistema como os vários software livres de shells, compiladores, bibliotecas-padrão e os comandos que fazem parte do Projeto GNU."
+    },
+    {
+      "id": "linux#38",
+      "index": 38,
+      "text": "O Projeto GNU, por sua vez, foi criado pela Free Software Foudation com o intuito de criar um sistema operacional completo, totalmente livre e compatível com o Unix. O principal compilador do Linux C, gcc, é um pedaço do projeto GNU. Arquitetura\nO Linux é um núcleo monolítico: as funções do núcleo (escalonamento de processos, gerenciamento de memória, operações de entrada/saída, acesso ao sistema de arquivos) são executadas no espaço de núcleo."
+    },
+    {
+      "id": "linux#39",
+      "index": 39,
+      "text": "Uma característica do núcleo Linux é que algumas das funções (drivers de dispositivos, suporte à rede, sistema de arquivos, por exemplo) podem ser compiladas e executadas como módulos (em inglês: LKM - loadable kernel modules), que são bibliotecas compiladas separadamente da parte principal do núcleo e podem ser carregadas e descarregadas após o núcleo estar em execução."
+    },
+    {
+      "id": "linux#40",
+      "index": 40,
+      "text": "Portabilidade\nEmbora Linus Torvalds não tivesse como objetivo inicial tornar o Linux um sistema portátil, ele evoluiu nessa direção. Linux é hoje um dos núcleos de sistemas operativos mais portáteis, correndo em sistemas desde o iPaq (um computador portátil) até o IBM S/390 (um denso e altamente custoso mainframe). Os esforços de Linus foram também dirigidos a um diferente tipo de portabilidade."
+    },
+    {
+      "id": "linux#41",
+      "index": 41,
+      "text": "Os esforços de Linus foram também dirigidos a um diferente tipo de portabilidade. Portabilidade, de acordo com Linus, era a habilidade de facilmente compilar aplicações de uma variedade de código fonte no seu sistema; consequentemente, o Linux originalmente tornou-se popular em parte devido ao esforço para que os códigos-fonte GPL ou outros favoritos de todos corressem em Linux."
+    },
+    {
+      "id": "linux#42",
+      "index": 42,
+      "text": "O Linux hoje funciona em dezenas de plataformas, desde mainframes até um relógio de pulso, passando por várias arquitecturas: x86 (Intel, AMD), x86-64 (Intel EM64T, AMD64), ARM, PowerPC, Alpha, SPARC e etc, com grande penetração também em sistemas embarcados, como handhelds, PVR, console de videogames, celulares, TVs e centros multimídia, entre outros."
+    },
+    {
+      "id": "linux#43",
+      "index": 43,
+      "text": "Termos de licenciamento\nInicialmente, Torvalds lançou o Linux sob uma licença de software própria que proibia qualquer uso comercial. Isso foi mudado, um ano depois, para a GNU General Public License. Essa licença permite a distribuição e até a venda de versões até mesmo modificadas do Linux, mas requer que todas as cópias sejam lançadas dentro da mesma licença e acompanhadas de acesso ao código fonte."
+    },
+    {
+      "id": "linux#44",
+      "index": 44,
+      "text": "Apesar de alguns dos programadores que contribuem para o núcleo permitirem que o seu código seja licenciado com GPL versão 2 ou posterior, grande parte do código (incluído as contribuições de Torvalds) menciona apenas a GPL versão 2. Isto faz com que o núcleo como um todo esteja sob a versão 2 exclusivamente."
+    },
+    {
+      "id": "linux#45",
+      "index": 45,
+      "text": "Isto faz com que o núcleo como um todo esteja sob a versão 2 exclusivamente. Sistemas de arquivos suportados\nO Linux possui suporte de leitura e escrita a vários sistema de arquivos, de diversos sistemas operacionais, além de alguns sistemas nativos. Por isso, quando o Linux é instalado em dual boot com outros sistemas (Windows, por exemplo) ou mesmo funcionando como Live CD, ele poderá ler e escrever nas partições formatadas em FAT e NTFS."
+    },
+    {
+      "id": "linux#46",
+      "index": 46,
+      "text": "É por isso que os Live CDs Linux são muito utilizados na manutenção e recuperação de outros sistemas operacionais. Entre os sistemas de ficheiros suportados pelo Linux, podemos citar UFS, FAT, exFAT, NTFS, JFS, XFS, HPFS, Minix, ZFS, UDF (sistema de ficheiros usado em DVD-ROMs e BD-ROMs) e ISO 9660 (sistema de ficheiros usado em CD-ROMs), este último também com as extensões RRIP (IEEE P1282) e ZISOFS."
+    },
+    {
+      "id": "linux#47",
+      "index": 47,
+      "text": "Alguns sistemas de ficheiros nativos são, entre outros, Btrfs, Ext2, Ext3, Ext4, F2FS, ReiserFS e Reiser4. Alguns sistemas de ficheiros com características especiais são SWAP, UnionFS, SquashFS, Tmpfs, Aufs e NFS, dentre outros."
+    },
+    {
+      "id": "linux#48",
+      "index": 48,
+      "text": "Sistema operacional\nLogo que Linus Torvalds passou a disponibilizar o Linux, ou seja na sua versão 0.01, já havia suporte ao disco rígido, tela, teclado e portas seriais, o sistema de arquivos adotava o mesmo layout do Minix (embora não houvesse código do Minix no Linux), havia extensos trechos em assembly, e ela já era capaz de rodar o bash e o gcc. A linha guia quando implementei o Linux foi: fazê-lo funcionar rápido."
+    },
+    {
+      "id": "linux#49",
+      "index": 49,
+      "text": "A linha guia quando implementei o Linux foi: fazê-lo funcionar rápido. Eu queria o núcleo simples, mas poderoso o suficiente para rodar a maioria dos aplicativos Unix. O próprio usuário deveria procurar os programas que dessem funcionalidade ao seu sistema, compilá-los e configurá-los. Talvez por isso, o Linux tenha carregado consigo a etiqueta de sistema operativo apenas para técnicos."
+    },
+    {
+      "id": "linux#50",
+      "index": 50,
+      "text": "Talvez por isso, o Linux tenha carregado consigo a etiqueta de sistema operativo apenas para técnicos. Foi neste ambiente que surgiu a MCC Interim Linux, do Manchester Computer Centre, a primeira distribuição Linux, desenvolvida por Owen Le Blanc da Universidade de Manchester, capaz de ser instalada independentemente em um computador. Foi uma primeira tentativa de facilitar a instalação do Linux."
+    },
+    {
+      "id": "linux#51",
+      "index": 51,
+      "text": "Foi uma primeira tentativa de facilitar a instalação do Linux. Desde o começo, o núcleo Linux incluía um sistema básico para chamadas do sistema e acesso aos dispositivos do computador."
+    },
+    {
+      "id": "linux#52",
+      "index": 52,
+      "text": "O núcleo de um sistema operativo define entre várias operações, o gerenciamento da memória, de processos, dos dispositivos físicos no computador e é uma parte essencial de qualquer sistema operacional utilizável, contudo para um sistema operacional adquirir funcionalidade são necessários também vários outros aplicativos que determinam funções específicas que aquele sistema será capaz de desenvolver, os aplicativos existentes num sistema"
+    },
+    {
+      "id": "linux#53",
+      "index": 53,
+      "text": "operacional com a única exceção do núcleo são determinados pelo usuário do computador, como por exemplo: interpretadores de comandos, gerenciadores de janelas, que oferecem respectivamente uma interface para o usuário do computador, CLI ou GUI, e outros aplicativos como editores de texto, editores de imagem, tocadores de som, e, mas não necessariamente, compiladores."
+    },
+    {
+      "id": "linux#54",
+      "index": 54,
+      "text": "No momento do desenvolvimento do Linux, vários aplicativos já vinham sendo reunidos pelo Projeto GNU da Free Software Foundation (‘Fundação do Software Livre’), que embarcara num subprojeto que ainda continua para obter um núcleo, o GNU Hurd."
+    },
+    {
+      "id": "linux#55",
+      "index": 55,
+      "text": "Porém devido a várias complicações o projeto GNU e demora em desenvolver o  Hurd, Stallman acabou adotando o núcleo Linux como base para distribuir os programas do projeto GNU ; no entanto diversas pessoas e instituições tiveram a mesma ideia e assim começaram a surgir várias distribuições baseadas no núcleo desenvolvido inicialmente por Linus."
+    },
+    {
+      "id": "linux#56",
+      "index": 56,
+      "text": "Diretórios\nOs scripts de shell, que são:os arquivos de textos, os comandos executáveis, entre outros arquivos comuns, são nomeados como arquivos regulares. Estes tipos de arquivos possuem dados que podem ser lidos ou executados por instruções. No entanto há também arquivos que não são regulares, como diretórios ou redirecionamentos com nomes. Eles contêm dados singulares ou possuem comportamentos especiais quando acessados."
+    },
+    {
+      "id": "linux#57",
+      "index": 57,
+      "text": "Eles contêm dados singulares ou possuem comportamentos especiais quando acessados. Os arquivos são organizados em diretórios ou listagens de arquivos.Cada diretório poderá conter um subdiretório, originando assim uma lista hierárquica. Os diretórios são organizados somente em uma árvore monolítica. O mais alto dos diretórios é chamado de diretório-raiz."
+    },
+    {
+      "id": "linux#58",
+      "index": 58,
+      "text": "O mais alto dos diretórios é chamado de diretório-raiz. Ele se difere em relação aos outros sistemas operacionais, que tem discos marcados separadamente. O Linux lida qualquer parte do disco como um subdiretório dentro dessa estrutura do principal diretório. Partindo do ponto de vista do usuário, é praticamente impossível afirmar em qual parte do disco é pertencido um respectivo diretório, pois aparentemente tudo pertence ao único disco."
+    },
+    {
+      "id": "linux#59",
+      "index": 59,
+      "text": "O nome de caminho é uma string que mostra uma localização de um arquivo, de acordo com sua ordem de diretórios que for encontrado ao passar. O diretório-raiz, é determinado com o símbolo da barra (/). O uso de mais nomes de barras e diretórios especifica os diretórios adicionais. Quando os usuários se conectam, são trazidos no diretório pessoal chamado de seu diretório de entrada. Esse diretório é tipificado com um til (~) em Bash."
+    },
+    {
+      "id": "linux#60",
+      "index": 60,
+      "text": "Esse diretório é tipificado com um til (~) em Bash. O diretório de trabalho, ou chamado também diretório corrente é representado por um ponto final (.). Quando ele não começa com uma barra, o Bash julga que é um caminho relativo ao diretório de trabalho. O diretório-pai, é simbolizado por dois pontos (..)."
+    },
+    {
+      "id": "linux#61",
+      "index": 61,
+      "text": "O diretório-pai, é simbolizado por dois pontos (..). Esses dois pontos podem ser usados em qualquer diretório a fim de mover em direção ao diretório-raiz da árvore de diretórios, anulando assim o diretório dito anteriormente em um caminho. Os nomes de caminhos sem uma barra inicial são nomeados de caminhos relativos, pois eles especificam a localização de um arquivo em comparação ao diretório corrente."
+    },
+    {
+      "id": "linux#62",
+      "index": 62,
+      "text": "Esses caminhos relativos são de utilidade para representar arquivos em seu diretório corrente ou em subdiretórios deste. Os caminhos com uma barra no início são nomeados de caminhos absolutos. Esses tipos de caminhos denotam a localização do arquivo em comparação ao diretório-raiz. Não importando onde que esse diretório-raiz estiver. Os caminhos absolutos sempre identificam o arquivo com precisão."
+    },
+    {
+      "id": "linux#63",
+      "index": 63,
+      "text": "Os caminhos absolutos sempre identificam o arquivo com precisão. Esses caminhos absolutos servem de localização de arquivos comuns que são guardados sempre no mesmo lugar. A maioria das distribuições Linux incluem os respectivos diretórios:"
+    },
+    {
+      "id": "linux#64",
+      "index": 64,
+      "text": "/dev - Contém arquivos especiais ou arquivos de dispositivos.\n/bin e /usr/bin - Contém comandos-padrão de Linux.\n/lib e /usr/lib - Possui as bibliotecas-padrão de Linux.\n/var - Possui arquivos de configuração e de log.\n/etc - Possui arquivos padrão de configuração.\n/usr/local/bin - Possui comandos que não são parte da distribuição, acrescentando pelo seu administrador.\n/opt - Possui software comercial\n/tmp - Armazena arquivos temporários.\n/sbin e"
+    },
+    {
+      "id": "linux#65",
+      "index": 65,
+      "text": "/usr/sbin - Possui comandos de administração de sistema. Distribuições\nAtualmente, um Sistema Operacional (em Portugal Sistema Operativo)  Linux ou GNU/Linux completo (uma \"Lista de distribuições de Linux ou GNU/Linux\") é uma coleção de software livre (e por vezes não-livre) criado por indivíduos, grupos e organizações de todo o mundo, incluindo o núcleo   Linux."
+    },
+    {
+      "id": "linux#66",
+      "index": 66,
+      "text": "Companhias como a Red Hat, a SuSE, a Mandriva (união da Mandrake com a Conectiva) e a Canonical (desenvolvedora do Ubuntu Linux), bem como projetos de comunidades como o Debian ou o Gentoo, compilam o software e fornecem um sistema completo, pronto para instalação e uso. Patrick Volkerding também fornece uma distribuição Linux, o Slackware."
+    },
+    {
+      "id": "linux#67",
+      "index": 67,
+      "text": "Patrick Volkerding também fornece uma distribuição Linux, o Slackware. As distribuições do Linux ou  GNU/Linux começaram a receber uma popularidade limitada desde a segunda metade dos anos 90, como uma alternativa livre para os sistemas operacionais Microsoft Windows e Mac OS, principalmente por parte de pessoas acostumadas ao Unix na escola e no trabalho."
+    },
+    {
+      "id": "linux#68",
+      "index": 68,
+      "text": "O sistema tornou-se popular no mercado de Desktops e servidores, principalmente para a Web e servidores de bancos de dados. Todas elas tem o seu público e sua finalidade, as pequenas (que ocupam poucas disquetes) são usadas para recuperação de sistemas danificados ou em monitoramento de redes de computadores. Dentre as maiores, distribuídas em CDs, podem-se citar: Slackware, Debian, Suse, e Conectiva."
+    },
+    {
+      "id": "linux#69",
+      "index": 69,
+      "text": "Dentre as maiores, distribuídas em CDs, podem-se citar: Slackware, Debian, Suse, e Conectiva. Cada distribuição é, em síntese, um sistema operacional independente, de modo que os programas compilados para uma distribuição podem não rodar em outra, embora usem o mesmo núcleo (o Linux propriamente dito)."
+    },
+    {
+      "id": "linux#70",
+      "index": 70,
+      "text": "A distribuição Conectiva Linux, por exemplo, tinha as suas aplicações traduzidas em português, o que fez com que os usuários que falam a Língua Portuguesa tenham aderido melhor a esta distribuição. Hoje esta distribuição foi incorporada à Mandrake, o que resultou na Mandriva."
+    },
+    {
+      "id": "linux#71",
+      "index": 71,
+      "text": "Para o português, existe também as distribuições brasileiras, como as mais recentes DuZeru, Metamorphose, GoboLinux, LinuxFX, Big Linux, Dizinha Linux, DreamLinux, Dual OS, Ekaaty, Famelix, FeniX, GoblinX, Kalango e Kurumin (essa distribuição foi descontinuada pelo seu mantenedor), construída sobre Knoppix e Debian, e a Caixa Mágica, existente nas versões 32 bits, 64 bits, Live CD 32 bits e Live CD 64 bits, e com vários programas open source:"
+    },
+    {
+      "id": "linux#72",
+      "index": 72,
+      "text": "LibreOffice, Mozilla Firefox, entre outros. Existem distribuições com ferramentas para configuração que facilitam a administração do sistema. As principais diferenças entre as distribuições estão nos seus sistemas de pacotes, nas estruturas dos diretórios e na sua biblioteca básica."
+    },
+    {
+      "id": "linux#73",
+      "index": 73,
+      "text": "As principais diferenças entre as distribuições estão nos seus sistemas de pacotes, nas estruturas dos diretórios e na sua biblioteca básica. Por mais que a estrutura dos diretórios siga o mesmo padrão, o FSSTND é um padrão muito relaxado, principalmente em arquivos onde as configurações são diferentes entre as distribuições. Então normalmente todos seguem o padrão FHS (File Hierarchy System), que é o padrão mais novo."
+    },
+    {
+      "id": "linux#74",
+      "index": 74,
+      "text": "Então normalmente todos seguem o padrão FHS (File Hierarchy System), que é o padrão mais novo. Vale lembrar, entretanto, que qualquer aplicativo ou driver desenvolvido para Linux pode ser compilado em qualquer distribuição que vai funcionar da mesma maneira. Quanto à biblioteca, é usada a biblioteca libc, contendo funções básicas para o sistema Operacional Linux."
+    },
+    {
+      "id": "linux#75",
+      "index": 75,
+      "text": "Quanto à biblioteca, é usada a biblioteca libc, contendo funções básicas para o sistema Operacional Linux. O problema é que, quando do lançamento de uma nova versão da Biblioteca libc, algumas distribuições colocam logo a nova versão, enquanto outras aguardam um pouco. Por isso, alguns programas funcionam numa distribuição e noutras não. Existe um movimento LSB (Linux Standard Base) que proporciona uma maior padronização."
+    },
+    {
+      "id": "linux#76",
+      "index": 76,
+      "text": "Existe um movimento LSB (Linux Standard Base) que proporciona uma maior padronização. Auxilia principalmente vendedores de software que não liberam para distribuição do código fonte, sem tirar características das distribuições. O sistemas de pacotes não é padronizado."
+    },
+    {
+      "id": "linux#77",
+      "index": 77,
+      "text": "O sistemas de pacotes não é padronizado. Arch Linux, Debian, Fedora, Manjaro Linux, SolusOS, Sabayon, Mandriva, Mint, openSuse, PCLinuxOS, Puppy, Slackware e Ubuntu são algumas das distribuições mais utilizadas atualmente (2017), listadas aqui por ordem alfabética. Existem também distribuições Linux para sistemas móveis, como tablets e smartphones, sendo o Android, desenvolvido pelo Google, a mais difundida de todas."
+    },
+    {
+      "id": "linux#78",
+      "index": 78,
+      "text": "Outras distribuições Linux para sistemas móveis são o Maemo e o MeeGo. Vários fatores ajudaram a rápida expansão do Linux depois de seu lançamento: Popularização dos computadores pessoais: o Unix era o S.O. padrão para estudos em universidades, porém, utilizavam plataformas proprietárias relativamente caras. O Linux se tornou uma opção para resolver esse problema, porque com ele foi possível a utilização de computadores pessoais mais baratos."
+    },
+    {
+      "id": "linux#79",
+      "index": 79,
+      "text": "O Linux se tornou uma opção para resolver esse problema, porque com ele foi possível a utilização de computadores pessoais mais baratos. Projeto GNU: o projeto GNU, criado por Richard Stallman em 1984, surgiu com o intuito de apoiar a liberdade de software (veja seção mais adiante sobre Software Livre)."
+    },
+    {
+      "id": "linux#80",
+      "index": 80,
+      "text": "Na época do surgimento do Linux, Stallman apoiava e pretendia adotar o kernel Hurd, porém este não estava utilizável, com isso, o Linux acabou sendo o kernel (componente central do sistema operacional ligando aplicativos e o processamento real de dados feito pelo hardware) preferido para rodar as centenas de programas livres disponibilizados pelo projeto, porém o Hurd continua sendo o kernel oficial do sistema operacional GNU."
+    },
+    {
+      "id": "linux#81",
+      "index": 81,
+      "text": "Distribuições Linux: no sentido de tornar o Linux o mais utilizável possível, surgiram instituições comerciais e não-comerciais que se dedicaram a criar uma combinação ideal de aplicativos (livres ou não) que rodassem no kernel Linux. As instituições com objetivos comerciais mantiveram o licenciamento livre, através de serviços agregados, tais como: suporte, treinamento e desenvolvimento customizado."
+    },
+    {
+      "id": "linux#82",
+      "index": 82,
+      "text": "Veja seção mais adiante sobre distribuições Linux. Interface com o Usuário\nUma característica que acaba resultando na diferenciação de uma Distribuição Linux é a Interface Gráfica. Algumas distribuições utilizam a interface KDE, outras utilizam interface GNOME, outras utilizam a interface Xfce, e ainda existem várias outras interfaces que podem ser utilizadas."
+    },
+    {
+      "id": "linux#83",
+      "index": 83,
+      "text": "Código aberto e programas livres\nUm programa, assim como toda obra produzida atualmente, seja ela literária, artística ou tecnológica, tem um autor. Os direitos sobre a ideia ou originalidade da obra do autor, que incluem distribuição, reprodução e uso, são regidos pela sua licença, no caso de um programa."
+    },
+    {
+      "id": "linux#84",
+      "index": 84,
+      "text": "Existem dois movimentos que regem o licenciamento de programas no mundo do software livre: os programas de código aberto e os programas livres. Os dois representados respectivamente pela OSI e pela FSF oferecem licenças para produção de software, sendo seus maiores representantes a licença BSD e a GPL."
+    },
+    {
+      "id": "linux#85",
+      "index": 85,
+      "text": "O Linux oferece muitos aplicativos de open source, contudo nem todos podem ser considerados programas livres, dependendo exclusivamente de sob qual licença estes programas são distribuídos. Os programas distribuídos sob tais licenças possuem as mais diversas funcionalidades, como desktops, escritório, edição de imagem e inclusive de outros sistemas operacionais."
+    },
+    {
+      "id": "linux#86",
+      "index": 86,
+      "text": "Também existem organizações, inclusive no mundo do software livre, como a SEUL (Linux Simples para o Usuário Final), que têm como objetivo adotar a maior variedade possível de aplicativos de alta qualidade produzidos sob a GPL. A SEUL é um projeto voluntário que atualmente se concentra no aprendizado do Linux, seu uso na ciência e em documentos de advocacia, além de gerenciar e coordenar projetos de desenvolvimento de aplicativos."
+    },
+    {
+      "id": "linux#87",
+      "index": 87,
+      "text": "Sobre o símbolo\nO símbolo do software foi escolhido pelo seu criador (Linus Torvalds), que um dia estava em um zoológico na Austrália e foi surpreendido pela mordida de um pinguim. Fato curioso, discutido até hoje. Em 1996, muitos integrantes da lista de discussão \"Linux-Kernel\" estavam discutindo a criação de um logotipo ou de um mascote que representasse o Linux."
+    },
+    {
+      "id": "linux#88",
+      "index": 88,
+      "text": "Muitas das sugestões eram paródias ao logotipo de um sistema operacional concorrente e muito conhecido (Windows). Outros eram monstros ou animais agressivos. Linus Torvalds acabou entrando nesse debate ao afirmar em uma mensagem que gostava muito de pinguins. Isso foi o suficiente para dar fim à discussão."
+    },
+    {
+      "id": "linux#89",
+      "index": 89,
+      "text": "Isso foi o suficiente para dar fim à discussão. Depois disso, várias tentativas foram feitas em uma espécie de concurso para que a imagem de um pinguim servisse aos propósitos do Linux, até que alguém sugeriu a figura de um \"pinguim sustentando o mundo\"."
+    },
+    {
+      "id": "linux#90",
+      "index": 90,
+      "text": "Em resposta, Linus Torvalds declarou que achava interessante que esse pinguim tivesse uma imagem simples: um pinguim \"gordinho\" e com expressão de satisfeito, como se tivesse acabado de comer uma porção de peixes. Torvalds também não achava atraente a ideia de algo agressivo, mas sim a ideia de um pinguim simpático, do tipo em que as crianças perguntam \"mamãe, posso ter um desses também?\"."
+    },
+    {
+      "id": "linux#91",
+      "index": 91,
+      "text": "Ainda, Torvalds também frisou que trabalhando dessa forma, as pessoas poderiam criar várias modificações desse pinguim. Isso realmente acontece. Quando questionado sobre o porquê de pinguins, Linus Torvalds respondeu que não havia uma razão em especial, mas os achava engraçados e até citou que foi bicado por um \"pinguim assassino\" na Austrália e ficou impressionado como a bicada de um animal aparentemente tão inofensivo podia ser tão dolorosa."
+    },
+    {
+      "id": "linux#92",
+      "index": 92,
+      "text": "Escândalo dos programas de vigilância da NSA\nAs revelações da vigilância global exercida pela Agência de Segurança Nacional trouxeram à tona alegações de que Google, Yahoo!, Facebook e Microsoft estão entre as várias empresas intencionalmente cooperando com a NSA, oferecendo acesso aos seus sistemas via uma backdoor criada especialmente para atender aos interesses da agência."
+    },
+    {
+      "id": "linux#93",
+      "index": 93,
+      "text": "No caso de sistemas operacionais Linux, a NSA pediu ao criador do Linux, Linus Torvalds, para criar backdoors no GNU/Linux, através do qual eles poderiam acessar o sistema. A inclusão dos backdoors acabou não ocorrendo, devido ao modelo de desenvolvimento aberto do núcleo Linux. O fato dos sistemas GNU/Linux serem software livre permite que qualquer um realize auditoria sobre os códigos, dessa forma dificultando a inserção de backdoors."
+    }
+  ]
+}

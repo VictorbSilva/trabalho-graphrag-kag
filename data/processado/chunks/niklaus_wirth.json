@@ -1,0 +1,59 @@
+{
+  "documento": {
+    "id": "niklaus_wirth",
+    "title": "Niklaus Wirth",
+    "source": "https://pt.wikipedia.org/wiki/Niklaus_Wirth"
+  },
+  "chunks": [
+    {
+      "id": "niklaus_wirth#0",
+      "index": 0,
+      "text": "Niklaus Emil Wirth (Winterthur, 15 de fevereiro de 1934 – 1 de janeiro de 2024) foi um professor e cientista da computação suíço. Ele projetou várias linguagens de programação, incluindo Pascal, e foi pioneiro em vários outros tópicos clássicos em engenharia de software. Em 1984, ele ganhou o Prêmio Turing, geralmente reconhecido como a maior distinção em ciência da computação, por desenvolver uma sequência de linguagens de computador inovadoras."
+    },
+    {
+      "id": "niklaus_wirth#1",
+      "index": 1,
+      "text": "Criador das linguagens de programação Pascal, Modula-2 e Oberon. Biografia\nWirth nasceu em Winterthur, Suíça, em 1934. Em 1959, formou-se em Engenharia Eletrônica pelo Instituto Federal Suiço  de Tecnologico de Zurique. Em 1960, ele ganhou um mestrado da Universidade Laval, Canadá. Em 1963, ele recebeu Ph.D."
+    },
+    {
+      "id": "niklaus_wirth#2",
+      "index": 2,
+      "text": "Em 1963, ele recebeu Ph.D. Em Engenharia Elétrica e Ciência da Computação (EECS), da Universidade da California, Berkeley, supervisionado pelo pioneiro em design de computadores Harry Huskey. De 1963 a 1967, ele atuou como professor assistente de Ciência da Computação na Universidade de Stanford. Em 1968 tornou-se professor de informática na ETH Zurique, fazendo dois anos sabáticos de um ano na Xerox PARC, Califórnia (1976-1977 e 1984-1985)."
+    },
+    {
+      "id": "niklaus_wirth#3",
+      "index": 3,
+      "text": "Em 1968 tornou-se professor de informática na ETH Zurique, fazendo dois anos sabáticos de um ano na Xerox PARC, Califórnia (1976-1977 e 1984-1985). Wirth se aposentou em 1999. Em 2004, ele foi nomeado membro do Museu de História da Computação \"por trabalhos seminais em linguagens de programação e algoritmos, incluindo Euler, Algol-W, Pascal, Modula e Oberon\". Wirth morreu em 1 de janeiro de 2024."
+    },
+    {
+      "id": "niklaus_wirth#4",
+      "index": 4,
+      "text": "Wirth morreu em 1 de janeiro de 2024. Linguagens de Programação\nWirth foi designer-chefe das linguagens de programação Euler, Algol W, Pascal, Modula, Modula-2, Oberon, Oberon-2 e Oberon-07. Ele também teve um papel importante da equipe de design e implementação dos sistemas operacionais Lilith e Oberon e do sistema de design e simulação de hardware digital Lola."
+    },
+    {
+      "id": "niklaus_wirth#5",
+      "index": 5,
+      "text": "Ele recebeu o Prêmio Turing da Association for Computing Machinery (ACM) pelo desenvolvimento dessas linguagens em 1984, e em 1994 foi indicado como membro do ACM. Publicações\nO livro \"The Pascal User Manual and Report\", escrito em conjunto com Kathleen Jensen, serviu de base para muitos esforços de implementação de linguagens nas décadas de 1970 e 1980 nos Estados Unidos e em toda a Europa."
+    },
+    {
+      "id": "niklaus_wirth#6",
+      "index": 6,
+      "text": "Seu artigo \"Program Development by Stepwise Refinement\" sobre o ensino da programação, é considerado um texto clássico em engenharia de software. Em 1975, ele escreveu o livro \"Algorithms + Data Structures = Programs\", que ganhou amplo reconhecimento. As principais revisões deste livro com o novo título \"Algoritmos + Estruturas de Dados\" foram publicadas em 1985 e 2004. Os exemplos da primeira edição foram escritos em Pascal."
+    },
+    {
+      "id": "niklaus_wirth#7",
+      "index": 7,
+      "text": "Os exemplos da primeira edição foram escritos em Pascal. Estes foram substituídos nas edições posteriores por exemplos escritos em Modula-2 e Oberon, respectivamente. Seu livro \"Programação Sistemática: Uma Introdução\", foi considerado uma boa fonte para os estudantes que queriam fazer mais do que apenas codificar. Como um texto desafiador para se trabalhar, foi procurado como leitura imperativa para os interessados ​​em matemática numérica."
+    },
+    {
+      "id": "niklaus_wirth#8",
+      "index": 8,
+      "text": "Como um texto desafiador para se trabalhar, foi procurado como leitura imperativa para os interessados ​​em matemática numérica. Em 1992, ele publicou (juntamente com Jürg Gutknecht) a documentação completa do sistema operacional Oberon. Um segundo livro (junto com Martin Reiser) foi planejado como um guia do programador."
+    },
+    {
+      "id": "niklaus_wirth#9",
+      "index": 9,
+      "text": "Um segundo livro (junto com Martin Reiser) foi planejado como um guia do programador. Lei de Wirth\nEm 1995, ele popularizou o ditado, agora conhecido como lei de Wirth, que afirma que o software está ficando mais lento mais rapidamente do que o hardware. Em seu artigo de 1995, A Plea for Lean Software, ele o atribui a Martin Reiser."
+    }
+  ]
+}

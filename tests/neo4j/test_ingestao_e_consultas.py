@@ -7,6 +7,7 @@ from conftest import (
     PASTA_NEO4J,
     PREFIXO,
     carregar_cypher,
+    dimensao_vetorial,
     ingerir,
     vetor_base,
 )
@@ -92,7 +93,7 @@ def test_mesma_entidade_em_outro_documento_vira_um_no_so(grafo_exemplo):
 # ---------- Consultas de referência (neo4j/consultas/exemplos.cypher) ----------
 
 def test_consultas_de_exemplo_sao_validas(driver):
-    dim = 1536
+    dim = dimensao_vetorial(driver, "chunk_embedding")
     params = {"termo": "x", "embedding": [0.1] * dim, "k": 5, "origem": "a", "destino": "b"}
     consultas = carregar_cypher(PASTA_NEO4J / "consultas" / "exemplos.cypher")
     assert len(consultas) == 6

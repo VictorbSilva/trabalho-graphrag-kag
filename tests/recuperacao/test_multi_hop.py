@@ -149,6 +149,38 @@ def test_com_pergunta_ordena_pela_semelhanca_com_o_caminho(semente):
         assert P + "premio:premio_turing" in {n["id"] for n in caminho["nos"]}
 
 
+def vetores_contra_premio(textos):
+    return [[0.0, 1.0] if "Prêmio" in t else [1.0, 0.0] for t in textos]
+
+
+def pontas(caminho: dict) -> set[str]:
+    return {caminho["nos"][0]["tipo"], caminho["nos"][-1]["tipo"]}
+
+
+def test_caminhos_com_ponta_do_tipo_pedido_vem_primeiro(semente):
+    caminhos = expandir(
+        semente,
+        [P + "c#2", P + "c#1"],
+        limite=3,
+        pergunta="Que prêmio recebeu quem criou o C++?",
+        gerar_vetores=vetores_contra_premio,
+    )
+    assert len(caminhos) == 3
+    assert all("Premio" in pontas(c) for c in caminhos)
+
+
+def test_sem_tipo_pedido_vale_so_a_similaridade(semente):
+    caminhos = expandir(
+        semente,
+        [P + "c#2", P + "c#1"],
+        limite=3,
+        pergunta="Em que ano o C++ foi criado?",
+        gerar_vetores=vetores_contra_premio,
+    )
+    assert len(caminhos) == 3
+    assert not any("Premio" in pontas(c) for c in caminhos)
+
+
 def test_corte_da_consulta_fica_com_os_trechos_de_maior_score(semente):
     caminhos = expandir(
         semente,

@@ -13,6 +13,7 @@ from pathlib import Path
 from neo4j import RoutingControl
 
 from src.recuperacao.embeddings import gerar_embeddings
+from src.recuperacao.tipo_resposta import tipo_esperado
 
 RAIZ = Path(__file__).resolve().parents[2]
 DOMINIO = RAIZ / "neo4j" / "dominio.json"
@@ -91,9 +92,11 @@ def expandir(
     (fica o de maior score).
 
     Com pergunta, cada caminho ganha "similaridade" (produto escalar entre os
-    vetores normalizados da pergunta e da frase do caminho) e a ordem é por
-    similaridade, score, média do PageRank dos nós e caminhos mais curtos. Sem
-    pergunta, a ordem é a mesma sem a similaridade.
+    vetores normalizados da pergunta e da frase do caminho). A ordem põe primeiro
+    os caminhos com uma ponta do tipo que a pergunta pede (tipo_esperado), sem
+    descartar os outros, e segue por similaridade, score, média do PageRank dos
+    nós e caminhos mais curtos. Sem pergunta, a ordem é a mesma sem o tipo e sem
+    a similaridade.
     """
     if isinstance(max_saltos, bool) or not isinstance(max_saltos, int) or not 1 <= max_saltos <= 3:
         raise ValueError("max_saltos precisa ser um inteiro entre 1 e 3.")
@@ -134,9 +137,11 @@ def expandir(
         vetores = gerar_vetores([pergunta] + [verbalizar_caminho(c) for c in caminhos])
         for caminho, vetor in zip(caminhos, vetores[1:]):
             caminho["similaridade"] = _produto_escalar(vetores[0], vetor)
+    tipo = tipo_esperado(pergunta)
     ordenados = sorted(
         caminhos,
         key=lambda c: (
+            0 if tipo and tipo in (c["nos"][0]["tipo"], c["nos"][-1]["tipo"]) else 1,
             -c["similaridade"],
             -c["score"],
             -_media_pagerank(c),

@@ -167,6 +167,56 @@ def test_confianca_vem_dos_sinais_da_recuperacao(chamadas):
     assert "1 de 1 caminhos" in dados["confianca"]["criterio"]
 
 
+def test_recusa_do_llm_fica_com_confianca_baixa(chamadas):
+    chamadas["resultados"][0]["score"] = 0.95
+    recusa = MENSAGEM_SEM_INFORMACAO.rstrip(".")
+    dados = responder(PERGUNTA, driver=object(), llm=llm_fixo(recusa))
+    assert dados["resposta"] == recusa
+    assert dados["confianca"]["nivel"] == "baixa"
+    assert "resposta não gerada" in dados["confianca"]["criterio"]
+
+
+def test_falha_do_llm_fica_com_confianca_baixa(chamadas):
+    chamadas["resultados"][0]["score"] = 0.95
+
+    def llm_quebrado(mensagens):
+        raise RuntimeError("fora do ar")
+
+    dados = responder(PERGUNTA, driver=object(), llm=llm_quebrado)
+    assert dados["confianca"]["nivel"] == "baixa"
+
+
+@pytest.fixture
+def sinais_da_confianca(monkeypatch):
+    """Troca calcular_confianca por uma falsa que guarda os argumentos recebidos."""
+    recebidos = {}
+
+    def calcular_falso(**kwargs):
+        recebidos.update(kwargs)
+        return {"valor": 0.5, "nivel": "media", "criterio": "falso"}
+
+    monkeypatch.setattr(modulo, "calcular_confianca", calcular_falso)
+    return recebidos
+
+
+def test_confianca_recebe_a_maior_similaridade_dos_caminhos(chamadas, sinais_da_confianca):
+    chamadas["caminhos"] = [{**CAMINHO, "similaridade": 0.6}, {**CAMINHO, "similaridade": 0.3}]
+    responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1][F1]."))
+    assert sinais_da_confianca["similaridade_caminho"] == 0.6
+    assert sinais_da_confianca["resposta_gerada"] is True
+
+
+def test_caminho_sem_similaridade_passa_none(chamadas, sinais_da_confianca):
+    responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1]."))
+    assert sinais_da_confianca["similaridade_caminho"] is None
+
+
+def test_vetorial_passa_similaridade_none(chamadas, sinais_da_confianca):
+    responder(PERGUNTA, "vetorial", driver=object(), llm=llm_fixo("Foi Dennis Ritchie [F1]."))
+    assert sinais_da_confianca["similaridade_caminho"] is None
+    assert sinais_da_confianca["caminhos"] == 0
+
+
 def test_fontes_das_arestas_fora_da_busca_viram_fontes_sem_score(chamadas):
     aresta = {**CAMINHO["arestas"][0], "fontes": ["c_mais_mais#0", "extra#0"]}
     chamadas["caminhos"] = [{**CAMINHO, "arestas": [aresta]}]

@@ -14,9 +14,9 @@ Os trechos dos documentos e as perguntas são convertidos em vetores pelo modelo
 
 A busca consulta o índice vetorial do Neo4j e devolve os cinco trechos mais parecidos com a pergunta, cada um com o título e a URL do documento de origem. O índice compara os vetores pelo cosseno, mas devolve o score na faixa de 0 a 1, calculado como (1 + cosseno) / 2. Nessa escala, um trecho sem relação nenhuma com a pergunta tem score 0,5, e não 0. O cálculo da confiança desfaz essa conversão.
 
-O modelo lê no máximo 128 tokens de cada texto e ignora o restante. Por isso os documentos são divididos em trechos de até 450 caracteres, cortados entre frases. Só uma frase que sozinha passa do limite é quebrada, e mesmo assim entre palavras. Com essa regra, 17 dos 1633 trechos do dataset (1%) ainda passam de 128 tokens. Nenhuma das 22 evidências da avaliação está na parte cortada desses trechos.
+O modelo lê no máximo 128 tokens de cada texto e ignora o restante. Por isso os documentos são divididos em trechos de até 450 caracteres, cortados entre frases. Só uma frase que sozinha passa do limite é quebrada, e mesmo assim entre palavras. Com essa regra, 17 dos 1633 trechos do dataset do pipeline (1%) ainda passam de 128 tokens. Nenhuma das 22 evidências da avaliação está na parte cortada desses trechos.
 
-A busca foi conferida com a semente, um conjunto pequeno de trechos, entidades e relações anotados à mão. Em 13 de 14 perguntas de teste, o trecho que sustenta a resposta ficou entre os três primeiros resultados. A exceção foi uma pergunta sobre uma data, em que outro trecho também mencionava o mesmo ano.
+A busca foi conferida com a semente, um conjunto pequeno de trechos, entidades e relações anotados à mão. No teste `tests/recuperacao/test_busca_semente.py`, 12 de 12 perguntas tiveram um trecho certo entre os três primeiros resultados. Algumas perguntas têm mais de um trecho certo, e o gabarito do teste aceita todos eles. As posições podem ser reproduzidas com `python -m src.avaliacao.posicoes_semente`, que imprime a posição do primeiro trecho certo de cada pergunta.
 
 ## Expansão multi-hop
 
@@ -50,7 +50,7 @@ A regra prevê ainda um desconto de 0,1 quando a consulta do Text-to-Cypher dá 
 
 ## Exemplo completo
 
-O exemplo a seguir foi gerado com a semente carregada no Neo4j e o PageRank calculado. A pergunta, no modo GraphRAG, foi:
+O exemplo a seguir foi gerado em 15 de novembro de 2026, com a semente carregada no Neo4j e o PageRank calculado. O texto da resposta veio do modelo claude-opus-5-5-fast, pela Abacus RouteLLM, com temperatura 0. O JSON completo da resposta está em `docs/artigo/exemplo-resposta-real.json`, e as partes reproduzidas aqui foram copiadas dele sem edição. A pergunta, no modo GraphRAG, foi:
 
 > Que prêmio recebeu quem criou a linguagem que influenciou o C++?
 
@@ -95,18 +95,10 @@ O valor segue a regra: (0,5 × 0,64 + 0,5 × 0,54) × 5/5 = 0,59, nível médio.
 
 ## Limitações e trabalhos futuros
 
-O próprio exemplo mostra o limite da checagem de citações. Ela confere se o identificador existe, não se o caminho ou o trecho citado sustenta a afirmação. Na última frase da resposta, a Medalha IEEE Richard W. Hamming aparece citada com [C4][F7]. O trecho F7 menciona essa medalha, mas o caminho C4 trata só da Medalha Nacional de Tecnologia e Inovação. A citação passou porque os dois identificadores existem. Conferir o conteúdo de cada citação não faz parte desta versão.
+O próprio exemplo mostra o limite da checagem de citações. Ela confere se o identificador existe, não se o caminho ou o trecho citado sustenta a afirmação. Na última frase da resposta, a Medalha IEEE Richard W. Hamming aparece citada com [C4][F7]. O trecho F7 menciona essa medalha, mas o caminho C4 trata só da Medalha Nacional de Tecnologia e Inovação. A citação passou porque os dois identificadores existem. Como trabalho futuro, a checagem deve verificar se o trecho citado sustenta a afirmação, e não só se o identificador existe.
 
 A expansão também traz caminhos que não respondem à pergunta. No exemplo, três dos cinco passam por Ken Thompson e chegam ao Prêmio Turing por outro lado. Eles ocupam espaço no contexto, e cabe ao LLM descartá-los. A detecção do tipo pedido olha só o começo da pergunta e uma lista fixa de palavras. Uma pergunta formulada de outro jeito fica sem tipo, e a ordem dos caminhos passa a depender só da similaridade e dos scores.
 
-Na busca, 1% dos trechos tem o final ignorado pelo modelo de embeddings. A exceção encontrada na semente mostra ainda que trechos que mencionam a mesma data competem entre si.
+Na busca, 17 dos 1633 trechos do dataset do pipeline (1%) têm o final ignorado pelo modelo de embeddings. Esse número não vale para a semente da demo. Os trechos da semente são parágrafos inteiros anotados à mão e não passaram pelo chunking. Três dos 12 passam do limite de 128 tokens do modelo: `c#2` (147 tokens), `c_mais_mais#1` (247) e `dennis_ritchie#4` (140). Os três aparecem nas fontes do exemplo, como F1, F4 e F8. No teste da semente, a pergunta "Quem criou a linguagem C?" acerta no limite, com o trecho certo em 3º lugar.
 
 O Text-to-Cypher, que traduziria a pergunta numa consulta Cypher, ficou como trabalho futuro. Hoje o campo `cypher` da resposta sai sempre nulo, e o sinal correspondente na confiança não é usado.
-
----
-
-Divergências para o Victor revisar:
-
-1. Ordem da expansão. A lista de fatos diz que a expansão é ordenada por score do trecho e por PageRank. No código (`expandir` em `src/recuperacao/multi_hop.py`), quando a pergunta é passada, e o `responder` sempre passa, a ordem é tipo pedido, similaridade com a pergunta, score, média do PageRank e tamanho do caminho. O texto segue o código.
-2. 13 de 14 perguntas. O teste da main (`tests/recuperacao/test_busca_semente.py`) tem 8 perguntas e espera o trecho certo entre os 3 primeiros em todas. O número 13 de 14 não aparece em nenhum teste ou documento do repositório. O texto usa o número da lista, mas vale confirmar de onde ele veio.
-3. Exemplo e limite de 128 tokens. Os trechos da semente são parágrafos inteiros e não passam pelo chunking. Três dos doze passam de 128 tokens, e os três aparecem nas fontes do exemplo: F1 (`c#2`, 147 tokens), F4 (`c_mais_mais#1`, 247) e F8 (`dennis_ritchie#4`, 140). O 1% vale para o dataset processado, não para a semente.

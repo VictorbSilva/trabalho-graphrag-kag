@@ -8,17 +8,61 @@ import pytest
 from src.contrato import Confianca
 from src.recuperacao.confianca import calcular_confianca
 
+# melhor_score 0.82 dá cosseno 0.64.
+GRAFO_BOM = {"melhor_score": 0.82, "caminhos": 5, "caminhos_com_fonte": 5, "similaridade_caminho": 0.60}
 
-def test_score_alto_com_todos_os_caminhos_com_fonte_da_alta():
-    c = calcular_confianca(melhor_score=0.95, caminhos=3, caminhos_com_fonte=3)
-    assert c["valor"] == 0.95
+
+def test_grafo_e_trechos_bons_da_alta():
+    c = calcular_confianca(
+        melhor_score=0.95, caminhos=3, caminhos_com_fonte=3, similaridade_caminho=0.9
+    )
+    assert c["valor"] == 0.9
     assert c["nivel"] == "alta"
+
+
+def test_caminho_parecido_com_a_pergunta_fica_media():
+    c = calcular_confianca(**GRAFO_BOM)
+    assert c["valor"] == 0.62
+    assert c["nivel"] == "media"
+
+
+def test_caminho_pouco_parecido_com_a_pergunta_baixa_o_valor():
+    c = calcular_confianca(**{**GRAFO_BOM, "similaridade_caminho": 0.20})
+    assert c["valor"] == 0.42
+    assert c["nivel"] == "media"
+
+
+def test_sem_caminhos_com_fonte_zera_o_valor():
+    c = calcular_confianca(**{**GRAFO_BOM, "caminhos_com_fonte": 0})
+    assert c["valor"] == 0.0
+    assert c["nivel"] == "baixa"
+
+
+@pytest.mark.parametrize("similaridade", [None, -0.3])
+def test_similaridade_ausente_ou_negativa_conta_como_zero(similaridade):
+    ausente = calcular_confianca(**{**GRAFO_BOM, "similaridade_caminho": similaridade})
+    zero = calcular_confianca(**{**GRAFO_BOM, "similaridade_caminho": 0.0})
+    assert ausente["valor"] == zero["valor"] == 0.32
 
 
 @pytest.mark.parametrize(
     "sinais",
     [
-        {"melhor_score": 0.95, "caminhos": 3, "caminhos_com_fonte": 3},
+        GRAFO_BOM,
+        {"melhor_score": 1.0, "caminhos": 5, "caminhos_com_fonte": 5, "similaridade_caminho": 1.0},
+        {"melhor_score": 0.95, "caminhos": 0, "caminhos_com_fonte": 0},
+    ],
+)
+def test_resposta_nao_gerada_zera_o_valor(sinais):
+    c = calcular_confianca(**sinais, resposta_gerada=False)
+    assert c["valor"] == 0.0
+    assert c["nivel"] == "baixa"
+
+
+@pytest.mark.parametrize(
+    "sinais",
+    [
+        {"melhor_score": 0.95, "caminhos": 3, "caminhos_com_fonte": 3, "similaridade_caminho": 0.9},
         {"melhor_score": 1.0, "caminhos": 5, "caminhos_com_fonte": 5, "cypher_ok": True},
         {"melhor_score": None, "caminhos": 0, "caminhos_com_fonte": 0, "cypher_ok": False},
     ],
@@ -35,24 +79,28 @@ def test_so_vetorial_com_score_alto_fica_media():
     assert c["nivel"] == "media"
 
 
+def test_so_vetorial_ignora_a_similaridade_do_caminho():
+    sem = calcular_confianca(melhor_score=0.95, caminhos=0, caminhos_com_fonte=0)
+    com = calcular_confianca(
+        melhor_score=0.95, caminhos=0, caminhos_com_fonte=0, similaridade_caminho=0.9
+    )
+    assert com["valor"] == sem["valor"]
+
+
 def test_pergunta_fora_do_dominio_fica_baixa():
     c = calcular_confianca(melhor_score=0.6, caminhos=0, caminhos_com_fonte=0)
     assert c["nivel"] == "baixa"
 
 
 def test_cypher_com_erro_tira_um_decimo():
-    base = calcular_confianca(melhor_score=0.95, caminhos=3, caminhos_com_fonte=3)
-    com_erro = calcular_confianca(
-        melhor_score=0.95, caminhos=3, caminhos_com_fonte=3, cypher_ok=False
-    )
+    base = calcular_confianca(**GRAFO_BOM)
+    com_erro = calcular_confianca(**GRAFO_BOM, cypher_ok=False)
     assert com_erro["valor"] == round(base["valor"] - 0.1, 2)
 
 
 def test_cypher_ausente_nao_muda_o_valor():
-    base = calcular_confianca(melhor_score=0.95, caminhos=3, caminhos_com_fonte=3)
-    sem_cypher = calcular_confianca(
-        melhor_score=0.95, caminhos=3, caminhos_com_fonte=3, cypher_ok=None
-    )
+    base = calcular_confianca(**GRAFO_BOM)
+    sem_cypher = calcular_confianca(**GRAFO_BOM, cypher_ok=None)
     assert sem_cypher["valor"] == base["valor"]
     assert sem_cypher["nivel"] == base["nivel"]
 
@@ -60,10 +108,12 @@ def test_cypher_ausente_nao_muda_o_valor():
 @pytest.mark.parametrize(("caminhos", "caminhos_com_fonte"), [(0, 0), (2, 2), (4, 1)])
 def test_score_ausente_conta_como_cosseno_zero(caminhos, caminhos_com_fonte):
     ausente = calcular_confianca(
-        melhor_score=None, caminhos=caminhos, caminhos_com_fonte=caminhos_com_fonte
+        melhor_score=None, caminhos=caminhos, caminhos_com_fonte=caminhos_com_fonte,
+        similaridade_caminho=0.5,
     )
     cosseno_zero = calcular_confianca(
-        melhor_score=0.5, caminhos=caminhos, caminhos_com_fonte=caminhos_com_fonte
+        melhor_score=0.5, caminhos=caminhos, caminhos_com_fonte=caminhos_com_fonte,
+        similaridade_caminho=0.5,
     )
     assert ausente["valor"] == cosseno_zero["valor"]
 
@@ -71,13 +121,15 @@ def test_score_ausente_conta_como_cosseno_zero(caminhos, caminhos_com_fonte):
 @pytest.mark.parametrize(
     "sinais",
     [
-        {"melhor_score": 1.0, "caminhos": 3, "caminhos_com_fonte": 3},
+        {"melhor_score": 1.0, "caminhos": 3, "caminhos_com_fonte": 3, "similaridade_caminho": 1.0},
         {"melhor_score": 1.0, "caminhos": 0, "caminhos_com_fonte": 0},
         {"melhor_score": 0.0, "caminhos": 0, "caminhos_com_fonte": 0},
         {"melhor_score": 0.0, "caminhos": 0, "caminhos_com_fonte": 0, "cypher_ok": False},
         {"melhor_score": 0.0, "caminhos": 2, "caminhos_com_fonte": 0, "cypher_ok": False},
-        {"melhor_score": None, "caminhos": 3, "caminhos_com_fonte": 1},
+        {"melhor_score": None, "caminhos": 3, "caminhos_com_fonte": 1, "similaridade_caminho": -1.0},
         {"melhor_score": 0.95, "caminhos": 3, "caminhos_com_fonte": 3, "sem_contexto": True},
+        {"melhor_score": 0.95, "caminhos": 3, "caminhos_com_fonte": 3, "resposta_gerada": False,
+         "cypher_ok": False},
     ],
 )
 def test_resultado_valida_no_contrato_e_fica_entre_0_e_1(sinais):
@@ -94,6 +146,8 @@ def test_resultado_valida_no_contrato_e_fica_entre_0_e_1(sinais):
         {"melhor_score": 0.95, "caminhos": 2, "caminhos_com_fonte": 5},
         {"melhor_score": 1.5, "caminhos": 3, "caminhos_com_fonte": 3},
         {"melhor_score": -0.1, "caminhos": 3, "caminhos_com_fonte": 3},
+        {**GRAFO_BOM, "similaridade_caminho": 1.5},
+        {**GRAFO_BOM, "similaridade_caminho": -1.5},
     ],
 )
 def test_sinais_impossiveis_levantam_value_error(sinais):
@@ -107,6 +161,8 @@ def test_sinais_impossiveis_levantam_value_error(sinais):
         {"melhor_score": 0.0, "caminhos": 3, "caminhos_com_fonte": 3},
         {"melhor_score": 1.0, "caminhos": 3, "caminhos_com_fonte": 3},
         {"melhor_score": 0.95, "caminhos": 0, "caminhos_com_fonte": 0},
+        {**GRAFO_BOM, "similaridade_caminho": 1.0},
+        {**GRAFO_BOM, "similaridade_caminho": -1.0},
     ],
 )
 def test_sinais_nos_extremos_continuam_aceitos(sinais):
@@ -126,3 +182,14 @@ def test_criterio_cita_os_sinais_usados(sinais):
     assert isinstance(criterio, str)
     assert "score" in criterio
     assert "caminhos" in criterio
+
+
+def test_criterio_cita_a_similaridade_do_caminho_quando_ha_caminhos():
+    assert "similaridade do caminho" in calcular_confianca(**GRAFO_BOM)["criterio"]
+    vetorial = calcular_confianca(melhor_score=0.95, caminhos=0, caminhos_com_fonte=0)
+    assert "similaridade do caminho" not in vetorial["criterio"]
+
+
+def test_criterio_cita_resposta_nao_gerada():
+    assert "resposta não gerada" in calcular_confianca(**GRAFO_BOM, resposta_gerada=False)["criterio"]
+    assert "resposta não gerada" not in calcular_confianca(**GRAFO_BOM)["criterio"]

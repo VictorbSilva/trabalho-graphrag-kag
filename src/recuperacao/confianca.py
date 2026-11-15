@@ -25,6 +25,8 @@ def calcular_confianca(
     caminhos_com_fonte: int,
     cypher_ok: bool | None = None,
     sem_contexto: bool = False,
+    similaridade_caminho: float | None = None,
+    resposta_gerada: bool = True,
 ) -> dict:
     """Devolve {valor, nivel, criterio} no formato de Confianca (src/contrato.py)."""
     if caminhos < 0:
@@ -39,13 +41,18 @@ def calcular_confianca(
         )
     if melhor_score is not None and not 0.0 <= melhor_score <= 1.0:
         raise ValueError(f"melhor_score precisa estar entre 0 e 1 (recebido: {melhor_score}).")
+    if similaridade_caminho is not None and not -1.0 <= similaridade_caminho <= 1.0:
+        raise ValueError(
+            f"similaridade_caminho precisa estar entre -1 e 1 (recebido: {similaridade_caminho})."
+        )
 
     cosseno = max(0.0, 2 * melhor_score - 1) if melhor_score is not None else 0.0
+    similaridade = max(0.0, similaridade_caminho) if similaridade_caminho is not None else 0.0
 
-    if sem_contexto:
+    if sem_contexto or not resposta_gerada:
         valor = 0.0
     elif caminhos > 0:
-        valor = 0.5 * cosseno + 0.5 * (caminhos_com_fonte / caminhos)
+        valor = (0.5 * cosseno + 0.5 * similaridade) * (caminhos_com_fonte / caminhos)
     else:
         valor = 0.7 * cosseno
 
@@ -57,11 +64,17 @@ def calcular_confianca(
     partes = []
     if sem_contexto:
         partes.append("sem contexto recuperado")
+    if not resposta_gerada:
+        partes.append("resposta não gerada (recusa ou falha do LLM)")
     if melhor_score is None:
         partes.append(f"score ausente (cosseno {cosseno:.2f})")
     else:
         partes.append(f"score {melhor_score:.2f} (cosseno {cosseno:.2f})")
     if caminhos > 0:
+        if similaridade_caminho is None:
+            partes.append("similaridade do caminho ausente (conta 0)")
+        else:
+            partes.append(f"similaridade do caminho {similaridade_caminho:.2f}")
         partes.append(f"{caminhos_com_fonte} de {caminhos} caminhos com trecho de origem")
     else:
         partes.append("0 caminhos no grafo (só busca vetorial)")

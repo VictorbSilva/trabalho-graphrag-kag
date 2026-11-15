@@ -6,6 +6,8 @@ F1...), com as citações conferidas (V4). A confiança vem de sinais observáve
 recuperação (V5).
 """
 
+import string
+
 from src.contrato import Resposta
 from src.recuperacao.busca_vetorial import buscar_chunks
 from src.recuperacao.confianca import calcular_confianca
@@ -25,6 +27,21 @@ MODOS = ("graphrag", "vetorial")
 MAX_FONTES = 8
 AVISO_SEM_CONTEXTO = "Nenhum trecho ou caminho encontrado."
 RESPOSTA_FALHA_LLM = "Não foi possível gerar a resposta agora. Veja os trechos em fontes."
+
+
+def _normalizar_recusa(texto: str) -> str:
+    """Minúsculas, sem pontuação final e sem espaços sobrando, para reconhecer a recusa."""
+    return " ".join(texto.split()).lower().rstrip(string.punctuation).strip()
+
+
+def _e_recusa(texto: str) -> bool:
+    return _normalizar_recusa(texto).startswith(_normalizar_recusa(MENSAGEM_SEM_INFORMACAO))
+
+
+def _maior_similaridade(brutos: list[dict]) -> float | None:
+    """Maior "similaridade" entre os caminhos da expansão (None sem caminhos ou sem o campo)."""
+    valores = [c["similaridade"] for c in brutos if c.get("similaridade") is not None]
+    return max(valores, default=None)
 
 
 def _fontes(driver, resultados: list[dict], caminhos: list[dict]) -> list[dict]:
@@ -74,6 +91,7 @@ def responder(pergunta: str, modo: str = "graphrag", *, driver=None, llm=None) -
     fontes = _fontes(driver, resultados, caminhos)
     sem_contexto = not fontes and not caminhos
     avisos = []
+    llm_falhou = False
 
     if sem_contexto:
         resposta = MENSAGEM_SEM_INFORMACAO
@@ -90,6 +108,7 @@ def responder(pergunta: str, modo: str = "graphrag", *, driver=None, llm=None) -
             resposta = llm(mensagens)
         except Exception as erro:
             resposta = RESPOSTA_FALHA_LLM
+            llm_falhou = True
             avisos.append(f"Falha ao chamar o LLM ({type(erro).__name__}).")
 
     for citado in citacoes_invalidas(resposta, caminhos, fontes):
@@ -101,6 +120,8 @@ def responder(pergunta: str, modo: str = "graphrag", *, driver=None, llm=None) -
         caminhos_com_fonte=sum(1 for c in brutos if all(a["fontes"] for a in c["arestas"])),
         cypher_ok=None,
         sem_contexto=sem_contexto,
+        similaridade_caminho=_maior_similaridade(brutos),
+        resposta_gerada=not llm_falhou and not _e_recusa(resposta),
     )
 
     dados = {

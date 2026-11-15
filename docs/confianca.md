@@ -20,6 +20,8 @@ O valor sai só de sinais observáveis da recuperação. Nenhum LLM avalia a pr�
 | `cypher_ok` | Resultado do Text-to-Cypher: `True` se rodou, `False` se deu erro, `None` se não foi usado. |
 | `sem_contexto` | `True` quando a recuperação não trouxe nada para o LLM usar. |
 
+Entradas impossíveis (`caminhos` ou `caminhos_com_fonte` negativos, `caminhos_com_fonte` maior que `caminhos`, `melhor_score` fora de 0 a 1) são recusadas com `ValueError`, em vez de corrigidas, para que o limite de 0 a 1 não esconda um erro de quem chamou.
+
 ## Conversão do score do Neo4j
 
 O índice vetorial do Neo4j usa similaridade por cosseno, mas devolve o score convertido para a faixa de 0 a 1:

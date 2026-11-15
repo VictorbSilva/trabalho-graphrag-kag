@@ -27,6 +27,19 @@ def calcular_confianca(
     sem_contexto: bool = False,
 ) -> dict:
     """Devolve {valor, nivel, criterio} no formato de Confianca (src/contrato.py)."""
+    if caminhos < 0:
+        raise ValueError(f"caminhos não pode ser negativo (recebido: {caminhos}).")
+    if caminhos_com_fonte < 0:
+        raise ValueError(
+            f"caminhos_com_fonte não pode ser negativo (recebido: {caminhos_com_fonte})."
+        )
+    if caminhos_com_fonte > caminhos:
+        raise ValueError(
+            f"caminhos_com_fonte ({caminhos_com_fonte}) não pode passar de caminhos ({caminhos})."
+        )
+    if melhor_score is not None and not 0.0 <= melhor_score <= 1.0:
+        raise ValueError(f"melhor_score precisa estar entre 0 e 1 (recebido: {melhor_score}).")
+
     cosseno = max(0.0, 2 * melhor_score - 1) if melhor_score is not None else 0.0
 
     if sem_contexto:

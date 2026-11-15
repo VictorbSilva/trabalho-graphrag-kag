@@ -1,0 +1,142 @@
+{
+  "documento": {
+    "id": "ken_thompson",
+    "title": "Ken Thompson",
+    "source": "https://pt.wikipedia.org/wiki/Ken_Thompson"
+  },
+  "chunks": [
+    {
+      "id": "ken_thompson#0",
+      "index": 0,
+      "text": "Kenneth Thompson (Nova Orleães, 4 de fevereiro de 1943) é um cientista da computação, conhecido pela sua influência na criação do sistema operacional UNIX, pela invenção da linguagem de programação B, antecessora da linguagem de programação C. Originalmente contratado em 1966 para trabalhar no projeto Multics da Bell Labs, Thompson conheceu Dennis Ritchie e trabalhou junto com Ritchie para criar o sistema operacional UNIX."
+    },
+    {
+      "id": "ken_thompson#1",
+      "index": 1,
+      "text": "Thompson também criou a linguagem de programação B, uma precursora da linguagem C de Dennis Ritchie. Thompson também é conhecido por outros trabalhos, como o sistema operacional Plan 9, suas contribuições na definição da codificação de caracteres UTF-8, tabelas finais e a máquina de xadrez Belle. Desde 2006, está trabalhando na empresa Google, onde co-inventou a linguagem de programação Go."
+    }
+  ],
+  "entidades": [
+    {
+      "id": "organizacao:bell_labs",
+      "name": "Bell Labs",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Laboratório onde Thompson trabalhou no projeto Multics e participou da criação do UNIX.",
+      "chunk_ids": [
+        "ken_thompson#0"
+      ]
+    },
+    {
+      "id": "organizacao:google",
+      "name": "Google",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa onde Thompson trabalha desde 2006 e co-inventou a linguagem Go.",
+      "chunk_ids": [
+        "ken_thompson#1"
+      ]
+    },
+    {
+      "id": "pessoa:dennis_ritchie",
+      "name": "Dennis Ritchie",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Cientista da computação que colaborou com Thompson na criação do UNIX e criou a linguagem C.",
+      "chunk_ids": [
+        "ken_thompson#0"
+      ]
+    },
+    {
+      "id": "pessoa:ken_thompson",
+      "name": "Ken Thompson",
+      "type": "Pessoa",
+      "aliases": [
+        "Kenneth Thompson"
+      ],
+      "description": "Cientista da computação que ajudou a criar UNIX e inventou a linguagem B.",
+      "chunk_ids": [
+        "ken_thompson#0",
+        "ken_thompson#1"
+      ]
+    },
+    {
+      "id": "tecnologia:b",
+      "name": "B",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação criada por Thompson, precursora da linguagem C.",
+      "chunk_ids": [
+        "ken_thompson#1"
+      ]
+    },
+    {
+      "id": "tecnologia:c",
+      "name": "C",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação desenvolvida por Dennis Ritchie, influenciada pela linguagem B.",
+      "chunk_ids": [
+        "ken_thompson#1"
+      ]
+    },
+    {
+      "id": "tecnologia:go",
+      "name": "Go",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação co-inventada por Thompson na Google.",
+      "chunk_ids": [
+        "ken_thompson#1"
+      ]
+    },
+    {
+      "id": "tecnologia:unix",
+      "name": "UNIX",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Sistema operacional criado por Thompson e Ritchie.",
+      "chunk_ids": [
+        "ken_thompson#0"
+      ]
+    }
+  ],
+  "relacoes": [
+    {
+      "origem": "pessoa:ken_thompson",
+      "destino": "tecnologia:b",
+      "tipo": "CRIOU",
+      "chunk_id": "ken_thompson#1"
+    },
+    {
+      "origem": "pessoa:ken_thompson",
+      "destino": "tecnologia:go",
+      "tipo": "CRIOU",
+      "chunk_id": "ken_thompson#1"
+    },
+    {
+      "origem": "pessoa:ken_thompson",
+      "destino": "tecnologia:unix",
+      "tipo": "CRIOU",
+      "chunk_id": "ken_thompson#0"
+    },
+    {
+      "origem": "pessoa:ken_thompson",
+      "destino": "organizacao:bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "ken_thompson#0"
+    },
+    {
+      "origem": "pessoa:ken_thompson",
+      "destino": "organizacao:google",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "ken_thompson#1"
+    },
+    {
+      "origem": "tecnologia:b",
+      "destino": "tecnologia:c",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "ken_thompson#1"
+    }
+  ]
+}

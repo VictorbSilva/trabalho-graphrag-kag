@@ -1,0 +1,394 @@
+{
+  "documento": {
+    "id": "brian_kernighan",
+    "title": "Brian Kernighan",
+    "source": "https://pt.wikipedia.org/wiki/Brian_Kernighan"
+  },
+  "chunks": [
+    {
+      "id": "brian_kernighan#0",
+      "index": 0,
+      "text": "Brian Kernighan ([ˈkɜːrnɪhæn]; (Toronto, 1942) é um cientista da computação canadense. Ele trabalhou na Bell Labs e contribuiu com o desenvolvimento do Unix junto dos criadores Ken Thompson e Dennis Ritchie. O nome de Brian Kernighan tornou-se conhecido por ser o co-autor do primeiro livro sobre a linguagem de programação C (The C Programming Language) com Dennis Ritchie."
+    },
+    {
+      "id": "brian_kernighan#1",
+      "index": 1,
+      "text": "Kernighan teria dito que não contribuiu para o desenvolvimento da linguagem C (\"O trabalho foi todo do Dennis Ritchie\"). Kernighan foi autor de muitos programas Unix, incluindo ditroff. Ele é co-autor das linguagens de programação AWK e AMPL. O \"K\" do \"C K&R\" e também o do AWK remetem para o seu nome. Nasceu em Toronto, Canadá, e concluiu o seu bacharelato em \"Engenharia Física\" na Universidade de Toronto."
+    },
+    {
+      "id": "brian_kernighan#2",
+      "index": 2,
+      "text": "Nasceu em Toronto, Canadá, e concluiu o seu bacharelato em \"Engenharia Física\" na Universidade de Toronto. Obteve o seu doutoramento em Engenharia Electrotécnica na Universidade de Princeton, onde desde de 2004 é professor no departamento de Ciência da Computação. Carreira e pesquisa\nLivros e relatórios\nThe Elements of Programming Style, with P. J. Plauger\nSoftware Tools, a book and set of tools for Ratfor, co-created in part with P. J."
+    },
+    {
+      "id": "brian_kernighan#3",
+      "index": 3,
+      "text": "J. Plauger\nSoftware Tools in Pascal, a book and set of tools for Pascal, with P. J. Plauger\nThe AWK Programming Language, with Alfred V. Aho, and Peter J."
+    },
+    {
+      "id": "brian_kernighan#4",
+      "index": 4,
+      "text": "Aho, and Peter J. Weinberger\nThe C Programming Language, with C creator Dennis Ritchie, the first book on C\nThe Practice of Programming, with Rob Pike\nThe Unix Programming Environment, a tutorial book, with Rob Pike\n\"Why Pascal is Not My Favorite Programming Language\", a popular criticism of Niklaus Wirth's Pascal."
+    },
+    {
+      "id": "brian_kernighan#5",
+      "index": 5,
+      "text": "Some parts of the criticism are obsolete due to ISO 7185 (Programming Languages - Pascal); the criticism was written before ISO 7185 was created. (AT&T Computing Science Technical Report #100)\nUNIX: A History and a Memoir, a historical account of the development of Unix from the perspective of his role at Bell Labs"
+    },
+    {
+      "id": "brian_kernighan#6",
+      "index": 6,
+      "text": "Programas\n1972: The first documented \"Hello, world!\" program, in Kernighan's \"A Tutorial Introduction to the Language B\"\n1973: ditroff, or \"device independent troff\", which allowed troff to be used with any device\n1974: The eqn typesetting language for troff, with Lorinda Cherry\n1976: Ratfor\n1977: The m4 macro processing language, with Dennis Ritchie\n1977: The AWK programming language, with Alfred Aho and Peter J."
+    },
+    {
+      "id": "brian_kernighan#7",
+      "index": 7,
+      "text": "Weinberger, and its book The AWK Programming Language\n1985: The AMPL programming language\n1988: The pic typesetting language for troff"
+    }
+  ],
+  "entidades": [
+    {
+      "id": "organizacao:bell_labs",
+      "name": "Bell Labs",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Laboratório onde Kernighan trabalhou e onde o Unix foi desenvolvido.",
+      "chunk_ids": [
+        "brian_kernighan#0"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_de_princeton",
+      "name": "Universidade de Princeton",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Instituição onde Kernighan obteve o doutorado e leciona em ciência da computação.",
+      "chunk_ids": [
+        "brian_kernighan#2"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_de_toronto",
+      "name": "Universidade de Toronto",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Instituição onde Kernighan concluiu o bacharelado em Engenharia Física.",
+      "chunk_ids": [
+        "brian_kernighan#1"
+      ]
+    },
+    {
+      "id": "pessoa:alfred_aho",
+      "name": "Alfred Aho",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Cientista da computação que co-criou a linguagem AWK.",
+      "chunk_ids": [
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "pessoa:alfred_v_aho",
+      "name": "Alfred V. Aho",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Coautor de livros de programação.",
+      "chunk_ids": [
+        "brian_kernighan#4"
+      ]
+    },
+    {
+      "id": "pessoa:brian_kernighan",
+      "name": "Brian Kernighan",
+      "type": "Pessoa",
+      "aliases": [
+        "Kernighan"
+      ],
+      "description": "Cientista da computação canadense, co-autor das linguagens AWK e AMPL.",
+      "chunk_ids": [
+        "brian_kernighan#0",
+        "brian_kernighan#1",
+        "brian_kernighan#2",
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "pessoa:dennis_ritchie",
+      "name": "Dennis Ritchie",
+      "type": "Pessoa",
+      "aliases": [
+        "Ritchie"
+      ],
+      "description": "Cientista da computação, co-criador do Unix e da linguagem C.",
+      "chunk_ids": [
+        "brian_kernighan#0",
+        "brian_kernighan#4",
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "pessoa:ken_thompson",
+      "name": "Ken Thompson",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Cientista da computação, co-criador do Unix.",
+      "chunk_ids": [
+        "brian_kernighan#0"
+      ]
+    },
+    {
+      "id": "pessoa:lorinda_cherry",
+      "name": "Lorinda Cherry",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Colaboradora na criação da linguagem eqn.",
+      "chunk_ids": [
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "pessoa:niklaus_wirth",
+      "name": "Niklaus Wirth",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Criador da linguagem Pascal.",
+      "chunk_ids": [
+        "brian_kernighan#4"
+      ]
+    },
+    {
+      "id": "pessoa:peter_j_weinberger",
+      "name": "Peter J. Weinberger",
+      "type": "Pessoa",
+      "aliases": [
+        "Peter Weinberger"
+      ],
+      "description": "Coautor de livros de programação.",
+      "chunk_ids": [
+        "brian_kernighan#4",
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "pessoa:rob_pike",
+      "name": "Rob Pike",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Coautor de livros sobre Unix e programação.",
+      "chunk_ids": [
+        "brian_kernighan#4"
+      ]
+    },
+    {
+      "id": "tecnologia:ampl",
+      "name": "AMPL",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação co-criada por Kernighan.",
+      "chunk_ids": [
+        "brian_kernighan#1",
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "tecnologia:awk",
+      "name": "AWK",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação co-criada por Kernighan.",
+      "chunk_ids": [
+        "brian_kernighan#1",
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "tecnologia:b",
+      "name": "B",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação precursor da C.",
+      "chunk_ids": [
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "tecnologia:ditroff",
+      "name": "ditroff",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Versão device-independent do troff.",
+      "chunk_ids": [
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "tecnologia:eqn",
+      "name": "eqn",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de tipografia para troff.",
+      "chunk_ids": [
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "tecnologia:iso_7185",
+      "name": "ISO 7185",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Padrão internacional para a linguagem Pascal.",
+      "chunk_ids": [
+        "brian_kernighan#5"
+      ]
+    },
+    {
+      "id": "tecnologia:m4",
+      "name": "m4",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de macro processamento.",
+      "chunk_ids": [
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "tecnologia:pascal",
+      "name": "Pascal",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação desenvolvida por Niklaus Wirth.",
+      "chunk_ids": [
+        "brian_kernighan#4"
+      ]
+    },
+    {
+      "id": "tecnologia:pic",
+      "name": "pic",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de desenho para troff.",
+      "chunk_ids": [
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "tecnologia:ratfor",
+      "name": "Ratfor",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Pré-processador de Fortran.",
+      "chunk_ids": [
+        "brian_kernighan#6"
+      ]
+    },
+    {
+      "id": "tecnologia:unix",
+      "name": "Unix",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Sistema operacional desenvolvido no Bell Labs.",
+      "chunk_ids": [
+        "brian_kernighan#0",
+        "brian_kernighan#5"
+      ]
+    }
+  ],
+  "relacoes": [
+    {
+      "origem": "pessoa:alfred_aho",
+      "destino": "tecnologia:awk",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6"
+    },
+    {
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:ampl",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#1"
+    },
+    {
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:ampl",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6"
+    },
+    {
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:awk",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#1"
+    },
+    {
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:awk",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6"
+    },
+    {
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:ditroff",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6"
+    },
+    {
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:eqn",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6"
+    },
+    {
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:m4",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6"
+    },
+    {
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:pic",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6"
+    },
+    {
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:ratfor",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6"
+    },
+    {
+      "origem": "pessoa:brian_kernighan",
+      "destino": "organizacao:bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brian_kernighan#0"
+    },
+    {
+      "origem": "pessoa:brian_kernighan",
+      "destino": "organizacao:universidade_de_princeton",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brian_kernighan#2"
+    },
+    {
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "tecnologia:m4",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6"
+    },
+    {
+      "origem": "pessoa:lorinda_cherry",
+      "destino": "tecnologia:eqn",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6"
+    },
+    {
+      "origem": "pessoa:peter_j_weinberger",
+      "destino": "tecnologia:awk",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6"
+    },
+    {
+      "origem": "tecnologia:unix",
+      "destino": "organizacao:bell_labs",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "brian_kernighan#0"
+    }
+  ]
+}

@@ -127,9 +127,10 @@ def banco(driver):
 
 
 def ingerir(driver, payload: dict) -> None:
-    """Roda o modelo de ingestão (neo4j/consultas/ingestao_modelo.cypher) com um documento."""
-    for comando in carregar_cypher(PASTA_NEO4J / "consultas" / "ingestao_modelo.cypher"):
-        driver.execute_query(comando, payload)
+    """Grava um documento com a ingestão oficial (src/banco/ingestor.py, uma transação por artigo)."""
+    from src.banco.ingestor import ingerir_artigo
+
+    ingerir_artigo(driver, payload)
 
 
 def payload_exemplo(dim: int) -> dict:

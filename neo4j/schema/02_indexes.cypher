@@ -16,10 +16,14 @@ CREATE RANGE INDEX document_source IF NOT EXISTS
 FOR (d:Document) ON (d.source);
 
 // R07 - Índices Fulltext (busca por palavra-chave, com tolerância a variações).
-// Se o dataset for em português, troque o analyzer para 'brazilian'
-// (melhora o stemming). Para mudar, é preciso DROP INDEX e criar de novo.
+// O dataset são artigos da Wikipédia em português, então o analyzer é o
+// 'brazilian' (stemming e stopwords do português do Brasil).
+// Para mudar o analyzer de um índice que já existe é preciso DROP INDEX
+// e criar de novo (ver neo4j/README.md).
 CREATE FULLTEXT INDEX entity_search IF NOT EXISTS
-FOR (e:Entity) ON EACH [e.name, e.aliases, e.description];
+FOR (e:Entity) ON EACH [e.name, e.aliases, e.description]
+OPTIONS { indexConfig: { `fulltext.analyzer`: 'brazilian' } };
 
 CREATE FULLTEXT INDEX chunk_text IF NOT EXISTS
-FOR (c:Chunk) ON EACH [c.text];
+FOR (c:Chunk) ON EACH [c.text]
+OPTIONS { indexConfig: { `fulltext.analyzer`: 'brazilian' } };

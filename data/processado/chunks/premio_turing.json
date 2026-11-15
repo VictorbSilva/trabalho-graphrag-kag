@@ -1,0 +1,19 @@
+{
+  "documento": {
+    "id": "premio_turing",
+    "title": "Prêmio Turing",
+    "source": "https://pt.wikipedia.org/wiki/Pr%C3%AAmio_Turing"
+  },
+  "chunks": [
+    {
+      "id": "premio_turing#0",
+      "index": 0,
+      "text": "O Prêmio Turing é concedido anualmente pela Association for Computing Machinery (ACM) para uma pessoa selecionada por contribuições à computação. As contribuições devem ser duradouras e fundamentais no campo computacional. A denominação do prêmio é homenagem a Alan Mathison Turing, um matemático britânico considerado um dos pais da ciência da computação moderna. O prêmio é conhecido como o \"Prêmio Nobel da computação\"."
+    },
+    {
+      "id": "premio_turing#1",
+      "index": 1,
+      "text": "O prêmio é conhecido como o \"Prêmio Nobel da computação\". É patrocinado pela Intel Corporation e acompanhado atualmente por um prêmio monetário no valor de 250 mil dólares. A ACM anunciou em 13 de novembro de 2014 que a premiação foi aumentada para 1 milhão de dólares através de recursos fornecidos pelo Google. Nacionalidades\nA maior parte dos laureados é estadunidense. De 1966 a 2019: Laureados\nLista de laureados desde 1966 a atualidade."
+    }
+  ]
+}

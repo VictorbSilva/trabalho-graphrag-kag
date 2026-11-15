@@ -156,6 +156,42 @@
     "arquivo": "data/bruto/bjarne_stroustrup.txt"
   },
   {
+    "id": "unix",
+    "titulo": "Unix",
+    "titulo_pedido": "Unix",
+    "url": "https://pt.wikipedia.org/wiki/Unix",
+    "url_revisao": "https://pt.wikipedia.org/w/index.php?title=Unix&oldid=72548574",
+    "revisao": 72548574,
+    "data_acesso": "2026-11-12",
+    "licenca": "CC BY-SA 4.0",
+    "palavras": 3487,
+    "arquivo": "data/bruto/unix.txt"
+  },
+  {
+    "id": "bell_labs",
+    "titulo": "Bell Labs",
+    "titulo_pedido": "Bell Labs",
+    "url": "https://pt.wikipedia.org/wiki/Bell_Labs",
+    "url_revisao": "https://pt.wikipedia.org/w/index.php?title=Bell_Labs&oldid=72965089",
+    "revisao": 72965089,
+    "data_acesso": "2026-11-12",
+    "licenca": "CC BY-SA 4.0",
+    "palavras": 9148,
+    "arquivo": "data/bruto/bell_labs.txt"
+  },
+  {
+    "id": "java",
+    "titulo": "Java (linguagem de programação)",
+    "titulo_pedido": "Java (linguagem de programação)",
+    "url": "https://pt.wikipedia.org/wiki/Java_(linguagem_de_programa%C3%A7%C3%A3o)",
+    "url_revisao": "https://pt.wikipedia.org/w/index.php?title=Java_(linguagem_de_programação)&oldid=73239703",
+    "revisao": 73239703,
+    "data_acesso": "2026-11-12",
+    "licenca": "CC BY-SA 4.0",
+    "palavras": 1946,
+    "arquivo": "data/bruto/java.txt"
+  },
+  {
     "id": "james_gosling",
     "titulo": "James Gosling",
     "titulo_pedido": "James Gosling",
@@ -274,6 +310,42 @@
     "licenca": "CC BY-SA 4.0",
     "palavras": 4788,
     "arquivo": "data/bruto/linux.txt"
+  },
+  {
+    "id": "linus_torvalds",
+    "titulo": "Linus Torvalds",
+    "titulo_pedido": "Linus Torvalds",
+    "url": "https://pt.wikipedia.org/wiki/Linus_Torvalds",
+    "url_revisao": "https://pt.wikipedia.org/w/index.php?title=Linus_Torvalds&oldid=72678005",
+    "revisao": 72678005,
+    "data_acesso": "2026-11-12",
+    "licenca": "CC BY-SA 4.0",
+    "palavras": 1584,
+    "arquivo": "data/bruto/linus_torvalds.txt"
+  },
+  {
+    "id": "javascript",
+    "titulo": "JavaScript",
+    "titulo_pedido": "JavaScript",
+    "url": "https://pt.wikipedia.org/wiki/JavaScript",
+    "url_revisao": "https://pt.wikipedia.org/w/index.php?title=JavaScript&oldid=72979232",
+    "revisao": 72979232,
+    "data_acesso": "2026-11-12",
+    "licenca": "CC BY-SA 4.0",
+    "palavras": 5643,
+    "arquivo": "data/bruto/javascript.txt"
+  },
+  {
+    "id": "brendan_eich",
+    "titulo": "Brendan Eich",
+    "titulo_pedido": "Brendan Eich",
+    "url": "https://pt.wikipedia.org/wiki/Brendan_Eich",
+    "url_revisao": "https://pt.wikipedia.org/w/index.php?title=Brendan_Eich&oldid=72464899",
+    "revisao": 72464899,
+    "data_acesso": "2026-11-12",
+    "licenca": "CC BY-SA 4.0",
+    "palavras": 446,
+    "arquivo": "data/bruto/brendan_eich.txt"
   },
   {
     "id": "netscape",

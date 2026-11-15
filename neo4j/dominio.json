@@ -1,0 +1,117 @@
+{
+  "versao": 1,
+  "descricao": "Schema do domínio: história da computação, a partir de artigos da Wikipédia em português. Fonte única para o prompt de extração (pipeline) e para o prompt do Text-to-Cypher (recuperação). Explicação completa em docs/modelo-do-grafo.md.",
+  "embedding": {
+    "dimensoes": 384,
+    "similaridade": "cosine",
+    "indices": ["chunk_embedding", "entity_embedding"]
+  },
+  "id_canonico": {
+    "regra": "<prefixo do rótulo>:<nome normalizado>",
+    "normalizacao": [
+      "remove a desambiguação entre parênteses ('Java (linguagem de programação)' vira 'Java')",
+      "'+' vira ' mais '",
+      "remove acentos (ç vira c, ã vira a)",
+      "passa para minúsculas",
+      "toda sequência de caracteres que não é letra nem número vira '_'",
+      "remove '_' do início e do fim"
+    ],
+    "implementacao": "a normalização é a mesma de gerar_slug() em src/pipeline/baixar_artigos.py",
+    "exemplos": {
+      "Alan Turing": "pessoa:alan_turing",
+      "Bell Labs": "organizacao:bell_labs",
+      "C++": "tecnologia:c_mais_mais",
+      "Java (linguagem de programação)": "tecnologia:java",
+      "Prêmio Turing": "premio:premio_turing"
+    },
+    "documento": "nome normalizado do título do artigo, sem prefixo: o mesmo id de data/bruto/manifesto.json. Ex.: 'C (linguagem de programação)' vira 'c' e 'C++' vira 'c_mais_mais'",
+    "chunk": "<id do documento>#<índice do trecho>, ex.: 'c_mais_mais#0'"
+  },
+  "rotulos": [
+    {
+      "nome": "Pessoa",
+      "prefixo_id": "pessoa",
+      "descricao": "Pessoa real ligada à história da computação: cientista, engenheiro, programador, fundador.",
+      "exemplos": ["Alan Turing", "Dennis Ritchie", "Grace Hopper"]
+    },
+    {
+      "nome": "Organizacao",
+      "prefixo_id": "organizacao",
+      "descricao": "Empresa, laboratório, universidade ou instituto onde pessoas trabalharam ou tecnologias foram desenvolvidas.",
+      "exemplos": ["Bell Labs", "IBM", "Universidade de Cambridge"]
+    },
+    {
+      "nome": "Tecnologia",
+      "prefixo_id": "tecnologia",
+      "descricao": "Linguagem de programação, sistema operacional, computador, máquina, algoritmo, protocolo ou padrão.",
+      "exemplos": ["C", "Unix", "ENIAC", "TCP/IP"]
+    },
+    {
+      "nome": "Premio",
+      "prefixo_id": "premio",
+      "descricao": "Prêmio, medalha ou distinção recebida por uma pessoa.",
+      "exemplos": ["Prêmio Turing", "Medalha Nacional de Tecnologia"]
+    }
+  ],
+  "relacoes": [
+    {
+      "tipo": "CRIOU",
+      "de": ["Pessoa"],
+      "para": ["Tecnologia", "Organizacao"],
+      "descricao": "A pessoa criou ou foi coautora da tecnologia, ou fundou a organização.",
+      "exemplo": "Dennis Ritchie CRIOU C"
+    },
+    {
+      "tipo": "TRABALHOU_EM",
+      "de": ["Pessoa"],
+      "para": ["Organizacao"],
+      "descricao": "A pessoa trabalhou, pesquisou ou lecionou na organização.",
+      "exemplo": "Dennis Ritchie TRABALHOU_EM Bell Labs"
+    },
+    {
+      "tipo": "DESENVOLVIDA_EM",
+      "de": ["Tecnologia"],
+      "para": ["Organizacao"],
+      "descricao": "A tecnologia foi desenvolvida na organização.",
+      "exemplo": "Unix DESENVOLVIDA_EM Bell Labs"
+    },
+    {
+      "tipo": "INFLUENCIADA_POR",
+      "de": ["Tecnologia"],
+      "para": ["Tecnologia"],
+      "descricao": "A primeira tecnologia foi influenciada pela segunda ou derivou dela.",
+      "exemplo": "C++ INFLUENCIADA_POR C"
+    },
+    {
+      "tipo": "RECEBEU",
+      "de": ["Pessoa"],
+      "para": ["Premio"],
+      "descricao": "A pessoa recebeu o prêmio.",
+      "exemplo": "Dennis Ritchie RECEBEU Prêmio Turing"
+    }
+  ],
+  "grafo_lexico": {
+    "rotulos": {
+      "Document": ["id", "title", "source"],
+      "Chunk": ["id", "index", "text", "embedding"],
+      "Entity": ["id", "name", "type", "aliases", "description", "embedding", "pagerank", "community"]
+    },
+    "relacoes": [
+      "(:Chunk)-[:PART_OF]->(:Document)",
+      "(:Chunk)-[:NEXT]->(:Chunk)",
+      "(:Chunk)-[:MENTIONS]->(:Entity)"
+    ],
+    "observacoes": [
+      "Toda entidade tem o rótulo Entity mais o rótulo do domínio, ex.: (:Entity:Pessoa).",
+      "Toda relação do domínio tem a propriedade source_chunk_ids com os ids dos trechos que a justificam.",
+      "pagerank e community só existem depois de rodar o GDS."
+    ]
+  },
+  "arquivo_por_artigo": {
+    "descricao": "Formato do JSON que o pipeline entrega e o ingestor lê (um arquivo por artigo, sem embedding).",
+    "documento": ["id", "title", "source"],
+    "chunks": ["id", "index", "text"],
+    "entidades": ["id", "name", "type", "aliases", "description", "chunk_ids"],
+    "relacoes": ["origem", "destino", "tipo", "chunk_id"]
+  }
+}

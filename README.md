@@ -4,14 +4,27 @@ Sistema de perguntas e respostas sobre um grafo de conhecimento no Neo4j, constr
 
 Tendências em Ciência da Computação, Prof. Ricardo Roberto de Lima, 2026.
 
+## Domínio
+
+**História da computação.** O grafo é construído a partir de cerca de 30 artigos da Wikipédia em português (licença CC BY-SA) sobre pessoas, organizações, tecnologias e prêmios da computação. Exemplo de pergunta multi-hop: *"Algum criador de uma linguagem que influenciou o C++ recebeu o Prêmio Turing?"*
+
+| Rótulos | Relações |
+|---|---|
+| `Pessoa`, `Organizacao`, `Tecnologia`, `Premio` | `CRIOU`, `TRABALHOU_EM`, `DESENVOLVIDA_EM`, `INFLUENCIADA_POR`, `RECEBEU` |
+
+Schema completo em [docs/modelo-do-grafo.md](docs/modelo-do-grafo.md) e, em formato legível por código, em [neo4j/dominio.json](neo4j/dominio.json).
+
 ## Equipe
 
-| Integrante | Pilar |
+| Integrante | Frente |
 |---|---|
-| Victor | Recuperação híbrida, multi-hop e backend |
-| Nicolas | Modelagem LPG no Neo4j e algoritmos de grafo |
-| Patrick | Pipeline Text-to-Graph, avaliação e testes |
-| Gabriel | Interface e visualização |
+| Victor | Contratos, recuperação híbrida, multi-hop e avaliação comparativa |
+| Nicolas | Banco Neo4j (modelagem, ingestão e algoritmos de grafo) e artigo |
+| Patrick | Pipeline Text-to-Graph (dataset, extração e resolução de entidades) |
+| Gabriel | Interface, agente Mentor e apresentação |
+| Pedro | API, perguntas de avaliação e entrega (README, testes, demo) |
+
+O backlog com as issues de cada um está no quadro [Backlog GraphRAG e KAG](https://github.com/users/VictorbSilva/projects/4).
 
 ## Estrutura
 
@@ -19,6 +32,7 @@ Tendências em Ciência da Computação, Prof. Ricardo Roberto de Lima, 2026.
 docker-compose.yml     Neo4j 5.26 + APOC + GDS
 neo4j/
   Dockerfile           imagem do Neo4j com os plugins já instalados
+  dominio.json         rótulos, relações e regra de ids do domínio
   schema/              constraints e índices (aplicados no docker compose up)
   gds/                 PageRank e Louvain
   consultas/           modelo de ingestão e consultas de referência
@@ -45,6 +59,30 @@ python -m venv .venv
 .venv\Scripts\activate          # Linux/Mac: source .venv/bin/activate
 pip install -r requirements-dev.txt
 python -m pytest
+```
+
+`python -m pytest` roda a suíte inteira (banco, pipeline, recuperação e API). Os testes que dependem de serviço externo têm marcador e podem ser rodados à parte:
+
+| Comando | O que roda |
+|---|---|
+| `python -m pytest -m neo4j` | só os testes que precisam do Neo4j no ar (os que usam a conexão com o banco) |
+| `python -m pytest -m llm` | só os testes que precisam de chave de LLM |
+| `python -m pytest -m "not neo4j and not llm"` | só os que rodam em qualquer máquina (é o que o CI roda) |
+
+Se o Neo4j estiver fora do ar, os testes do banco aparecem como pulados, com o motivo no resumo. Para exigir o banco, rode com `EXIGIR_NEO4J=1`. Teste novo que chama um LLM deve levar `@pytest.mark.llm`. O CI do GitHub ([.github/workflows/testes.yml](.github/workflows/testes.yml)) roda a cada push na `main` e em todo pull request.
+
+API (FastAPI), com o ambiente virtual ativo:
+
+```bash
+uvicorn src.api.app:app --reload --port 8000
+```
+
+- `GET http://localhost:8000/saude` responde se a API está no ar.
+- `POST http://localhost:8000/perguntar` recebe `{"pergunta": "...", "modo": "graphrag"}` (`modo` é `graphrag` ou `vetorial`) e devolve o objeto do contrato da resposta. Documentação interativa em http://localhost:8000/docs.
+- Por padrão a API devolve o JSON de exemplo do contrato (`data/exemplo_resposta.json`), sem banco nem LLM. Com `API_FONTE=recuperacao` e `API_RESPONDER=modulo:funcao` no `.env`, ela chama a recuperação de verdade. As outras variáveis (`API_TIMEOUT_S`, `API_CORS_ORIGENS`) estão no `.env.example`.
+
+```bash
+curl -X POST http://localhost:8000/perguntar -H "Content-Type: application/json" -d "{\"pergunta\": \"Quem criou o C?\", \"modo\": \"graphrag\"}"
 ```
 
 Detalhes do banco em [neo4j/README.md](neo4j/README.md) e do modelo do grafo em [docs/modelo-do-grafo.md](docs/modelo-do-grafo.md).

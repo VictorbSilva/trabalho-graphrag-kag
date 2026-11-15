@@ -1,0 +1,219 @@
+{
+  "documento": {
+    "id": "java",
+    "title": "Java (linguagem de programação)",
+    "source": "https://pt.wikipedia.org/wiki/Java_(linguagem_de_programa%C3%A7%C3%A3o)"
+  },
+  "chunks": [
+    {
+      "id": "java#0",
+      "index": 0,
+      "text": "Java é uma linguagem de programação de propósito geral, baseada em classes e orientada a objetos, desenvolvida por uma equipe liderada por James Gosling na Sun Microsystems a partir de 1991. A linguagem foi apresentada publicamente em 1995. Em 2010, a Oracle Corporation concluiu a aquisição da Sun Microsystems, tornando-se responsável pela continuidade comercial de produtos e tecnologias da empresa, entre eles Java."
+    },
+    {
+      "id": "java#1",
+      "index": 1,
+      "text": "O código-fonte Java é normalmente compilado em bytecode, armazenado em arquivos de classe. Esse código é executado por uma máquina virtual Java (Java Virtual Machine, ou JVM), cuja implementação pode interpretá-lo ou compilá-lo dinamicamente para código nativo durante a execução."
+    },
+    {
+      "id": "java#2",
+      "index": 2,
+      "text": "A linguagem é a principal linguagem associada à Plataforma Java, mas essa plataforma também pode executar programas escritos em outras linguagens que produzam código compatível com a JVM. História\nDesenvolvimento\nO desenvolvimento de Java começou em 1991, na Sun Microsystems, com o Green Project. A equipe central incluía James Gosling, Mike Sheridan e Patrick Naughton."
+    },
+    {
+      "id": "java#3",
+      "index": 3,
+      "text": "A equipe central incluía James Gosling, Mike Sheridan e Patrick Naughton. O projeto procurava desenvolver software para dispositivos eletrônicos e sistemas computacionais que poderiam interagir com diferentes tipos de equipamentos. A linguagem criada durante o projeto recebeu inicialmente o nome de Oak."
+    },
+    {
+      "id": "java#4",
+      "index": 4,
+      "text": "A linguagem criada durante o projeto recebeu inicialmente o nome de Oak. Um dos protótipos produzidos foi o Star-7, um dispositivo portátil com interface gráfica sensível ao toque, concebido para controlar outros equipamentos. O projeto também originou Duke, personagem que se tornou o mascote da tecnologia Java. A equipe demonstrou uma versão funcional do sistema em 1992."
+    },
+    {
+      "id": "java#5",
+      "index": 5,
+      "text": "A equipe demonstrou uma versão funcional do sistema em 1992. A equipe posteriormente redirecionou o desenvolvimento para aplicações distribuídas e para o uso em redes de computadores, em particular na internet. O nome Oak foi substituído por Java, e a tecnologia foi apresentada publicamente em 23 de maio de 1995."
+    },
+    {
+      "id": "java#6",
+      "index": 6,
+      "text": "O nome Oak foi substituído por Java, e a tecnologia foi apresentada publicamente em 23 de maio de 1995. A plataforma foi concebida para permitir que o mesmo programa fosse executado em sistemas diferentes, desde que houvesse uma implementação compatível do ambiente de execução. Durante os primeiros anos, Java ficou conhecida também pelo uso em aplicações executadas em navegadores por meio de applets."
+    },
+    {
+      "id": "java#7",
+      "index": 7,
+      "text": "Durante os primeiros anos, Java ficou conhecida também pelo uso em aplicações executadas em navegadores por meio de applets. Esse modelo teve importância histórica para a difusão da linguagem, mas deixou de ser uma forma corrente de distribuição de aplicações web com o abandono do suporte a applets nos navegadores modernos."
+    },
+    {
+      "id": "java#8",
+      "index": 8,
+      "text": "Java continuou a ser utilizada em diferentes domínios, incluindo aplicações empresariais, serviços de rede, software para computadores e sistemas embarcados."
+    },
+    {
+      "id": "java#9",
+      "index": 9,
+      "text": "Padronização e desenvolvimento da plataforma\nO desenvolvimento das especificações de Java passou a contar com o Java Community Process (JCP), um processo de participação comunitária destinado a desenvolver e revisar especificações, implementações de referência e testes de compatibilidade para tecnologias Java. O JCP não é uma licença de software."
+    },
+    {
+      "id": "java#10",
+      "index": 10,
+      "text": "O JCP não é uma licença de software. Trata-se de um processo de especificação e evolução de tecnologias; os termos de licenciamento dependem da implementação, dos componentes e da versão considerados. Em novembro de 2006, a Sun Microsystems anunciou a disponibilização de grande parte do código-fonte da implementação da plataforma sob a GNU GPL."
+    },
+    {
+      "id": "java#11",
+      "index": 11,
+      "text": "Em novembro de 2006, a Sun Microsystems anunciou a disponibilização de grande parte do código-fonte da implementação da plataforma sob a GNU GPL. O processo de abertura do código foi concluído em 2007 e deu origem ao projeto OpenJDK, uma implementação de referência de código aberto da plataforma Java. Aquisição pela Oracle\nA Oracle anunciou a aquisição da Sun Microsystems em 2009 e concluiu a operação em 27 de janeiro de 2010."
+    },
+    {
+      "id": "java#12",
+      "index": 12,
+      "text": "Aquisição pela Oracle\nA Oracle anunciou a aquisição da Sun Microsystems em 2009 e concluiu a operação em 27 de janeiro de 2010. Com a aquisição, a Oracle assumiu a gestão de produtos e tecnologias da Sun, incluindo Java. O desenvolvimento da plataforma passou a envolver a Oracle, o projeto OpenJDK e a comunidade participante dos processos de especificação e implementação."
+    },
+    {
+      "id": "java#13",
+      "index": 13,
+      "text": "Versões\nA partir do Java 9, lançado em 2017, os lançamentos da plataforma passaram a seguir uma cadência regular, em geral com novas versões principais em março e setembro. Algumas versões recebem suporte de longo prazo (LTS, do inglês *Long-Term Support*), conforme a política de suporte do fornecedor. A designação LTS e os prazos de suporte podem variar entre fornecedores e distribuições."
+    },
+    {
+      "id": "java#14",
+      "index": 14,
+      "text": "A designação LTS e os prazos de suporte podem variar entre fornecedores e distribuições. Características\nJava foi concebida para favorecer a portabilidade dos programas, a segurança do ambiente de execução, a programação orientada a objetos e o desenvolvimento de aplicações em diferentes sistemas computacionais. Entre suas características estão:"
+    },
+    {
+      "id": "java#15",
+      "index": 15,
+      "text": "Entre suas características estão: Orientação a objetos: organiza os programas por meio de classes e objetos, com suporte a encapsulamento, herança e polimorfismo. Tipagem estática: os tipos das variáveis e expressões são verificados pelo sistema de tipos, em grande parte durante a compilação. Portabilidade: o compilador produz bytecode que pode ser executado em implementações compatíveis da máquina virtual Java."
+    },
+    {
+      "id": "java#16",
+      "index": 16,
+      "text": "Portabilidade: o compilador produz bytecode que pode ser executado em implementações compatíveis da máquina virtual Java. Bibliotecas e APIs: a plataforma oferece bibliotecas para operações comuns, entrada e saída, redes, coleções, concorrência, segurança e outras funções. Programação concorrente: disponibiliza mecanismos para executar e coordenar múltiplas tarefas, incluindo as APIs de *threads*."
+    },
+    {
+      "id": "java#17",
+      "index": 17,
+      "text": "Programação concorrente: disponibiliza mecanismos para executar e coordenar múltiplas tarefas, incluindo as APIs de *threads*. Gerenciamento automático de memória: o ambiente de execução inclui mecanismos de coleta de lixo para recuperar memória ocupada por objetos que já não são alcançáveis. Carregamento dinâmico: classes podem ser carregadas durante a execução, de acordo com as necessidades do programa."
+    },
+    {
+      "id": "java#18",
+      "index": 18,
+      "text": "Carregamento dinâmico: classes podem ser carregadas durante a execução, de acordo com as necessidades do programa. Internacionalização: as APIs incluem recursos para trabalhar com diferentes idiomas, localidades e conjuntos de caracteres. Recursos de rede: as bibliotecas incluem mecanismos para comunicação por rede e para a criação de aplicações distribuídas."
+    },
+    {
+      "id": "java#19",
+      "index": 19,
+      "text": "Recursos de rede: as bibliotecas incluem mecanismos para comunicação por rede e para a criação de aplicações distribuídas. A sintaxe de Java apresenta semelhanças com a de C e C++, mas a linguagem possui modelo próprio de tipos, gerenciamento de memória e execução. Embora a orientação a objetos seja central, recursos introduzidos em diferentes versões também permitem expressar técnicas de programação funcional, genérica e concorrente."
+    },
+    {
+      "id": "java#20",
+      "index": 20,
+      "text": "A execução de bytecode pela JVM não implica que todas as instruções sejam interpretadas durante toda a execução. Implementações como a HotSpot podem compilar dinamicamente partes do programa para código de máquina, além de interpretar bytecode. Licença\nNão existe uma única condição de licenciamento aplicável indistintamente a todas as distribuições de Java. O OpenJDK é disponibilizado sob a GNU GPL versão 2, acompanhada da Classpath Exception."
+    },
+    {
+      "id": "java#21",
+      "index": 21,
+      "text": "O OpenJDK é disponibilizado sob a GNU GPL versão 2, acompanhada da Classpath Exception. As condições de uso de uma distribuição Oracle JDK dependem da versão e dos termos aplicáveis a essa distribuição. A abertura do código-fonte de grande parte da implementação da plataforma Java começou em 2006, durante a gestão da Sun Microsystems, e foi concluída em 2007."
+    },
+    {
+      "id": "java#22",
+      "index": 22,
+      "text": "O projeto OpenJDK passou a oferecer uma implementação de código aberto da plataforma e serve de base para diversas distribuições de JDK. Exemplos de código\nOs exemplos a seguir ilustram recursos da linguagem. Cada bloco representa um exemplo independente; quando várias classes aparecem no mesmo bloco, podem ser colocadas em arquivos separados ou reunidas em um único arquivo se nenhuma delas for declarada como pública."
+    },
+    {
+      "id": "java#23",
+      "index": 23,
+      "text": "Método main\nEm programas Java tradicionais iniciados pelo lançador da plataforma, um dos pontos de entrada mais conhecidos é o método `main`, com a assinatura `public static void main(String[] args)`. O parâmetro `args` recebe os argumentos informados na linha de comando. Classes\nO exemplo seguinte apresenta uma classe abstrata e duas classes derivadas que implementam seu método abstrato."
+    },
+    {
+      "id": "java#24",
+      "index": 24,
+      "text": "Classes\nO exemplo seguinte apresenta uma classe abstrata e duas classes derivadas que implementam seu método abstrato. As classes `Cachorro` e `Gato` herdam de `Animal` e fornecem implementações próprias para `fazerBarulho()`. A redefinição de um método herdado é denominada sobrescrita (override). Java não permite que uma classe estenda diretamente mais de uma classe."
+    },
+    {
+      "id": "java#25",
+      "index": 25,
+      "text": "Java não permite que uma classe estenda diretamente mais de uma classe. Uma classe pode, porém, implementar várias interfaces; interfaces também podem estender outras interfaces. Essa possibilidade permite que um tipo satisfaça diferentes contratos sem exigir herança de múltiplas classes. Uma classe que não declara explicitamente outra superclasse herda diretamente de `Object`, a raiz da hierarquia de classes de Java."
+    },
+    {
+      "id": "java#26",
+      "index": 26,
+      "text": "Uma classe que não declara explicitamente outra superclasse herda diretamente de `Object`, a raiz da hierarquia de classes de Java. Interfaces\nUma interface define um contrato de operações que uma classe pode implementar. As interfaces podem declarar métodos abstratos, métodos padrão (*default*), métodos estáticos e constantes, entre outros elementos previstos pela especificação da linguagem. Uma classe pode implementar mais de uma interface."
+    },
+    {
+      "id": "java#27",
+      "index": 27,
+      "text": "Uma classe pode implementar mais de uma interface. No exemplo, `Porco` estende `Animal` e implementa as interfaces `Pesado` e `Colorido`. A classe fornece uma implementação para cada método abstrato herdado ou declarado pelas interfaces. Objetos e classes anônimas\nÉ possível criar um objeto sem armazenar sua referência em uma variável. Isso não torna a classe do objeto anônima: no primeiro caso do exemplo, a classe `Cavalo` tem nome."
+    },
+    {
+      "id": "java#28",
+      "index": 28,
+      "text": "Isso não torna a classe do objeto anônima: no primeiro caso do exemplo, a classe `Cavalo` tem nome. No segundo, a expressão cria uma classe anônima que estende `Animal` e implementa seu método abstrato. Programação funcional\nA versão 8 de Java, lançada em 2014, acrescentou recursos importantes para a programação funcional, entre eles expressões lambda, referências a métodos e a API de *streams*."
+    },
+    {
+      "id": "java#29",
+      "index": 29,
+      "text": "Esses recursos permitem, por exemplo, representar operações por meio de interfaces funcionais e encadear operações sobre coleções de dados. Nesse exemplo, `stream()` cria um fluxo de elementos; `map()` transforma cada texto em letras maiúsculas; e `forEach()` executa uma operação para cada elemento resultante. Ferramentas\nFrameworks e bibliotecas\nHá frameworks e bibliotecas que apoiam diferentes etapas do desenvolvimento de aplicações Java."
+    },
+    {
+      "id": "java#30",
+      "index": 30,
+      "text": "Ferramentas\nFrameworks e bibliotecas\nHá frameworks e bibliotecas que apoiam diferentes etapas do desenvolvimento de aplicações Java. Entre os exemplos conhecidos estão: Hibernate — framework de mapeamento objeto-relacional. JUnit — framework para testes automatizados. Apache Log4j — biblioteca de registro de eventos e mensagens de diagnóstico."
+    },
+    {
+      "id": "java#31",
+      "index": 31,
+      "text": "Apache Log4j — biblioteca de registro de eventos e mensagens de diagnóstico. Spring — framework que inclui recursos para injeção de dependência, inversão de controle e desenvolvimento de aplicações. Apache Struts — framework web baseado no padrão de arquitetura MVC. A presença de uma ferramenta nessa lista não implica que seja a mais utilizada ou recomendada para todos os projetos."
+    },
+    {
+      "id": "java#32",
+      "index": 32,
+      "text": "A presença de uma ferramenta nessa lista não implica que seja a mais utilizada ou recomendada para todos os projetos. A escolha depende do objetivo, da arquitetura, da manutenção e dos requisitos da aplicação. Ambientes de desenvolvimento\nO desenvolvimento Java pode ser feito em editores de texto e por ferramentas de linha de comando ou por meio de ambientes de desenvolvimento integrado (IDEs)."
+    },
+    {
+      "id": "java#33",
+      "index": 33,
+      "text": "Exemplos de ambientes e ferramentas associados ao ecossistema incluem: BlueJ — ambiente educacional para aprender programação orientada a objetos. Eclipse — ambiente de desenvolvimento extensível. IntelliJ IDEA — ambiente de desenvolvimento integrado da JetBrains. JDeveloper — ambiente de desenvolvimento da Oracle."
+    },
+    {
+      "id": "java#34",
+      "index": 34,
+      "text": "JDeveloper — ambiente de desenvolvimento da Oracle. NetBeans — ambiente de desenvolvimento integrado que oferece suporte a Java.\njEdit — editor de texto extensível com recursos para edição de código. JCreator — ambiente de desenvolvimento Java que teve uso em versões anteriores do ecossistema. JBuilder — ambiente de desenvolvimento historicamente associado à Borland."
+    },
+    {
+      "id": "java#35",
+      "index": 35,
+      "text": "JBuilder — ambiente de desenvolvimento historicamente associado à Borland. Tecnologias associadas\nA plataforma Java inclui bibliotecas, APIs, ambientes de execução e especificações destinados a diferentes tipos de aplicação. Alguns nomes pertencem a tecnologias históricas, enquanto outros continuam a ser encontrados em sistemas existentes ou em projetos de desenvolvimento. Java SE — edição padrão da plataforma Java."
+    },
+    {
+      "id": "java#36",
+      "index": 36,
+      "text": "Java SE — edição padrão da plataforma Java. Java ME — edição destinada a determinados dispositivos e ambientes de recursos limitados. Java EE — edição empresarial histórica, cuja evolução prosseguiu no ecossistema Jakarta EE. Java Card — plataforma para aplicações em cartões inteligentes e dispositivos semelhantes. JavaFX — conjunto de tecnologias para construção de interfaces gráficas. JDBC — API para acesso a bancos de dados relacionais."
+    },
+    {
+      "id": "java#37",
+      "index": 37,
+      "text": "JDBC — API para acesso a bancos de dados relacionais. JNI — interface para integração entre código Java e código nativo. JMX — tecnologias de gerenciamento e monitoramento de aplicações Java. JAAS — serviços de autenticação e autorização. JCE — extensões de criptografia da plataforma Java. JNDI — interface de acesso a serviços de nomes e diretórios. JMS — API de mensageria. JSP — tecnologia histórica para geração de conteúdo web dinâmico."
+    },
+    {
+      "id": "java#38",
+      "index": 38,
+      "text": "JSP — tecnologia histórica para geração de conteúdo web dinâmico. JSF — tecnologia de interface para aplicações web Java. JAIN — APIs relacionadas a redes e telecomunicações. J3D — API histórica para gráficos tridimensionais. JMX — API para gerenciamento de recursos e aplicações. JDO — API para persistência de objetos Java. JDMK — tecnologia histórica de gerenciamento de sistemas. JMF — framework histórico para mídia."
+    },
+    {
+      "id": "java#39",
+      "index": 39,
+      "text": "JMF — framework histórico para mídia. JMI — interface para metadados. JavaSpaces — tecnologia de coordenação distribuída baseada em espaços de objetos. Jini — arquitetura histórica para sistemas distribuídos. Jiro — tecnologia histórica para integração e gerenciamento de serviços. JXTA — conjunto de protocolos e ferramentas para aplicações ponto a ponto. JSML — linguagem de marcação associada a tecnologias de fala."
+    },
+    {
+      "id": "java#40",
+      "index": 40,
+      "text": "JSML — linguagem de marcação associada a tecnologias de fala. OSGi — especificação para sistemas modulares baseados em serviços. MARF — framework modular para reconhecimento de áudio. SuperWaba — plataforma histórica destinada a dispositivos portáteis."
+    },
+    {
+      "id": "java#41",
+      "index": 41,
+      "text": "SuperWaba — plataforma histórica destinada a dispositivos portáteis. Comunidade\nA comunidade de desenvolvimento Java inclui grupos de usuários conhecidos como JUGs (*Java User Groups*), que organizam encontros, palestras, atividades de formação e intercâmbio técnico. No Brasil, comunidades, fóruns e portais dedicados à linguagem incluem o PortalJava e o GUJ. A dimensão e a atividade dessas comunidades variam ao longo do tempo."
+    }
+  ]
+}

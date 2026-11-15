@@ -3,7 +3,7 @@
 import pytest
 from neo4j.exceptions import ConstraintError
 
-from conftest import PREFIXO
+from conftest import PREFIXO, carregar_dominio
 
 CONSTRAINTS = {"document_id_unique", "chunk_id_unique", "entity_id_unique"}
 
@@ -32,14 +32,28 @@ def test_indices_existem_e_estao_online(driver):
     assert not fora_do_ar, f"Índices que não estão ONLINE: {fora_do_ar}"
 
 
-def test_indices_vetoriais_usam_cosseno_e_mesma_dimensao(driver):
+def test_indices_vetoriais_seguem_o_dominio(driver):
+    """Dimensão e similaridade iguais às de neo4j/dominio.json (decisão do grupo: 384, cosseno)."""
+    esperado = carregar_dominio()["embedding"]
     registros, _, _ = driver.execute_query(
         "SHOW VECTOR INDEXES YIELD name, options RETURN name, options.indexConfig AS cfg"
     )
     configs = {r["name"]: r["cfg"] for r in registros}
-    for nome in ("chunk_embedding", "entity_embedding"):
-        assert configs[nome]["vector.similarity_function"].lower() == "cosine"
-    assert configs["chunk_embedding"]["vector.dimensions"] == configs["entity_embedding"]["vector.dimensions"]
+    for nome in esperado["indices"]:
+        assert configs[nome]["vector.dimensions"] == esperado["dimensoes"], (
+            f"{nome} está com {configs[nome]['vector.dimensions']} dimensões. "
+            "Recrie os índices (ver neo4j/README.md)."
+        )
+        assert configs[nome]["vector.similarity_function"].lower() == esperado["similaridade"]
+
+
+def test_indices_fulltext_usam_analyzer_brazilian(driver):
+    registros, _, _ = driver.execute_query(
+        "SHOW FULLTEXT INDEXES YIELD name, options RETURN name, options.indexConfig AS cfg"
+    )
+    analyzers = {r["name"]: r["cfg"]["fulltext.analyzer"] for r in registros}
+    assert analyzers["entity_search"] == "brazilian"
+    assert analyzers["chunk_text"] == "brazilian"
 
 
 def test_unicidade_impede_entidade_duplicada(banco):

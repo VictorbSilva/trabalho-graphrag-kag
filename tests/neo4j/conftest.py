@@ -6,7 +6,10 @@ Os dados reais do banco não são alterados (exceto pagerank/community, que o
 próprio script do GDS recalcula).
 """
 
+import json
 import os
+import re
+import unicodedata
 from pathlib import Path
 
 import pytest
@@ -15,9 +18,59 @@ from neo4j import GraphDatabase
 
 RAIZ = Path(__file__).resolve().parents[2]
 PASTA_NEO4J = RAIZ / "neo4j"
+PASTA_SEMENTE = RAIZ / "data" / "semente"
 PREFIXO = "teste::"
 
 load_dotenv(RAIZ / ".env")
+
+
+def carregar_dominio() -> dict:
+    """Schema do domínio (neo4j/dominio.json), a fonte única de rótulos e relações."""
+    return json.loads((PASTA_NEO4J / "dominio.json").read_text(encoding="utf-8"))
+
+
+def carregar_semente() -> dict[str, dict]:
+    """Arquivos de data/semente/, por nome de arquivo."""
+    return {
+        caminho.name: json.loads(caminho.read_text(encoding="utf-8"))
+        for caminho in sorted(PASTA_SEMENTE.glob("*.json"))
+    }
+
+
+def com_prefixo(artigo: dict, prefixo: str = PREFIXO) -> dict:
+    """Cópia do artigo com todos os ids prefixados, para os testes não tocarem dados reais."""
+    p = prefixo
+    return {
+        "documento": {**artigo["documento"], "id": p + artigo["documento"]["id"]},
+        "chunks": [{**c, "id": p + c["id"]} for c in artigo["chunks"]],
+        "entidades": [
+            {**e, "id": p + e["id"], "chunk_ids": [p + c for c in e["chunk_ids"]]}
+            for e in artigo["entidades"]
+        ],
+        "relacoes": [
+            {**r, "origem": p + r["origem"], "destino": p + r["destino"], "chunk_id": p + r["chunk_id"]}
+            for r in artigo["relacoes"]
+        ],
+    }
+
+
+def slug(texto: str) -> str:
+    """Nome normalizado: a mesma regra de gerar_slug() em src/pipeline/baixar_artigos.py.
+
+    slug("C++") -> "c_mais_mais"; slug("Java (linguagem de programação)") -> "java"
+    """
+    texto = re.sub(r"\s*\(.*?\)", "", texto)
+    texto = texto.replace("+", " mais ")
+    texto = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]+", "_", texto.lower()).strip("_")
+
+
+def id_canonico(prefixo: str, nome: str) -> str:
+    """Implementação de referência da regra de id canônico descrita em neo4j/dominio.json.
+
+    id_canonico("tecnologia", "C++") -> "tecnologia:c_mais_mais"
+    """
+    return f"{prefixo}:{slug(nome)}"
 
 
 def carregar_cypher(caminho: Path) -> list[str]:

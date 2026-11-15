@@ -2,6 +2,7 @@
 #
 #   docker compose up -d                 -> sobe o Neo4j (APOC + GDS) e aplica o schema
 #   docker compose run --rm neo4j-gds    -> roda PageRank e Louvain depois da ingestão
+#   docker compose run --rm neo4j-recriar-indices -> recria índices fulltext e vetoriais
 #   docker compose down                  -> para tudo (os dados ficam no volume)
 #   docker compose down -v               -> para tudo e APAGA os dados
 #
@@ -62,6 +63,13 @@ services:
     <<: *cypher-runner
     command: ["/neo4j/gds"]
     profiles: ["gds"]
+
+  # Apaga e recria os índices fulltext e vetoriais (depois de mudar analyzer ou
+  # dimensões em neo4j/schema). Não apaga nós. Só roda quando chamado explicitamente.
+  neo4j-recriar-indices:
+    <<: *cypher-runner
+    command: ["/neo4j/manutencao/recriar_indices", "/neo4j/schema"]
+    profiles: ["manutencao"]
 
 volumes:
   neo4j_data:

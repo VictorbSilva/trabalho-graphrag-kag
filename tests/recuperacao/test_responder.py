@@ -1,8 +1,8 @@
-"""Testes do responder() sem banco, sem modelo e sem LLM (issues V1, V3, V4 e V5).
+"""Testes do responder() sem banco, sem modelo e sem LLM (issues V1, V2, V3, V4 e V5).
 
-A busca vetorial, o embedding, a expansão e a resolução dos trechos são trocados por
-funções falsas, e o LLM é passado como função falsa, para conferir só como o
-responder monta a resposta. Rodam no CI.
+A busca vetorial, o embedding, a expansão, o Text-to-Cypher e a resolução dos
+trechos são trocados por funções falsas, e o LLM é passado como função falsa, para
+conferir só como o responder monta a resposta. Rodam no CI.
 """
 
 import json
@@ -49,6 +49,24 @@ CAMINHO = {
     "score": 0.9,
 }
 
+# Caminho que só o Text-to-Cypher acha, no formato de expandir().
+CAMINHO_DA_CYPHER = {
+    "chunk_origem": None,
+    "nos": [
+        {"id": "pessoa:bjarne_stroustrup", "nome": "Bjarne Stroustrup", "tipo": "Pessoa",
+         "pagerank": 0.0, "comunidade": None},
+        {"id": "tecnologia:c_mais_mais", "nome": "C++", "tipo": "Tecnologia",
+         "pagerank": 0.0, "comunidade": None},
+    ],
+    "arestas": [
+        {"origem": "pessoa:bjarne_stroustrup", "destino": "tecnologia:c_mais_mais",
+         "tipo": "CRIOU", "fontes": ["c_mais_mais#0"]},
+    ],
+    "score": 0.0,
+}
+
+CYPHER = "MATCH p = (:Pessoa)-[:CRIOU]->(:Tecnologia {id: 'tecnologia:c_mais_mais'}) RETURN p LIMIT 25"
+
 # Trechos que só aparecem nas fontes das arestas, fora do resultado da busca.
 TRECHOS_DO_BANCO = {
     f"extra#{i}": {
@@ -63,15 +81,17 @@ TRECHOS_DO_BANCO = {
 
 @pytest.fixture
 def chamadas(monkeypatch):
-    """Troca embedding, busca, expansão e resolução por funções falsas.
+    """Troca embedding, busca, expansão, Text-to-Cypher e resolução por funções falsas.
 
-    O registro guarda o que a busca e a expansão devolvem (os testes podem trocar)
-    e se a expansão foi chamada.
+    O registro guarda o que a busca, a expansão e o Text-to-Cypher devolvem (os
+    testes podem trocar) e se a expansão e o Text-to-Cypher foram chamados.
     """
     registro = {
         "resultados": [dict(r) for r in RESULTADOS],
         "caminhos": [CAMINHO],
         "expandir": False,
+        "text_to_cypher": {"cypher": CYPHER, "caminhos": [], "erro": None},
+        "gerar_e_executar": False,
     }
 
     def buscar_falso(driver, embedding, k=5):
@@ -84,9 +104,14 @@ def chamadas(monkeypatch):
     def resolver_falso(driver, chunk_ids):
         return [dict(TRECHOS_DO_BANCO[i]) for i in chunk_ids if i in TRECHOS_DO_BANCO]
 
+    def gerar_e_executar_falso(driver, pergunta, llm):
+        registro["gerar_e_executar"] = True
+        return registro["text_to_cypher"]
+
     monkeypatch.setattr(modulo, "gerar_embedding", lambda t: [0.0])
     monkeypatch.setattr(modulo, "buscar_chunks", buscar_falso)
     monkeypatch.setattr(modulo, "expandir", expandir_falso)
+    monkeypatch.setattr(modulo, "gerar_e_executar", gerar_e_executar_falso)
     monkeypatch.setattr(modulo, "resolver_trechos", resolver_falso)
     return registro
 
@@ -108,8 +133,9 @@ def test_graphrag_usa_o_texto_do_llm(chamadas):
     assert [c["id"] for c in dados["caminhos"]] == ["C1"]
     assert [f["id"] for f in dados["fontes"]] == ["F1", "F2"]
     assert not any("cita" in aviso for aviso in dados["avisos"])
-    assert dados["cypher"] is None
+    assert dados["cypher"] == CYPHER
     assert chamadas["expandir"]
+    assert chamadas["gerar_e_executar"]
 
 
 def test_llm_recebe_instrucoes_contexto_e_pergunta(chamadas):
@@ -157,7 +183,9 @@ def test_vetorial_nao_expande(chamadas):
     dados = responder(PERGUNTA, "vetorial", driver=object(), llm=llm_fixo("Foi Dennis Ritchie [F2]."))
     Resposta.model_validate(dados)
     assert dados["caminhos"] == []
+    assert dados["cypher"] is None
     assert not chamadas["expandir"]
+    assert not chamadas["gerar_e_executar"]
 
 
 def test_confianca_vem_dos_sinais_da_recuperacao(chamadas):
@@ -215,6 +243,57 @@ def test_vetorial_passa_similaridade_none(chamadas, sinais_da_confianca):
     responder(PERGUNTA, "vetorial", driver=object(), llm=llm_fixo("Foi Dennis Ritchie [F1]."))
     assert sinais_da_confianca["similaridade_caminho"] is None
     assert sinais_da_confianca["caminhos"] == 0
+    assert sinais_da_confianca["cypher_ok"] is None
+
+
+def test_cypher_executada_passa_cypher_ok_true(chamadas, sinais_da_confianca):
+    responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1]."))
+    assert sinais_da_confianca["cypher_ok"] is True
+
+
+def text_to_cypher_que_levanta(driver, pergunta, llm):
+    raise RuntimeError("Text-to-Cypher fora do ar")
+
+
+@pytest.mark.parametrize("como_falha", ["devolve erro", "levanta exceção"])
+def test_falha_do_text_to_cypher_nao_derruba_a_resposta(
+    chamadas, sinais_da_confianca, monkeypatch, como_falha
+):
+    if como_falha == "devolve erro":
+        chamadas["text_to_cypher"] = {"cypher": None, "caminhos": [], "erro": "Invalid input 'RETURN'"}
+    else:
+        monkeypatch.setattr(modulo, "gerar_e_executar", text_to_cypher_que_levanta)
+
+    dados = responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1]."))
+    Resposta.model_validate(dados)
+    assert dados["cypher"] is None
+    assert dados["resposta"] == "Foi Dennis Ritchie [C1]."
+    assert [c["id"] for c in dados["caminhos"]] == ["C1"]
+    assert any("Text-to-Cypher" in aviso for aviso in dados["avisos"])
+    assert sinais_da_confianca["cypher_ok"] is False
+
+
+def test_caminhos_da_cypher_se_juntam_aos_da_expansao_sem_duplicar(chamadas):
+    chamadas["text_to_cypher"] = {
+        "cypher": CYPHER,
+        "caminhos": [dict(CAMINHO, score=0.0, chunk_origem=None), CAMINHO_DA_CYPHER],
+        "erro": None,
+    }
+    dados = responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1][C2]."))
+    Resposta.model_validate(dados)
+    assert [(c["id"], c["relacoes"]) for c in dados["caminhos"]] == [
+        ("C1", ["INFLUENCIADA_POR"]),
+        ("C2", ["CRIOU"]),
+    ]
+    assert "pessoa:bjarne_stroustrup" in dados["nos_consultados"]
+    assert not any("Text-to-Cypher" in aviso for aviso in dados["avisos"])
+
+
+def test_confianca_conta_os_caminhos_da_cypher(chamadas, sinais_da_confianca):
+    chamadas["text_to_cypher"] = {"cypher": CYPHER, "caminhos": [CAMINHO_DA_CYPHER], "erro": None}
+    responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1]."))
+    assert sinais_da_confianca["caminhos"] == 2
+    assert sinais_da_confianca["caminhos_com_fonte"] == 2
 
 
 def test_fontes_das_arestas_fora_da_busca_viram_fontes_sem_score(chamadas):

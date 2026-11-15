@@ -1,13 +1,13 @@
 {
   "pergunta": "Que prêmio recebeu quem criou a linguagem que influenciou o C++?",
   "modo": "graphrag",
-  "resposta": "A linguagem que influenciou o C++ foi o C, criado por Dennis Ritchie [C1][F5]. Ritchie recebeu o Prêmio Turing da ACM em 1983 [C1][F7]. Também recebeu a Medalha IEEE Richard W. Hamming em 1990 e a Medalha Nacional de Tecnologia e Inovação em 1999 [C4][F7].",
+  "resposta": "O C++ foi influenciado pela linguagem C, criada por Dennis Ritchie no AT&T Bell Labs [C1][F5]. Ritchie recebeu o **Prêmio Turing** da ACM em 1983, junto com Ken Thompson [C1][F7]. Também recebeu a Medalha IEEE Richard W. Hamming em 1990 e a Medalha Nacional de Tecnologia e Inovação em 1999 [C4][F7].",
   "confianca": {
     "valor": 0.59,
     "nivel": "media",
     "criterio": "score 0.82 (cosseno 0.64), similaridade do caminho 0.54, 5 de 5 caminhos com trecho de origem"
   },
-  "cypher": null,
+  "cypher": "MATCH p = (:Tecnologia {id: 'tecnologia:c_mais_mais'})-[:INFLUENCIADA_POR]->(:Tecnologia)<-[:CRIOU]-(:Pessoa)-[:RECEBEU]->(:Premio) RETURN p LIMIT 25",
   "caminhos": [
     {
       "id": "C1",
@@ -120,63 +120,63 @@
         "nome": "C++",
         "tipo": "Tecnologia",
         "pagerank": 1.3107437951562202,
-        "comunidade": 16
+        "comunidade": 12
       },
       {
         "id": "tecnologia:c",
         "nome": "C",
         "tipo": "Tecnologia",
         "pagerank": 1.236697955412936,
-        "comunidade": 16
+        "comunidade": 12
       },
       {
         "id": "pessoa:dennis_ritchie",
         "nome": "Dennis Ritchie",
         "tipo": "Pessoa",
         "pagerank": 1.8654386677915662,
-        "comunidade": 14
+        "comunidade": 10
       },
       {
         "id": "premio:premio_turing",
         "nome": "Prêmio Turing",
         "tipo": "Premio",
         "pagerank": 0.673916407044629,
-        "comunidade": 14
+        "comunidade": 10
       },
       {
         "id": "tecnologia:b",
         "nome": "B",
         "tipo": "Tecnologia",
         "pagerank": 1.0489235077440826,
-        "comunidade": 4
+        "comunidade": 2
       },
       {
         "id": "pessoa:ken_thompson",
         "nome": "Ken Thompson",
         "tipo": "Pessoa",
         "pagerank": 1.5514098917274044,
-        "comunidade": 14
+        "comunidade": 10
       },
       {
         "id": "tecnologia:bcpl",
         "nome": "BCPL",
         "tipo": "Tecnologia",
         "pagerank": 0.44524540478725283,
-        "comunidade": 4
+        "comunidade": 2
       },
       {
         "id": "premio:medalha_nacional_de_tecnologia_e_inovacao",
         "nome": "Medalha Nacional de Tecnologia e Inovação",
         "tipo": "Premio",
         "pagerank": 0.673916407044629,
-        "comunidade": 14
+        "comunidade": 10
       },
       {
         "id": "organizacao:bell_labs",
         "nome": "Bell Labs",
         "tipo": "Organizacao",
         "pagerank": 1.4979292944435794,
-        "comunidade": 16
+        "comunidade": 12
       }
     ],
     "arestas": [

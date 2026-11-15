@@ -28,6 +28,22 @@ A ordem final põe primeiro os caminhos que têm uma ponta do tipo pedido, sem d
 
 As fontes da resposta são os trechos da busca, seguidos dos trechos que sustentam as relações dos caminhos e que a busca não trouxe. Esses últimos entram sem score. O total fica limitado a oito fontes.
 
+## Text-to-Cypher
+
+No modo GraphRAG, além da expansão, o sistema pede ao LLM uma consulta Cypher para a pergunta. A expansão parte só dos trechos que a busca encontrou. A Cypher anda direto pelas relações que a pergunta pede.
+
+Antes de gerar a consulta, o sistema procura os nomes citados na pergunta no índice fulltext `entity_search` do Neo4j. Cada palavra da pergunta vira uma busca, e ficam as cinco entidades de maior score para cada uma. O prompt traz o schema do domínio, lido de `neo4j/dominio.json`, com os rótulos e as relações na direção em que estão no grafo. Traz também os identificadores reais das entidades encontradas e três exemplos de pergunta com a Cypher correspondente. As instruções pedem que a consulta devolva caminhos, para que o resultado tenha o mesmo formato dos caminhos da expansão.
+
+A consulta gerada não roda direto. Quando ela não tem LIMIT no final, o sistema acrescenta LIMIT 25. Em seguida, ela passa pelo EXPLAIN do Neo4j, que analisa a consulta sem executá-la e devolve o erro quando ela é inválida. Só então a consulta roda, sempre em transação de leitura. Se a validação ou a execução falhar, o LLM recebe a consulta anterior com a mensagem de erro do Neo4j e tem mais uma tentativa.
+
+A proteção contra escrita fica com o banco, e não com um filtro de palavras sobre o texto da consulta. Numa transação de leitura, o Neo4j recusa CREATE, MERGE, SET e DELETE, e essa recusa vale para qualquer consulta, seja qual for o texto. O EXPLAIN não serve como proteção, porque aceita um CREATE mesmo em transação de leitura, já que não executa nada. Quem barra a escrita é a execução. Um teste confere que uma consulta com CREATE é recusada e que nada é gravado no grafo.
+
+O Text-to-Cypher tem limites de tempo próprios. Cada chamada ao LLM tem 10 segundos. O conjunto tem um orçamento de 20 segundos, e a segunda tentativa não acontece se a primeira já passou dele. A execução da consulta no banco tem 5 segundos.
+
+Os caminhos da Cypher se juntam aos da expansão. Caminhos com as mesmas arestas aparecem uma vez só, e fica o da expansão, que tem o score do trecho de origem. A união passa pela mesma ordenação descrita na seção anterior, com o tipo de resposta pedido, a similaridade com a pergunta, o score, o PageRank e o tamanho, e é cortada nos cinco primeiros caminhos. Assim, os caminhos da Cypher disputam lugar com os da expansão em vez de se somarem a eles no contexto.
+
+Uma falha do Text-to-Cypher não interrompe a resposta. Ela vira um aviso no campo `avisos`, e a resposta segue com a busca e a expansão. O campo `cypher` da resposta traz a consulta executada, ou fica nulo quando houve falha, e o resultado do Text-to-Cypher entra no cálculo da confiança.
+
 ## Grounding e procedência
 
 O LLM não recebe o grafo nem os documentos inteiros. Ele recebe um contexto numerado. Cada caminho ocupa uma linha identificada como C1, C2 e assim por diante, com as entidades e as relações na direção em que estão no grafo. Cada trecho ocupa uma linha identificada como F1, F2, com o título do documento. As instruções pedem que o modelo responda só com base nesse contexto, em até três frases, e que cite cada afirmação com os identificadores entre colchetes. Se o contexto não tiver a resposta, o modelo deve escrever exatamente "Não encontrei essa informação no dataset." A chamada usa a API da Abacus RouteLLM com temperatura 0.
@@ -46,17 +62,25 @@ O primeiro sinal é o melhor score da busca vetorial. Como o índice devolve (1 
 
 No modo GraphRAG, o valor é a média desses dois sinais, multiplicada pela fração de caminhos que têm trecho de origem em todas as relações. No modo vetorial, sem caminhos, o valor é 0,7 vezes o cosseno. Sem caminho no grafo não há como conferir relações, então essa resposta não passa de 0,7. O valor é zero quando não há contexto e quando o LLM falha ou recusa a pergunta, porque nesses casos não existe resposta a qual atribuir confiança. A partir de 0,7 o nível é alto, de 0,4 até menos de 0,7 é médio, e abaixo de 0,4 é baixo. O campo `criterio` registra os números usados no cálculo, e a interface o mostra ao lado do nível.
 
-A regra prevê ainda um desconto de 0,1 quando a consulta do Text-to-Cypher dá erro. Como o Text-to-Cypher não foi implementado, esse sinal fica sempre ausente e não altera o valor.
+Quando o Text-to-Cypher falha, o valor perde 0,1, e o campo `criterio` registra o desconto. Quando a Cypher roda sem erro, e no modo vetorial, em que ela não é usada, o valor não muda.
 
 ## Exemplo completo
 
-O exemplo a seguir foi gerado em 15 de novembro de 2026, com a semente carregada no Neo4j e o PageRank calculado. O texto da resposta veio do modelo claude-opus-5-5-fast, pela Abacus RouteLLM, com temperatura 0. O JSON completo da resposta está em `docs/artigo/exemplo-resposta-real.json`, e as partes reproduzidas aqui foram copiadas dele sem edição. A pergunta, no modo GraphRAG, foi:
+O exemplo a seguir foi gerado em 15 de novembro de 2026, com a semente carregada no Neo4j e o PageRank calculado. O texto da resposta e a consulta Cypher vieram do modelo claude-opus-5-5-fast, pela Abacus RouteLLM, com temperatura 0. O JSON completo da resposta está em `docs/artigo/exemplo-resposta-real.json`, e as partes reproduzidas aqui foram copiadas dele sem edição. A pergunta, no modo GraphRAG, foi:
 
 > Que prêmio recebeu quem criou a linguagem que influenciou o C++?
 
 Responder exige três saltos: do C++ à linguagem que o influenciou, dela a quem a criou e dessa pessoa ao prêmio.
 
-A busca vetorial trouxe cinco trechos, o melhor com score 0,82. A expansão devolveu cinco caminhos. Como a pergunta começa por "Que prêmio", os caminhos que terminam num prêmio vêm primeiro, e os cinco terminam num prêmio. A resposta citou dois deles, mostrados aqui como o LLM os recebeu no contexto:
+A busca vetorial trouxe cinco trechos, o melhor com score 0,82. A expansão devolveu cinco caminhos. O Text-to-Cypher gerou e executou esta consulta:
+
+```cypher
+MATCH p = (:Tecnologia {id: 'tecnologia:c_mais_mais'})-[:INFLUENCIADA_POR]->(:Tecnologia)<-[:CRIOU]-(:Pessoa)-[:RECEBEU]->(:Premio) RETURN p LIMIT 25
+```
+
+A consulta parte do nó do C++, pelo id `tecnologia:c_mais_mais`, e faz os três saltos da pergunta: a linguagem que influenciou o C++, quem a criou e os prêmios dessa pessoa. Ela devolveu dois caminhos, os dois por Dennis Ritchie, um até o Prêmio Turing e outro até a Medalha Nacional de Tecnologia e Inovação. A expansão já tinha encontrado os dois, e na união ficaram as cópias da expansão. Neste exemplo, portanto, a Cypher não acrescentou caminho novo, e os cinco caminhos da resposta são os mesmos da expansão.
+
+Como a pergunta começa por "Que prêmio", os caminhos que terminam num prêmio vêm primeiro, e os cinco terminam num prêmio. A resposta citou dois deles, mostrados aqui como o LLM os recebeu no contexto:
 
 ```
 [C1] C++ -[INFLUENCIADA_POR]-> C <-[CRIOU]- Dennis Ritchie -[RECEBEU]-> Prêmio Turing
@@ -67,7 +91,7 @@ O caminho C1 diz que o C++ foi influenciado pelo C, que Dennis Ritchie criou o C
 
 A resposta gerada foi:
 
-> A linguagem que influenciou o C++ foi o C, criado por Dennis Ritchie [C1][F5]. Ritchie recebeu o Prêmio Turing da ACM em 1983 [C1][F7]. Também recebeu a Medalha IEEE Richard W. Hamming em 1990 e a Medalha Nacional de Tecnologia e Inovação em 1999 [C4][F7].
+> O C++ foi influenciado pela linguagem C, criada por Dennis Ritchie no AT&T Bell Labs [C1][F5]. Ritchie recebeu o **Prêmio Turing** da ACM em 1983, junto com Ken Thompson [C1][F7]. Também recebeu a Medalha IEEE Richard W. Hamming em 1990 e a Medalha Nacional de Tecnologia e Inovação em 1999 [C4][F7].
 
 As duas fontes citadas foram estas.
 
@@ -91,7 +115,7 @@ A confiança da resposta saiu assim:
 }
 ```
 
-O valor segue a regra: (0,5 × 0,64 + 0,5 × 0,54) × 5/5 = 0,59, nível médio. O campo `avisos` veio vazio, porque todas as citações existem no contexto.
+O valor segue a regra: (0,5 × 0,64 + 0,5 × 0,54) × 5/5 = 0,59, nível médio. Como a Cypher rodou sem erro, não houve desconto. O campo `avisos` veio vazio, porque o Text-to-Cypher não falhou e todas as citações existem no contexto.
 
 ## Limitações e trabalhos futuros
 
@@ -101,4 +125,4 @@ A expansão também traz caminhos que não respondem à pergunta. No exemplo, tr
 
 Na busca, 17 dos 1633 trechos do dataset do pipeline (1%) têm o final ignorado pelo modelo de embeddings. Esse número não vale para a semente da demo. Os trechos da semente são parágrafos inteiros anotados à mão e não passaram pelo chunking. Três dos 12 passam do limite de 128 tokens do modelo: `c#2` (147 tokens), `c_mais_mais#1` (247) e `dennis_ritchie#4` (140). Os três aparecem nas fontes do exemplo, como F1, F4 e F8. No teste da semente, a pergunta "Quem criou a linguagem C?" acerta no limite, com o trecho certo em 3º lugar.
 
-O Text-to-Cypher, que traduziria a pergunta numa consulta Cypher, ficou como trabalho futuro. Hoje o campo `cypher` da resposta sai sempre nulo, e o sinal correspondente na confiança não é usado.
+A consulta do Text-to-Cypher depende do LLM. O schema, os identificadores e os exemplos do prompt orientam a geração, e a validação impede que uma consulta inválida chegue a rodar, mas nada garante que a consulta gerada seja a que a pergunta pede. Uma consulta válida que anda pelas relações erradas devolve caminhos sem relação com a pergunta, sem erro e sem aviso. Os caminhos que só a Cypher encontra também não partem de nenhum trecho da busca. Eles chegam à ordenação sem trecho de origem e com score 0, e o score, que nos caminhos da expansão indica o quanto o trecho de partida se parece com a pergunta, não conta a favor deles. As relações desses caminhos continuam ligadas aos trechos que as sustentam, então a procedência até o documento se mantém.

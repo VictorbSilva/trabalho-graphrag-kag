@@ -4,28 +4,26 @@ import json
 from copy import deepcopy
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
+from pydantic import ValidationError
+from src.contrato import Resposta
 
-from src.interface.config import API_URL, ARQUIVO_EXEMPLO, FONTE_DADOS
-
+from src.interface.config import (
+    API_URL,
+    API_TIMEOUT_S_INTERFACE,
+    ARQUIVO_EXEMPLO,
+    FONTE_DADOS,
+)
 
 def _validar_resposta(dados: dict) -> dict:
-    """Verifica se o retorno contém os campos essenciais do contrato C3/C4."""
-    campos = {
-        "pergunta", "modo", "resposta", "confianca", "cypher",
-        "caminhos", "subgrafo", "nos_consultados", "fontes", "avisos"
-    }
-    ausentes = campos.difference(dados.keys())
-    if ausentes:
+    """Valida os dados utilizando o contrato oficial."""
+    try:
+        resposta = Resposta.model_validate(dados)
+        return resposta.model_dump()
+    except ValidationError as erro:
         raise ValueError(
-            "A resposta não segue o contrato C3/C4. Campos ausentes: "
-            + ", ".join(sorted(ausentes))
-        )
-    if not isinstance(dados["confianca"], dict):
-        raise ValueError("O campo 'confianca' precisa ser um objeto JSON.")
-    if not isinstance(dados["subgrafo"], dict):
-        raise ValueError("O campo 'subgrafo' precisa ser um objeto JSON.")
-    return dados
-
+            "A resposta recebida não segue o contrato oficial: "
+            + str(erro)
+        ) from erro
 
 def carregar_exemplo(pergunta: str, modo: str) -> dict:
     """Carrega o JSON estático para desenvolver a interface sem depender da API."""
@@ -42,9 +40,8 @@ def carregar_exemplo(pergunta: str, modo: str) -> dict:
     dados["modo"] = modo
     return _validar_resposta(dados)
 
-
 def consultar_api(pergunta: str, modo: str) -> dict:
-    """Envia pergunta e modo à API que implementará o contrato C4."""
+    """Envia pergunta e modo à API utilizando o contrato oficial."""
     payload = json.dumps(
         {"pergunta": pergunta, "modo": modo},
         ensure_ascii=False
@@ -58,23 +55,38 @@ def consultar_api(pergunta: str, modo: str) -> dict:
     )
 
     try:
-        with urlopen(requisicao, timeout=30) as resposta_http:
+        with urlopen(requisicao, timeout=API_TIMEOUT_S_INTERFACE) as resposta_http:
             dados = json.loads(resposta_http.read().decode("utf-8"))
+
     except HTTPError as erro:
-        detalhe = erro.read().decode("utf-8", errors="replace")
+        corpo = erro.read().decode("utf-8", errors="replace")
+
+        try:
+            conteudo = json.loads(corpo)
+            detalhe = (
+                conteudo.get("erro", corpo)
+                if isinstance(conteudo, dict)
+                else corpo
+            )
+        except json.JSONDecodeError:
+            detalhe = corpo
+
         raise RuntimeError(
-            f"A API respondeu com HTTP {erro.code}: {detalhe}"
+            f"Erro HTTP {erro.code}: {detalhe}"
         ) from erro
+
     except URLError as erro:
         raise RuntimeError(
             f"Não foi possível conectar à API em {API_URL}. "
             "Verifique se o backend está em execução."
         ) from erro
+
     except TimeoutError as erro:
-        raise RuntimeError("A API demorou demais para responder.") from erro
+        raise RuntimeError(
+            "A API demorou demais para responder."
+        ) from erro
 
     return _validar_resposta(dados)
-
 
 def responder(pergunta: str, modo: str) -> dict:
     """Seleciona a fonte configurada sem alterar a tela."""

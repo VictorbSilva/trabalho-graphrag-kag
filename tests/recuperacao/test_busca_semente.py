@@ -9,15 +9,12 @@ import pytest
 
 from src.recuperacao.busca_vetorial import buscar_chunks
 from src.recuperacao.embeddings import dimensoes_do_indice, gerar_embedding, gerar_embeddings
+# Dependência: estas três funções vêm de tests/neo4j/conftest.py (a mesma ingestão
+# dos testes do banco). Se forem renomeadas ou movidas lá, ajuste este import.
 from tests.neo4j.conftest import carregar_semente, com_prefixo, ingerir
 from tests.recuperacao.conftest import PREFIXO, limpar_dados_de_teste
 
 pytestmark = pytest.mark.modelo
-
-# O banco pode ter outros dados (a semente sem prefixo ou o dataset do pipeline).
-# A busca vai além dos 3 primeiros e só os trechos deste teste contam, como num
-# banco só com a semente.
-K_BUSCA = 100
 
 # Pergunta -> trecho da semente que sustenta a resposta, cobrindo os quatro artigos.
 PERGUNTAS = {
@@ -44,9 +41,22 @@ def semente_no_banco(driver):
     limpar_dados_de_teste(driver)
 
 
+def total_de_trechos_com_embedding(driver) -> int:
+    registros, _, _ = driver.execute_query(
+        "MATCH (c:Chunk) WHERE c.embedding IS NOT NULL RETURN count(c) AS total"
+    )
+    return registros[0]["total"]
+
+
 def tres_primeiros_da_semente(driver, pergunta: str) -> list[str]:
-    """Ids (sem o prefixo de teste) dos 3 trechos da semente mais parecidos com a pergunta."""
-    resultados = buscar_chunks(driver, gerar_embedding(pergunta), k=K_BUSCA)
+    """Ids (sem o prefixo de teste) dos 3 trechos da semente mais parecidos com a pergunta.
+
+    O banco pode ter outros dados (a semente sem prefixo ou o dataset do pipeline).
+    A busca percorre todos os trechos e só os deste teste contam, como num banco
+    só com a semente, qualquer que seja o tamanho do banco.
+    """
+    k = total_de_trechos_com_embedding(driver)
+    resultados = buscar_chunks(driver, gerar_embedding(pergunta), k=k)
     ids = [r["chunk_id"] for r in resultados if r["chunk_id"].startswith(PREFIXO)]
     return [i.removeprefix(PREFIXO) for i in ids[:3]]
 

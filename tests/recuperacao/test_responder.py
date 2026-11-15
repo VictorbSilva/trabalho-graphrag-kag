@@ -1,7 +1,8 @@
-"""Testes do responder() sem banco e sem modelo (issues V1 e V3).
+"""Testes do responder() sem banco, sem modelo e sem LLM (issues V1, V3, V4 e V5).
 
-A busca vetorial, o embedding e a expansão são trocados por funções falsas, para
-conferir só como o responder monta a resposta. Rodam no CI.
+A busca vetorial, o embedding, a expansão e a resolução dos trechos são trocados por
+funções falsas, e o LLM é passado como função falsa, para conferir só como o
+responder monta a resposta. Rodam no CI.
 """
 
 import json
@@ -11,6 +12,7 @@ import pytest
 import src.recuperacao.responder as modulo
 from src.api.servico import carregar_responder
 from src.contrato import Resposta
+from src.recuperacao.grounding import MENSAGEM_SEM_INFORMACAO
 from src.recuperacao.responder import responder
 
 PERGUNTA = "Que prêmio recebeu quem criou a linguagem que influenciou o C++?"
@@ -47,48 +49,150 @@ CAMINHO = {
     "score": 0.9,
 }
 
+# Trechos que só aparecem nas fontes das arestas, fora do resultado da busca.
+TRECHOS_DO_BANCO = {
+    f"extra#{i}": {
+        "chunk_id": f"extra#{i}",
+        "trecho": f"Trecho extra {i}.",
+        "documento": "Documento extra",
+        "url": f"https://exemplo/extra{i}",
+    }
+    for i in range(10)
+}
+
 
 @pytest.fixture
 def chamadas(monkeypatch):
-    """Troca embedding, busca e expansão por funções falsas e registra a expansão."""
-    registro = {"expandir": False}
+    """Troca embedding, busca, expansão e resolução por funções falsas.
+
+    O registro guarda o que a busca e a expansão devolvem (os testes podem trocar)
+    e se a expansão foi chamada.
+    """
+    registro = {
+        "resultados": [dict(r) for r in RESULTADOS],
+        "caminhos": [CAMINHO],
+        "expandir": False,
+    }
 
     def buscar_falso(driver, embedding, k=5):
-        return [dict(r) for r in RESULTADOS]
+        return [dict(r) for r in registro["resultados"]]
 
     def expandir_falso(driver, chunk_ids, **kwargs):
         registro["expandir"] = True
-        return [CAMINHO]
+        return registro["caminhos"]
+
+    def resolver_falso(driver, chunk_ids):
+        return [dict(TRECHOS_DO_BANCO[i]) for i in chunk_ids if i in TRECHOS_DO_BANCO]
 
     monkeypatch.setattr(modulo, "gerar_embedding", lambda t: [0.0])
     monkeypatch.setattr(modulo, "buscar_chunks", buscar_falso)
     monkeypatch.setattr(modulo, "expandir", expandir_falso)
+    monkeypatch.setattr(modulo, "resolver_trechos", resolver_falso)
     return registro
 
 
-def test_graphrag_devolve_caminho_e_fontes(chamadas):
-    dados = responder(PERGUNTA, "graphrag", driver=object())
+def llm_fixo(texto):
+    """LLM falso que sempre devolve o mesmo texto e guarda as mensagens recebidas."""
+    def llm(mensagens):
+        llm.mensagens = mensagens
+        return texto
+    llm.mensagens = None
+    return llm
+
+
+def test_graphrag_usa_o_texto_do_llm(chamadas):
+    dados = responder(PERGUNTA, "graphrag", driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1][F1]."))
     Resposta.model_validate(dados)
     assert dados["modo"] == "graphrag"
+    assert dados["resposta"] == "Foi Dennis Ritchie [C1][F1]."
     assert [c["id"] for c in dados["caminhos"]] == ["C1"]
     assert [f["id"] for f in dados["fontes"]] == ["F1", "F2"]
+    assert not any("cita" in aviso for aviso in dados["avisos"])
+    assert dados["cypher"] is None
     assert chamadas["expandir"]
 
 
+def test_llm_recebe_instrucoes_contexto_e_pergunta(chamadas):
+    llm = llm_fixo("Foi Dennis Ritchie [C1].")
+    responder(PERGUNTA, "graphrag", driver=object(), llm=llm)
+    sistema, usuario = llm.mensagens
+    assert sistema["role"] == "system"
+    assert usuario["role"] == "user"
+    assert "[C1]" in usuario["content"]
+    assert "[F1]" in usuario["content"]
+    assert usuario["content"].endswith("Pergunta: " + PERGUNTA)
+
+
+def test_citacao_inexistente_gera_aviso(chamadas):
+    dados = responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [F9]."))
+    Resposta.model_validate(dados)
+    assert any("F9" in aviso for aviso in dados["avisos"])
+
+
+def test_falha_do_llm_ainda_devolve_resposta_valida(chamadas):
+    def llm_quebrado(mensagens):
+        raise RuntimeError("fora do ar")
+
+    dados = responder(PERGUNTA, driver=object(), llm=llm_quebrado)
+    Resposta.model_validate(dados)
+    assert any("Falha ao chamar o LLM" in aviso for aviso in dados["avisos"])
+    assert [f["id"] for f in dados["fontes"]] == ["F1", "F2"]
+
+
+def test_sem_contexto_recusa_sem_chamar_o_llm(chamadas):
+    chamadas["resultados"] = []
+    chamadas["caminhos"] = []
+
+    def llm_proibido(mensagens):
+        raise AssertionError("o LLM não deveria ser chamado")
+
+    dados = responder(PERGUNTA, driver=object(), llm=llm_proibido)
+    Resposta.model_validate(dados)
+    assert dados["resposta"] == MENSAGEM_SEM_INFORMACAO
+    assert dados["confianca"]["nivel"] == "baixa"
+    assert "Nenhum trecho ou caminho encontrado." in dados["avisos"]
+
+
 def test_vetorial_nao_expande(chamadas):
-    dados = responder(PERGUNTA, "vetorial", driver=object())
+    dados = responder(PERGUNTA, "vetorial", driver=object(), llm=llm_fixo("Foi Dennis Ritchie [F2]."))
     Resposta.model_validate(dados)
     assert dados["caminhos"] == []
     assert not chamadas["expandir"]
 
 
+def test_confianca_vem_dos_sinais_da_recuperacao(chamadas):
+    chamadas["resultados"][0]["score"] = 0.95
+    dados = responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1]."))
+    assert dados["confianca"]["nivel"] != "baixa"
+    assert "1 de 1 caminhos" in dados["confianca"]["criterio"]
+
+
+def test_fontes_das_arestas_fora_da_busca_viram_fontes_sem_score(chamadas):
+    aresta = {**CAMINHO["arestas"][0], "fontes": ["c_mais_mais#0", "extra#0"]}
+    chamadas["caminhos"] = [{**CAMINHO, "arestas": [aresta]}]
+    dados = responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [F3]."))
+    Resposta.model_validate(dados)
+    assert [f["id"] for f in dados["fontes"]] == ["F1", "F2", "F3"]
+    assert dados["fontes"][2]["chunk_id"] == "extra#0"
+    assert dados["fontes"][2]["score"] is None
+    assert not any("cita" in aviso for aviso in dados["avisos"])
+
+
+def test_no_maximo_oito_fontes(chamadas):
+    aresta = {**CAMINHO["arestas"][0], "fontes": [f"extra#{i}" for i in range(10)]}
+    chamadas["caminhos"] = [{**CAMINHO, "arestas": [aresta]}]
+    dados = responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1]."))
+    assert [f["id"] for f in dados["fontes"]] == [f"F{i}" for i in range(1, 9)]
+
+
 def test_modo_invalido_e_recusado(chamadas):
     with pytest.raises(ValueError):
-        responder(PERGUNTA, "hibrido", driver=object())
+        responder(PERGUNTA, "hibrido", driver=object(), llm=llm_fixo("x"))
 
 
 def test_resposta_vira_json(chamadas):
-    json.dumps(responder(PERGUNTA, driver=object()), ensure_ascii=False)
+    dados = responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1]."))
+    json.dumps(dados, ensure_ascii=False)
 
 
 def test_api_carrega_o_responder_pela_configuracao():

@@ -14,6 +14,8 @@ neo4j/dominio.json ou data/semente/) rodam em qualquer máquina e no CI. Se o Ne
 não estiver acessível, esses testes são pulados com o motivo no resumo, em vez de
 derrubar a suíte inteira. Para exigir o banco (falhar em vez de pular), use
 EXIGIR_NEO4J=1.
+
+Os testes com o marcador `llm` são pulados quando ABACUS_API_KEY não está no .env.
 """
 
 import os
@@ -49,6 +51,12 @@ def pytest_collection_modifyitems(config, items):
         # fixturenames inclui as fixtures indiretas (banco -> driver).
         if FIXTURE_DO_BANCO in getattr(item, "fixturenames", ()):
             item.add_marker(pytest.mark.neo4j)
+
+    if not os.getenv("ABACUS_API_KEY"):
+        pular_llm = pytest.mark.skip(reason="ABACUS_API_KEY não definida no .env")
+        for item in items:
+            if item.get_closest_marker("llm"):
+                item.add_marker(pular_llm)
 
     selecionados = [item for item in items if item.get_closest_marker("neo4j")]
     if not selecionados or os.getenv("EXIGIR_NEO4J") == "1":

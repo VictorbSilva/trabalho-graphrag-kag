@@ -5,7 +5,20 @@ contrato (src/contrato.py), para conferir só como cada resposta é avaliada e r
 Rodam no CI.
 """
 
-from src.avaliacao.comparar import avaliar, carregar_perguntas, resumir
+import json
+
+import pytest
+
+from src.avaliacao.comparar import (
+    _tabela_por_pergunta,
+    acrescentar_classificacao,
+    avaliar,
+    carregar_classificacao,
+    carregar_perguntas,
+    classificar_sem_resposta,
+    gerar_planilha,
+    resumir,
+)
 from src.contrato import Resposta
 from src.recuperacao.grounding import MENSAGEM_SEM_INFORMACAO
 
@@ -184,3 +197,154 @@ def test_resumir_por_modo_e_por_tipo():
 
     assert resumo["vetorial"]["sem_resposta"]["recusa_correta"] == 1.0
     assert resumo["graphrag"]["sem_resposta"]["recusa_correta"] == 0.0
+
+
+# --- f) classificação manual em arquivo ---------------------------------------
+
+def _gravar(tmp_path, conteudo):
+    caminho = tmp_path / "classificacao.json"
+    caminho.write_text(json.dumps(conteudo, ensure_ascii=False), encoding="utf-8")
+    return caminho
+
+
+def test_carregar_classificacao_le_o_arquivo(tmp_path):
+    conteudo = {"P01": {"vetorial": "correta", "graphrag": "incompleta"}, "P13": {"graphrag": "alucinada"}}
+    assert carregar_classificacao(_gravar(tmp_path, conteudo)) == conteudo
+
+
+def test_carregar_classificacao_sem_arquivo_devolve_vazio(tmp_path):
+    assert carregar_classificacao(tmp_path / "nao_existe.json") == {}
+
+
+def test_carregar_classificacao_recusa_classe_desconhecida(tmp_path):
+    caminho = _gravar(tmp_path, {"P01": {"vetorial": "parcial"}})
+    with pytest.raises(ValueError, match="parcial"):
+        carregar_classificacao(caminho)
+
+
+def _linhas_de_um_salto():
+    return [
+        avaliar(UM_SALTO, _resposta(UM_SALTO, "vetorial")),
+        avaliar(UM_SALTO, _resposta(UM_SALTO, "graphrag")),
+    ]
+
+
+def test_tabela_mostra_a_classe_do_arquivo_e_vazio_sem_classe():
+    tabela = _tabela_por_pergunta(_linhas_de_um_salto(), {"P01": {"graphrag": "incompleta"}})
+    vetorial = next(l for l in tabela if l.startswith("| P01 | um_salto | vetorial |"))
+    graphrag = next(l for l in tabela if l.startswith("| P01 | um_salto | graphrag |"))
+    assert vetorial.endswith("|  |")
+    assert graphrag.endswith("| incompleta |")
+
+
+def test_tabela_sem_classificacao_deixa_a_coluna_vazia():
+    tabela = _tabela_por_pergunta(_linhas_de_um_salto())
+    assert all(l.endswith("|  |") for l in tabela if l.startswith("| P01 "))
+
+
+def test_resumir_conta_as_classes_por_modo_e_tipo_ignorando_as_sem_classe():
+    linhas = _linhas_de_um_salto() + [
+        avaliar(MULTI_HOP, _resposta(MULTI_HOP, "vetorial")),
+        avaliar(MULTI_HOP, _resposta(MULTI_HOP, "graphrag")),
+        avaliar(SEM_RESPOSTA, _resposta(SEM_RESPOSTA, "graphrag", texto=MENSAGEM_SEM_INFORMACAO)),
+    ]
+    classificacao = {
+        "P01": {"vetorial": "correta", "graphrag": "correta"},
+        "P06": {"vetorial": "alucinada"},
+        "P13": {"graphrag": "correta"},
+    }
+
+    resumo = resumir(linhas, classificacao)
+
+    assert resumo["vetorial"]["um_salto"]["classificacao"] == {"correta": 1, "incompleta": 0, "alucinada": 0}
+    assert resumo["graphrag"]["um_salto"]["classificacao"] == {"correta": 1, "incompleta": 0, "alucinada": 0}
+    assert resumo["vetorial"]["multi_hop"]["classificacao"] == {"correta": 0, "incompleta": 0, "alucinada": 1}
+    assert resumo["graphrag"]["multi_hop"]["classificacao"] == {"correta": 0, "incompleta": 0, "alucinada": 0}
+    assert resumo["graphrag"]["sem_resposta"]["classificacao"] == {"correta": 1, "incompleta": 0, "alucinada": 0}
+    assert resumo["vetorial"]["sem_resposta"]["classificacao"] == {"correta": 0, "incompleta": 0, "alucinada": 0}
+
+
+def test_resumir_sem_classificacao_conta_zero():
+    resumo = resumir(_linhas_de_um_salto())
+    assert resumo["vetorial"]["um_salto"]["classificacao"] == {"correta": 0, "incompleta": 0, "alucinada": 0}
+
+
+def test_classificar_sem_resposta_pela_recusa():
+    linhas = _linhas_de_um_salto() + [
+        avaliar(SEM_RESPOSTA, _resposta(SEM_RESPOSTA, "vetorial", texto=MENSAGEM_SEM_INFORMACAO)),
+        avaliar(SEM_RESPOSTA, _resposta(SEM_RESPOSTA, "graphrag", texto="Foi Graydon Hoare [F1].")),
+    ]
+    assert classificar_sem_resposta(linhas) == {"P13": {"vetorial": "correta", "graphrag": "alucinada"}}
+
+
+def test_classificar_sem_resposta_ignora_linha_com_erro():
+    linha = avaliar(SEM_RESPOSTA, _resposta(SEM_RESPOSTA, "vetorial", texto=MENSAGEM_SEM_INFORMACAO))
+    com_erro = {**linha, "modo": "graphrag", "recusa_correta": None, "confianca": None, "erro": "RuntimeError: x"}
+    assert classificar_sem_resposta([linha, com_erro]) == {"P13": {"vetorial": "correta"}}
+
+
+def test_acrescentar_classificacao_nunca_sobrescreve_classe_existente():
+    existente = {"P13": {"vetorial": "incompleta"}, "P01": {"graphrag": "correta"}}
+    novas = {"P13": {"vetorial": "correta", "graphrag": "alucinada"}, "P14": {"vetorial": "correta"}}
+
+    resultado = acrescentar_classificacao(existente, novas)
+
+    assert resultado == {
+        "P01": {"graphrag": "correta"},
+        "P13": {"vetorial": "incompleta", "graphrag": "alucinada"},
+        "P14": {"vetorial": "correta"},
+    }
+    assert existente == {"P13": {"vetorial": "incompleta"}, "P01": {"graphrag": "correta"}}
+
+
+# --- g) planilha para a classificação manual -----------------------------------
+
+UM_SALTO_COM_GABARITO = {**UM_SALTO, "resposta_esperada": "Guido van Rossum."}
+SEM_RESPOSTA_COM_GABARITO = {**SEM_RESPOSTA, "resposta_esperada": "O dataset não tem essa informação."}
+
+
+def test_gerar_planilha_tem_cada_pergunta_e_modo_com_a_linha_para_preencher():
+    perguntas = [UM_SALTO_COM_GABARITO, SEM_RESPOSTA_COM_GABARITO]
+    textos = {
+        ("P01", "vetorial"): "Python foi criado por Guido van Rossum [F1].",
+        ("P01", "graphrag"): "Guido van Rossum criou o Python [C1][F1].",
+        ("P13", "vetorial"): MENSAGEM_SEM_INFORMACAO,
+        ("P13", "graphrag"): "Rust foi criada por Graydon Hoare [F1].",
+    }
+    linhas, respostas = [], []
+    for pergunta in perguntas:
+        for modo in ("vetorial", "graphrag"):
+            resposta = _resposta(pergunta, modo, texto=textos[(pergunta["id"], modo)])
+            linhas.append(avaliar(pergunta, resposta))
+            respostas.append({"id": pergunta["id"], "modo": modo, "resposta": resposta, "erro": None})
+
+    planilha = gerar_planilha(linhas, perguntas, respostas)
+
+    for pergunta in perguntas:
+        assert pergunta["id"] in planilha
+        assert pergunta["tipo"] in planilha
+        assert pergunta["pergunta"] in planilha
+        assert pergunta["resposta_esperada"] in planilha
+    for texto in textos.values():
+        assert texto in planilha
+    assert planilha.count("Classificação: ____") == 4
+    assert planilha.count("Evidência recuperada: não (0/1)") == 2
+    assert planilha.count("Caminho completo: não (0/1)") == 2
+    assert planilha.count("Evidência recuperada: n/a") == 2
+
+
+def test_gerar_planilha_mostra_o_erro_quando_nao_houve_resposta():
+    linhas, respostas = [], []
+    for modo in ("vetorial", "graphrag"):
+        linha = {
+            "id": "P01", "tipo": "um_salto", "modo": modo,
+            "evidencia_recuperada": None, "caminho_completo": None, "recusa_correta": None,
+            "confianca": None, "erro": "RuntimeError: banco fora do ar",
+        }
+        linhas.append(linha)
+        respostas.append({"id": "P01", "modo": modo, "resposta": None, "erro": linha["erro"]})
+
+    planilha = gerar_planilha(linhas, [UM_SALTO_COM_GABARITO], respostas)
+
+    assert planilha.count("RuntimeError: banco fora do ar") == 2
+    assert planilha.count("Classificação: ____") == 2

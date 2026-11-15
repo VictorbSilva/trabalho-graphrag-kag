@@ -9,8 +9,13 @@ e mede, sem LLM juiz:
   (origem, tipo, destino) em subgrafo.arestas, que guarda a direção;
 - recusa correta: nas perguntas sem_resposta, a resposta traz MENSAGEM_SEM_INFORMACAO.
 
-A classificação correta / incompleta / alucinada é manual, numa coluna vazia da
-tabela gerada. O resultado depende do que estiver carregado no banco.
+A classificação correta / incompleta / alucinada é manual (sem LLM juiz, issue #28)
+e fica em data/avaliacao/classificacao.json, que sobrevive a novas execuções. A
+única regra automática é a das perguntas sem_resposta, cujo gabarito é recusar:
+recusa correta vira "correta", e qualquer outra resposta vira "alucinada". O
+executor só acrescenta essas entradas quando ainda não existem e nunca sobrescreve
+uma classe do arquivo. A planilha para classificar as outras sai em
+docs/avaliacao-planilha.md. O resultado depende do que estiver carregado no banco.
 
     python -m src.avaliacao.comparar
 """
@@ -26,15 +31,68 @@ RAIZ = Path(__file__).resolve().parents[2]
 ARQUIVO_PERGUNTAS = RAIZ / "data" / "avaliacao" / "perguntas.json"
 ARQUIVO_RESPOSTAS = RAIZ / "data" / "avaliacao" / "resultados" / "respostas.json"
 ARQUIVO_RELATORIO = RAIZ / "docs" / "avaliacao-resultados.md"
+ARQUIVO_CLASSIFICACAO = RAIZ / "data" / "avaliacao" / "classificacao.json"
+ARQUIVO_PLANILHA = RAIZ / "docs" / "avaliacao-planilha.md"
 
 MODOS = ("vetorial", "graphrag")
 TIPOS = ("um_salto", "multi_hop", "sem_resposta")
 METRICAS = ("evidencia_recuperada", "caminho_completo", "recusa_correta")
+CLASSES = ("correta", "incompleta", "alucinada")
 
 
 def carregar_perguntas(caminho: Path = ARQUIVO_PERGUNTAS) -> list[dict]:
     """As perguntas do gabarito (lista "perguntas" do arquivo)."""
     return json.loads(Path(caminho).read_text(encoding="utf-8"))["perguntas"]
+
+
+def carregar_classificacao(caminho: Path = ARQUIVO_CLASSIFICACAO) -> dict:
+    """A classificação manual {"P01": {"vetorial": "correta", ...}}, ou {} sem arquivo.
+
+    Levanta ValueError se alguma classe não for correta, incompleta ou alucinada.
+    """
+    caminho = Path(caminho)
+    if not caminho.exists():
+        return {}
+    classificacao = json.loads(caminho.read_text(encoding="utf-8"))
+    for id_pergunta, por_modo in classificacao.items():
+        for modo, classe in por_modo.items():
+            if classe not in CLASSES:
+                raise ValueError(
+                    f"Classe inválida em {caminho.name}, {id_pergunta} {modo}: {classe!r}. "
+                    f"Use {', '.join(CLASSES)}."
+                )
+    return classificacao
+
+
+def classificar_sem_resposta(linhas: list[dict]) -> dict:
+    """A classe das perguntas sem_resposta pela recusa, no formato do arquivo.
+
+    O gabarito delas é recusar: recusa correta vira "correta", qualquer outra
+    resposta vira "alucinada". Linhas com erro (recusa_correta None) ficam de fora.
+    """
+    classes: dict = {}
+    for l in linhas:
+        if l["tipo"] != "sem_resposta" or l["recusa_correta"] is None:
+            continue
+        classes.setdefault(l["id"], {})[l["modo"]] = "correta" if l["recusa_correta"] else "alucinada"
+    return classes
+
+
+def acrescentar_classificacao(existente: dict, novas: dict) -> dict:
+    """Cópia de existente com as entradas de novas que ainda não existem, por id e modo.
+
+    Nunca sobrescreve uma classe que já está em existente.
+    """
+    resultado = {id_pergunta: dict(por_modo) for id_pergunta, por_modo in existente.items()}
+    for id_pergunta, por_modo in novas.items():
+        destino = resultado.setdefault(id_pergunta, {})
+        for modo, classe in por_modo.items():
+            destino.setdefault(modo, classe)
+    return dict(sorted(resultado.items()))
+
+
+def _classe(classificacao: dict | None, linha: dict) -> str | None:
+    return (classificacao or {}).get(linha["id"], {}).get(linha["modo"])
 
 
 def _normalizar(texto: str) -> str:
@@ -94,10 +152,12 @@ def _fracao(valores: list) -> float | None:
     return sum(validos) / len(validos) if validos else None
 
 
-def resumir(linhas: list[dict]) -> dict:
-    """Por modo e por tipo: perguntas, erros e a fração de acertos de cada métrica.
+def resumir(linhas: list[dict], classificacao: dict | None = None) -> dict:
+    """Por modo e por tipo: perguntas, erros, a fração de acertos de cada métrica e,
+    em "classificacao", quantas respostas têm cada classe do arquivo.
 
-    As linhas com erro contam em "erros" e ficam fora das frações.
+    As linhas com erro contam em "erros" e ficam fora das frações. As linhas sem
+    classe ficam fora da contagem das classes.
     """
     resumo: dict = {}
     for modo in MODOS:
@@ -105,10 +165,12 @@ def resumir(linhas: list[dict]) -> dict:
         for tipo in TIPOS:
             grupo = [l for l in linhas if l["modo"] == modo and l["tipo"] == tipo]
             sem_erro = [l for l in grupo if l["erro"] is None]
+            classes = [_classe(classificacao, l) for l in grupo]
             resumo[modo][tipo] = {
                 "perguntas": len(grupo),
                 "erros": len(grupo) - len(sem_erro),
                 **{metrica: _fracao([l[metrica] for l in sem_erro]) for metrica in METRICAS},
+                "classificacao": {classe: classes.count(classe) for classe in CLASSES},
             }
     return resumo
 
@@ -128,7 +190,7 @@ def _porcentagem(fracao: float | None) -> str:
     return "n/d" if fracao is None else f"{fracao:.0%}"
 
 
-def _tabela_por_pergunta(linhas: list[dict]) -> list[str]:
+def _tabela_por_pergunta(linhas: list[dict], classificacao: dict | None = None) -> list[str]:
     saida = [
         "| ID | Tipo | Modo | Evidência recuperada | Caminho completo | Recusa correta | Confiança | Classificação (manual) |",
         "|---|---|---|---|---|---|---|---|",
@@ -143,7 +205,8 @@ def _tabela_por_pergunta(linhas: list[dict]) -> list[str]:
                 _sim_nao(l["recusa_correta"]),
                 f"{l['confianca']['nivel']} ({l['confianca']['valor']:.2f})",
             ]
-        saida.append(f"| {l['id']} | {l['tipo']} | {l['modo']} | " + " | ".join(celulas) + " |  |")
+        classe = _classe(classificacao, l) or ""
+        saida.append(f"| {l['id']} | {l['tipo']} | {l['modo']} | " + " | ".join(celulas) + f" | {classe} |")
     return saida
 
 
@@ -167,10 +230,26 @@ def _tabelas_de_resumo(resumo: dict) -> list[str]:
     for modo in MODOS:
         r = resumo[modo]["sem_resposta"]
         saida.append(f"| {modo} | {r['perguntas']} | {r['erros']} | {_porcentagem(r['recusa_correta'])} |")
+    saida += [
+        "",
+        "| Modo | Tipo | Perguntas | Classificadas | Correta | Incompleta | Alucinada |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for modo in MODOS:
+        for tipo in TIPOS:
+            r = resumo[modo][tipo]
+            contagem = r["classificacao"]
+            saida.append(
+                f"| {modo} | {tipo} | {r['perguntas']} | {sum(contagem.values())} | "
+                + " | ".join(str(contagem[classe]) for classe in CLASSES)
+                + " |"
+            )
     return saida
 
 
-def _relatorio(linhas: list[dict], resumo: dict, gerado_em: datetime) -> str:
+def _relatorio(
+    linhas: list[dict], resumo: dict, gerado_em: datetime, classificacao: dict | None = None
+) -> str:
     erros = [l for l in linhas if l["erro"] is not None]
     saida = [
         "# Avaliação: RAG vetorial vs GraphRAG",
@@ -181,7 +260,10 @@ def _relatorio(linhas: list[dict], resumo: dict, gerado_em: datetime) -> str:
         "[data/avaliacao/resultados/respostas.json](../data/avaliacao/resultados/respostas.json). "
         "Os números dependem do que estava carregado no Neo4j quando o executor rodou.",
         "",
-        "Rodar o executor de novo sobrescreve este arquivo, inclusive a classificação manual.",
+        "A classificação manual fica em "
+        "[data/avaliacao/classificacao.json](../data/avaliacao/classificacao.json) e sobrevive "
+        "a novas execuções do executor. A planilha para preenchê-la está em "
+        "[docs/avaliacao-planilha.md](avaliacao-planilha.md).",
         "",
         "## Como ler",
         "",
@@ -193,12 +275,14 @@ def _relatorio(linhas: list[dict], resumo: dict, gerado_em: datetime) -> str:
         "- **Recusa correta**: só nas perguntas `sem_resposta`, a resposta diz "
         f"\"{MENSAGEM_SEM_INFORMACAO}\"",
         "- **n/a**: a métrica não se aplica ao tipo da pergunta. **n/d**: sem dados para calcular.",
-        "- **Classificação (manual)**: correta, incompleta ou alucinada, preenchida por quem "
-        "conferir a resposta contra o gabarito.",
+        "- **Classificação (manual)**: correta, incompleta ou alucinada, lida de "
+        "`data/avaliacao/classificacao.json` e preenchida por quem conferir a resposta contra "
+        "o gabarito. Nas perguntas `sem_resposta`, cujo gabarito é recusar, a recusa correta "
+        "vira correta e qualquer outra resposta vira alucinada.",
         "",
         "## Resultado por pergunta",
         "",
-        *_tabela_por_pergunta(linhas),
+        *_tabela_por_pergunta(linhas, classificacao),
         "",
     ]
     if erros:
@@ -230,8 +314,72 @@ def _relatorio(linhas: list[dict], resumo: dict, gerado_em: datetime) -> str:
     return "\n".join(saida)
 
 
+# --- planilha para a classificação manual -------------------------------------
+
+def _citacao(texto: str) -> list[str]:
+    """O texto como citação em Markdown, linha a linha."""
+    return [f"> {linha}".rstrip() for linha in texto.splitlines()] or [">"]
+
+
+def gerar_planilha(linhas: list[dict], perguntas: list[dict], respostas: list[dict]) -> str:
+    """Markdown com, para cada pergunta e modo, o gabarito, a resposta do sistema,
+    as métricas automáticas e uma linha "Classificação: ____" para preencher.
+
+    linhas são as de avaliar() e respostas as de main(): {"id", "modo", "resposta", "erro"}.
+    """
+    por_linha = {(l["id"], l["modo"]): l for l in linhas}
+    por_resposta = {(r["id"], r["modo"]): r for r in respostas}
+    saida = [
+        "# Planilha de classificação manual",
+        "",
+        "Gerada por `python -m src.avaliacao.comparar`, a partir das respostas em "
+        "[data/avaliacao/resultados/respostas.json](../data/avaliacao/resultados/respostas.json). "
+        "Para cada pergunta e modo, compare a resposta do sistema com a resposta esperada e "
+        "escreva correta, incompleta ou alucinada.",
+        "",
+        "As classes ficam em [data/avaliacao/classificacao.json](../data/avaliacao/classificacao.json), "
+        'no formato `{"P01": {"vetorial": "correta", "graphrag": "incompleta"}}`. As perguntas '
+        "`sem_resposta` já entram nesse arquivo pela regra: recusa correta vira correta, e "
+        "qualquer outra resposta vira alucinada. Rodar o executor de novo regenera esta planilha, "
+        "mas não apaga o arquivo de classificação.",
+        "",
+    ]
+    for pergunta in perguntas:
+        saida += [
+            f"## {pergunta['id']} ({pergunta['tipo']})",
+            "",
+            f"Pergunta: {pergunta['pergunta']}",
+            "",
+            f"Resposta esperada: {pergunta['resposta_esperada']}",
+            "",
+        ]
+        for modo in MODOS:
+            linha = por_linha.get((pergunta["id"], modo))
+            registro = por_resposta.get((pergunta["id"], modo))
+            saida += [f"### {pergunta['id']} {modo}", ""]
+            if registro is None or registro["resposta"] is None:
+                erro = (registro or {}).get("erro") or (linha or {}).get("erro") or "sem resposta"
+                saida += [f"Resposta do sistema: erro na execução, `{erro}`", ""]
+            else:
+                saida += ["Resposta do sistema:", "", *_citacao(registro["resposta"]["resposta"]), ""]
+            if linha is not None and linha["erro"] is None:
+                saida += [
+                    "Evidência recuperada: "
+                    + _sim_nao(linha["evidencia_recuperada"], linha["evidencias_encontradas"], linha["evidencias_total"]),
+                    "",
+                    "Caminho completo: "
+                    + _sim_nao(linha["caminho_completo"], linha["triplas_encontradas"], linha["triplas_total"]),
+                    "",
+                ]
+            else:
+                saida += ["Evidência recuperada: erro", "", "Caminho completo: erro", ""]
+            saida += ["Classificação: ____", ""]
+    return "\n".join(saida)
+
+
 def main() -> None:
     perguntas = carregar_perguntas()
+    existente = carregar_classificacao()  # antes de rodar: uma classe inválida para já aqui
     linhas, respostas = [], []
     for pergunta in perguntas:
         for modo in MODOS:
@@ -246,11 +394,22 @@ def main() -> None:
             linhas.append(linha)
             print(f"{pergunta['id']} {modo}: {'erro' if linha['erro'] else 'ok'}", flush=True)
 
+    classificacao = acrescentar_classificacao(existente, classificar_sem_resposta(linhas))
+
     ARQUIVO_RESPOSTAS.parent.mkdir(parents=True, exist_ok=True)
     ARQUIVO_RESPOSTAS.write_text(json.dumps(respostas, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    ARQUIVO_RELATORIO.write_text(_relatorio(linhas, resumir(linhas), datetime.now()) + "\n", encoding="utf-8")
+    ARQUIVO_CLASSIFICACAO.write_text(
+        json.dumps(classificacao, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    ARQUIVO_RELATORIO.write_text(
+        _relatorio(linhas, resumir(linhas, classificacao), datetime.now(), classificacao) + "\n",
+        encoding="utf-8",
+    )
+    ARQUIVO_PLANILHA.write_text(gerar_planilha(linhas, perguntas, respostas) + "\n", encoding="utf-8")
     print(f"Respostas em {ARQUIVO_RESPOSTAS.relative_to(RAIZ)}")
+    print(f"Classificação em {ARQUIVO_CLASSIFICACAO.relative_to(RAIZ)}")
     print(f"Relatório em {ARQUIVO_RELATORIO.relative_to(RAIZ)}")
+    print(f"Planilha em {ARQUIVO_PLANILHA.relative_to(RAIZ)}")
 
 
 if __name__ == "__main__":

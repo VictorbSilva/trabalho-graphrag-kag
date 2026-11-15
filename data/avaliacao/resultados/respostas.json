@@ -76,7 +76,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.76 (cosseno 0.53), similaridade do caminho 0.40, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (:Pessoa)-[:CRIOU]->(t:Tecnologia) WHERE toLower(t.name) = 'python' RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -180,35 +180,35 @@
             "nome": "Bell Labs",
             "tipo": "Organizacao",
             "pagerank": 1.4979292944435794,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:c_mais_mais",
             "nome": "C++",
             "tipo": "Tecnologia",
             "pagerank": 1.3107437951562202,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:c",
             "nome": "C",
             "tipo": "Tecnologia",
             "pagerank": 1.236697955412936,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "pessoa:dennis_ritchie",
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:simula",
             "nome": "Simula",
             "tipo": "Tecnologia",
             "pagerank": 0.4265358070786999,
-            "comunidade": 16
+            "comunidade": 12
           }
         ],
         "arestas": [
@@ -402,7 +402,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.70 (cosseno 0.41), similaridade do caminho 0.31, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (t:Tecnologia)-[:DESENVOLVIDA_EM]->(:Organizacao) WHERE toLower(t.name) = 'java' RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -504,42 +504,42 @@
             "nome": "Bell Labs",
             "tipo": "Organizacao",
             "pagerank": 1.4979292944435794,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:c",
             "nome": "C",
             "tipo": "Tecnologia",
             "pagerank": 1.236697955412936,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:c_mais_mais",
             "nome": "C++",
             "tipo": "Tecnologia",
             "pagerank": 1.3107437951562202,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:b",
             "nome": "B",
             "tipo": "Tecnologia",
             "pagerank": 1.0489235077440826,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "tecnologia:bcpl",
             "nome": "BCPL",
             "tipo": "Tecnologia",
             "pagerank": 0.44524540478725283,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           }
         ],
         "arestas": [
@@ -751,7 +751,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.78 (cosseno 0.57), similaridade do caminho 0.64, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (:Pessoa)-[:CRIOU]->(t:Tecnologia) WHERE toLower(t.name) CONTAINS 'linux' OR any(a IN coalesce(t.aliases, []) WHERE toLower(a) CONTAINS 'linux') RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -856,42 +856,42 @@
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:unix",
             "nome": "Unix",
             "tipo": "Tecnologia",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "pessoa:dennis_ritchie",
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "organizacao:lucent_technologies",
             "nome": "Lucent Technologies",
             "tipo": "Organizacao",
             "pagerank": 0.41222642265458087,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "organizacao:bell_labs",
             "nome": "Bell Labs",
             "tipo": "Organizacao",
             "pagerank": 1.4979292944435794,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "premio:medalha_nacional_de_tecnologia_e_inovacao",
             "nome": "Medalha Nacional de Tecnologia e Inovação",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           }
         ],
         "arestas": [
@@ -1111,7 +1111,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.70 (cosseno 0.41), similaridade do caminho 0.48, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (pe:Pessoa)-[:RECEBEU]->(:Premio) WHERE toLower(pe.name) CONTAINS 'wirth' RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -1200,35 +1200,35 @@
             "nome": "Medalha Nacional de Tecnologia e Inovação",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "premio:premio_turing",
             "nome": "Prêmio Turing",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "pessoa:dennis_ritchie",
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:b",
             "nome": "B",
             "tipo": "Tecnologia",
             "pagerank": 1.0489235077440826,
-            "comunidade": 4
+            "comunidade": 2
           }
         ],
         "arestas": [
@@ -1413,7 +1413,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.72 (cosseno 0.45), similaridade do caminho 0.51, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (pe:Pessoa)-[:TRABALHOU_EM]->(:Organizacao) WHERE toLower(pe.name) CONTAINS 'kernighan' OR any(a IN coalesce(pe.aliases, []) WHERE toLower(a) CONTAINS 'kernighan') RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -1504,42 +1504,42 @@
             "nome": "Bell Labs",
             "tipo": "Organizacao",
             "pagerank": 1.4979292944435794,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:b",
             "nome": "B",
             "tipo": "Tecnologia",
             "pagerank": 1.0489235077440826,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "pessoa:dennis_ritchie",
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "organizacao:lucent_technologies",
             "nome": "Lucent Technologies",
             "tipo": "Organizacao",
             "pagerank": 0.41222642265458087,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "premio:medalha_nacional_de_tecnologia_e_inovacao",
             "nome": "Medalha Nacional de Tecnologia e Inovação",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           }
         ],
         "arestas": [
@@ -1734,7 +1734,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.69 (cosseno 0.37), similaridade do caminho 0.38, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (t:Tecnologia)<-[:CRIOU]-(:Pessoa)-[:RECEBEU]->(:Premio) WHERE toLower(t.name) = 'lisp' RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -1826,42 +1826,42 @@
             "nome": "Medalha Nacional de Tecnologia e Inovação",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "premio:premio_turing",
             "nome": "Prêmio Turing",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "pessoa:dennis_ritchie",
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:b",
             "nome": "B",
             "tipo": "Tecnologia",
             "pagerank": 1.0489235077440826,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "tecnologia:bcpl",
             "nome": "BCPL",
             "tipo": "Tecnologia",
             "pagerank": 0.44524540478725283,
-            "comunidade": 4
+            "comunidade": 2
           }
         ],
         "arestas": [
@@ -1984,11 +1984,11 @@
     "resposta": {
       "pergunta": "Além do C, o C++ foi influenciado por outra linguagem de programação. Que prêmio receberam os criadores dessa linguagem?",
       "modo": "vetorial",
-      "resposta": "Além do C, o C++ foi influenciado principalmente pela Simula 67, da qual Bjarne Stroustrup acrescentou ao C os recursos de criação e manipulação de objetos [F3]. Também serviram de inspiração ALGOL 68, Ada, CLU e ML [F3]. Os documentos não informam quem criou a Simula 67 nem que prêmio essas pessoas receberam, então não encontrei essa informação no dataset.",
+      "resposta": "Não encontrei essa informação no dataset.",
       "confianca": {
-        "valor": 0.52,
-        "nivel": "media",
-        "criterio": "score 0.87 (cosseno 0.74), 0 caminhos no grafo (só busca vetorial)"
+        "valor": 0.0,
+        "nivel": "baixa",
+        "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.87 (cosseno 0.74), 0 caminhos no grafo (só busca vetorial)"
       },
       "cypher": null,
       "caminhos": [],
@@ -2049,13 +2049,13 @@
     "resposta": {
       "pergunta": "Além do C, o C++ foi influenciado por outra linguagem de programação. Que prêmio receberam os criadores dessa linguagem?",
       "modo": "graphrag",
-      "resposta": "Além do C, o C++ foi influenciado pela linguagem Simula [C2], especificamente o Simula 67, de onde Stroustrup aproveitou os recursos de criação e manipulação de objetos [F3]. Não encontrei essa informação no dataset.",
+      "resposta": "Não encontrei essa informação no dataset.",
       "confianca": {
-        "valor": 0.75,
-        "nivel": "alta",
-        "criterio": "score 0.87 (cosseno 0.74), similaridade do caminho 0.76, 5 de 5 caminhos com trecho de origem"
+        "valor": 0.0,
+        "nivel": "baixa",
+        "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.87 (cosseno 0.74), similaridade do caminho 0.76, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (:Tecnologia {id: 'tecnologia:c_mais_mais'})-[:INFLUENCIADA_POR]->(t:Tecnologia)<-[:CRIOU]-(:Pessoa)-[:RECEBEU]->(:Premio) WHERE t.id <> 'tecnologia:c' RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -2156,42 +2156,42 @@
             "nome": "C++",
             "tipo": "Tecnologia",
             "pagerank": 1.3107437951562202,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:c",
             "nome": "C",
             "tipo": "Tecnologia",
             "pagerank": 1.236697955412936,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:simula",
             "nome": "Simula",
             "tipo": "Tecnologia",
             "pagerank": 0.4265358070786999,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "organizacao:bell_labs",
             "nome": "Bell Labs",
             "tipo": "Organizacao",
             "pagerank": 1.4979292944435794,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:b",
             "nome": "B",
             "tipo": "Tecnologia",
             "pagerank": 1.0489235077440826,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           }
         ],
         "arestas": [
@@ -2389,13 +2389,13 @@
     "resposta": {
       "pergunta": "Que prêmio recebeu quem criou a linguagem que deu origem ao C?",
       "modo": "graphrag",
-      "resposta": "A linguagem que deu origem ao C foi a B, criada por Ken Thompson [F1][F7][F8]. Ele recebeu o Prêmio Turing da ACM em 1983 [C1][F6] e a Medalha Nacional de Tecnologia e Inovação em 1999 [C3][F6]. Também recebeu, junto com Dennis Ritchie, a Medalha IEEE Richard W. Hamming em 1990 [F6].",
+      "resposta": "A linguagem que deu origem ao C foi a B, criada por Ken Thompson [C1][F1][F7][F8]. Ele recebeu o Prêmio Turing da ACM em 1983 [C1][F6]. Também recebeu a Medalha IEEE Richard W. Hamming em 1990 e a Medalha Nacional de Tecnologia e Inovação em 1999 [C3][F6].",
       "confianca": {
         "valor": 0.63,
         "nivel": "media",
         "criterio": "score 0.83 (cosseno 0.66), similaridade do caminho 0.59, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (:Tecnologia {id: 'tecnologia:c'})-[:INFLUENCIADA_POR]->(:Tecnologia)<-[:CRIOU]-(:Pessoa)-[:RECEBEU]->(:Premio) RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -2509,56 +2509,56 @@
             "nome": "C",
             "tipo": "Tecnologia",
             "pagerank": 1.236697955412936,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:b",
             "nome": "B",
             "tipo": "Tecnologia",
             "pagerank": 1.0489235077440826,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "premio:premio_turing",
             "nome": "Prêmio Turing",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:bcpl",
             "nome": "BCPL",
             "tipo": "Tecnologia",
             "pagerank": 0.44524540478725283,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "premio:medalha_nacional_de_tecnologia_e_inovacao",
             "nome": "Medalha Nacional de Tecnologia e Inovação",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "pessoa:dennis_ritchie",
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:c_mais_mais",
             "nome": "C++",
             "tipo": "Tecnologia",
             "pagerank": 1.3107437951562202,
-            "comunidade": 16
+            "comunidade": 12
           }
         ],
         "arestas": [
@@ -2789,7 +2789,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.78 (cosseno 0.56), similaridade do caminho 0.69, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (o:Organizacao)<-[:TRABALHOU_EM]-(:Pessoa)-[:RECEBEU]->(:Premio {id: 'premio:premio_turing'}) WHERE toLower(o.name) CONTAINS 'cern' OR any(a IN coalesce(o.aliases, []) WHERE toLower(a) CONTAINS 'cern') RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -2889,42 +2889,42 @@
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "premio:premio_turing",
             "nome": "Prêmio Turing",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "organizacao:bell_labs",
             "nome": "Bell Labs",
             "tipo": "Organizacao",
             "pagerank": 1.4979292944435794,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:c",
             "nome": "C",
             "tipo": "Tecnologia",
             "pagerank": 1.236697955412936,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:unix",
             "nome": "Unix",
             "tipo": "Tecnologia",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           }
         ],
         "arestas": [
@@ -3136,7 +3136,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.78 (cosseno 0.57), similaridade do caminho 0.42, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (t:Tecnologia)<-[:CRIOU]-(:Pessoa)-[:TRABALHOU_EM]->(:Organizacao) WHERE toLower(t.name) = 'smalltalk' RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -3240,56 +3240,56 @@
             "nome": "Bell Labs",
             "tipo": "Organizacao",
             "pagerank": 1.4979292944435794,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:unix",
             "nome": "Unix",
             "tipo": "Tecnologia",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "pessoa:dennis_ritchie",
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:b",
             "nome": "B",
             "tipo": "Tecnologia",
             "pagerank": 1.0489235077440826,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "tecnologia:bcpl",
             "nome": "BCPL",
             "tipo": "Tecnologia",
             "pagerank": 0.44524540478725283,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "organizacao:lucent_technologies",
             "nome": "Lucent Technologies",
             "tipo": "Organizacao",
             "pagerank": 0.41222642265458087,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:c_mais_mais",
             "nome": "C++",
             "tipo": "Tecnologia",
             "pagerank": 1.3107437951562202,
-            "comunidade": 16
+            "comunidade": 12
           }
         ],
         "arestas": [
@@ -3449,7 +3449,7 @@
     "resposta": {
       "pergunta": "Quais pessoas que trabalharam no Bell Labs receberam o Prêmio Turing?",
       "modo": "vetorial",
-      "resposta": "Dennis Ritchie e Ken Thompson trabalharam no Bell Labs, onde desenvolveram o Multics e depois o Unix [F2][F3]. Os dois receberam o Prêmio Turing da Association for Computing Machinery (ACM) em 1983 [F1].",
+      "resposta": "**Dennis Ritchie** e **Ken Thompson** trabalharam no Bell Labs e receberam o Prêmio Turing da ACM em 1983 [F1]. Ritchie começou no Bell Labs Computing Science Research Center em 1967 [F2], e os dois trabalharam juntos no sistema operacional Multics nos Bell Labs durante a década de 1960 [F3].",
       "confianca": {
         "valor": 0.35,
         "nivel": "baixa",
@@ -3514,13 +3514,13 @@
     "resposta": {
       "pergunta": "Quais pessoas que trabalharam no Bell Labs receberam o Prêmio Turing?",
       "modo": "graphrag",
-      "resposta": "Dennis Ritchie e Ken Thompson trabalharam no Bell Labs e receberam o Prêmio Turing [C1][C2][C4]. Eles receberam o prêmio juntos, concedido pela Association for Computing Machinery (ACM) em 1983 [F1]. Bjarne Stroustrup também trabalhou no Bell Labs, mas o contexto não diz que ele recebeu o Prêmio Turing [C3][F7].",
+      "resposta": "Dennis Ritchie e Ken Thompson trabalharam no Bell Labs e receberam o Prêmio Turing [C1][C2][C4]. Eles receberam o prêmio da ACM em 1983 [F1] e trabalharam juntos no Bell Labs, inclusive no Multics e no Unix [F3][F6]. Bjarne Stroustrup também trabalhou no Bell Labs, mas o contexto não diz que ele recebeu o Prêmio Turing [C3][F7].",
       "confianca": {
         "valor": 0.65,
         "nivel": "media",
         "criterio": "score 0.75 (cosseno 0.51), similaridade do caminho 0.80, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (:Organizacao {id: 'organizacao:bell_labs'})<-[:TRABALHOU_EM]-(:Pessoa)-[:RECEBEU]->(:Premio {id: 'premio:premio_turing'}) RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -3623,35 +3623,35 @@
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "premio:premio_turing",
             "nome": "Prêmio Turing",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "organizacao:bell_labs",
             "nome": "Bell Labs",
             "tipo": "Organizacao",
             "pagerank": 1.4979292944435794,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "pessoa:bjarne_stroustrup",
             "nome": "Bjarne Stroustrup",
             "tipo": "Pessoa",
             "pagerank": 0.6792261279711024,
-            "comunidade": 16
+            "comunidade": 12
           }
         ],
         "arestas": [
@@ -3845,7 +3845,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.72 (cosseno 0.45), similaridade do caminho 0.33, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (t:Tecnologia)-[:INFLUENCIADA_POR]->(:Tecnologia)-[:DESENVOLVIDA_EM]->(:Organizacao) WHERE toLower(t.name) = 'python' RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -3955,49 +3955,49 @@
             "nome": "C++",
             "tipo": "Tecnologia",
             "pagerank": 1.3107437951562202,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:c",
             "nome": "C",
             "tipo": "Tecnologia",
             "pagerank": 1.236697955412936,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:b",
             "nome": "B",
             "tipo": "Tecnologia",
             "pagerank": 1.0489235077440826,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:simula",
             "nome": "Simula",
             "tipo": "Tecnologia",
             "pagerank": 0.4265358070786999,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "organizacao:bell_labs",
             "nome": "Bell Labs",
             "tipo": "Organizacao",
             "pagerank": 1.4979292944435794,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "pessoa:dennis_ritchie",
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           }
         ],
         "arestas": [
@@ -4219,7 +4219,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.76 (cosseno 0.52), similaridade do caminho 0.43, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (:Pessoa)-[:CRIOU]->(t:Tecnologia) WHERE toLower(t.name) = 'rust' OR 'Rust' IN coalesce(t.aliases, []) RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -4324,56 +4324,56 @@
             "nome": "C++",
             "tipo": "Tecnologia",
             "pagerank": 1.3107437951562202,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "organizacao:bell_labs",
             "nome": "Bell Labs",
             "tipo": "Organizacao",
             "pagerank": 1.4979292944435794,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:c",
             "nome": "C",
             "tipo": "Tecnologia",
             "pagerank": 1.236697955412936,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "pessoa:dennis_ritchie",
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:unix",
             "nome": "Unix",
             "tipo": "Tecnologia",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "premio:premio_turing",
             "nome": "Prêmio Turing",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "organizacao:lucent_technologies",
             "nome": "Lucent Technologies",
             "tipo": "Organizacao",
             "pagerank": 0.41222642265458087,
-            "comunidade": 14
+            "comunidade": 10
           }
         ],
         "arestas": [
@@ -4611,7 +4611,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.63 (cosseno 0.27), similaridade do caminho 0.43, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (pe:Pessoa)-[:RECEBEU]->(:Premio) WHERE toLower(pe.name) CONTAINS 'margaret hamilton' RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -4704,28 +4704,28 @@
             "nome": "Dennis Ritchie",
             "tipo": "Pessoa",
             "pagerank": 1.8654386677915662,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "premio:medalha_nacional_de_tecnologia_e_inovacao",
             "nome": "Medalha Nacional de Tecnologia e Inovação",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "pessoa:ken_thompson",
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "premio:premio_turing",
             "nome": "Prêmio Turing",
             "tipo": "Premio",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           }
         ],
         "arestas": [
@@ -4892,7 +4892,7 @@
         "nivel": "baixa",
         "criterio": "resposta não gerada (recusa ou falha do LLM), score 0.76 (cosseno 0.51), similaridade do caminho 0.42, 5 de 5 caminhos com trecho de origem"
       },
-      "cypher": null,
+      "cypher": "MATCH p = (t:Tecnologia)-[:DESENVOLVIDA_EM]->(:Organizacao) WHERE toLower(t.name) = 'kotlin' RETURN p LIMIT 25",
       "caminhos": [
         {
           "id": "C1",
@@ -4999,42 +4999,42 @@
             "nome": "Ken Thompson",
             "tipo": "Pessoa",
             "pagerank": 1.5514098917274044,
-            "comunidade": 14
+            "comunidade": 10
           },
           {
             "id": "tecnologia:b",
             "nome": "B",
             "tipo": "Tecnologia",
             "pagerank": 1.0489235077440826,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "tecnologia:c",
             "nome": "C",
             "tipo": "Tecnologia",
             "pagerank": 1.236697955412936,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "organizacao:bell_labs",
             "nome": "Bell Labs",
             "tipo": "Organizacao",
             "pagerank": 1.4979292944435794,
-            "comunidade": 16
+            "comunidade": 12
           },
           {
             "id": "tecnologia:bcpl",
             "nome": "BCPL",
             "tipo": "Tecnologia",
             "pagerank": 0.44524540478725283,
-            "comunidade": 4
+            "comunidade": 2
           },
           {
             "id": "tecnologia:unix",
             "nome": "Unix",
             "tipo": "Tecnologia",
             "pagerank": 0.673916407044629,
-            "comunidade": 14
+            "comunidade": 10
           }
         ],
         "arestas": [

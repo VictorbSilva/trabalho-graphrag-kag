@@ -12,10 +12,10 @@
     {
       "id": "C1",
       "nos": [
-        "C++",
-        "C",
-        "Dennis Ritchie",
-        "Prêmio Turing"
+        "tecnologia:c_mais_mais",
+        "tecnologia:c",
+        "pessoa:dennis_ritchie",
+        "premio:premio_turing"
       ],
       "relacoes": [
         "INFLUENCIADA_POR",
@@ -23,9 +23,11 @@
         "RECEBEU"
       ],
       "fontes": [
-        "c_mais_mais#2",
-        "linguagem_c#0",
-        "dennis_ritchie#5"
+        "c_mais_mais#0",
+        "c#2",
+        "c#0",
+        "dennis_ritchie#0",
+        "dennis_ritchie#1"
       ]
     }
   ],
@@ -65,25 +67,19 @@
         "origem": "tecnologia:c_mais_mais",
         "destino": "tecnologia:c",
         "tipo": "INFLUENCIADA_POR",
-        "fontes": [
-          "c_mais_mais#2"
-        ]
+        "fontes": ["c_mais_mais#0", "c#2"]
       },
       {
         "origem": "pessoa:dennis_ritchie",
         "destino": "tecnologia:c",
         "tipo": "CRIOU",
-        "fontes": [
-          "linguagem_c#0"
-        ]
+        "fontes": ["c#0", "dennis_ritchie#0"]
       },
       {
         "origem": "pessoa:dennis_ritchie",
         "destino": "premio:premio_turing",
         "tipo": "RECEBEU",
-        "fontes": [
-          "dennis_ritchie#5"
-        ]
+        "fontes": ["dennis_ritchie#1"]
       }
     ]
   },
@@ -96,8 +92,8 @@
   "fontes": [
     {
       "id": "F1",
-      "chunk_id": "dennis_ritchie#5",
-      "trecho": "Trecho demonstrativo da fonte utilizado para fundamentar a resposta.",
+      "chunk_id": "dennis_ritchie#1",
+      "trecho": "Dennis Ritchie e Ken Thompson receberam o Prêmio Turing da Association for Computing Machinery (ACM) em 1983, a Medalha IEEE Richard W. Hamming do Institute of Electrical and Electronics Engineers (IEEE) em 1990 e a Medalha Nacional de Tecnologia e Inovação, concedida pelo presidente Bill Clinton em 1999.",
       "documento": "Dennis Ritchie",
       "url": "https://pt.wikipedia.org/wiki/Dennis_Ritchie",
       "score": 0.71

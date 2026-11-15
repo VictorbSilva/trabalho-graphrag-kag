@@ -52,6 +52,15 @@ docker compose up -d          # sobe o Neo4j e aplica o schema
 
 Neo4j Browser: http://localhost:7474 (usuário `neo4j`, senha do `.env`).
 
+Para carregar os dados no banco (com o ambiente virtual ativo, ver abaixo):
+
+```bash
+python -m src.banco.ingestor                  # artigos processados (data/processado/extraido)
+python -m src.banco.ingestor data/semente     # ou o grafo semente anotado à mão
+```
+
+Detalhes em [neo4j/README.md](neo4j/README.md#carregar-os-dados-ingestor).
+
 Testes:
 
 ```bash

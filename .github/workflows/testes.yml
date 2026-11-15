@@ -19,8 +19,11 @@ jobs:
           cache-dependency-path: requirements*.txt
 
       - name: Instalar dependências
-        run: pip install -r requirements-dev.txt
+        run: |
+          pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements-dev.txt
 
-      # Os testes do Neo4j e de LLM ficam de fora: o CI não tem banco nem chaves.
+      # Os testes do Neo4j, de LLM e do modelo de embeddings ficam de fora:
+      # o CI não tem banco nem chaves, e baixar o modelo a cada execução é lento.
       - name: Rodar os testes
-        run: python -m pytest -m "not neo4j and not llm"
+        run: python -m pytest -m "not neo4j and not llm and not modelo"

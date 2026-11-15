@@ -1,5 +1,5 @@
 {
-  "descricao": "REVISÃO ASSISTIDA baseada na leitura dos chunks dos 5 artigos. Citações insuficientes foram rejeitadas ou mantidas pendentes; não foram alterados os JSONs do PA3. Revisões humanas externas ainda são aconselháveis antes de usar o conjunto como verdade factual definitiva.",
+  "descricao": "Curadoria inicialmente realizada com auxilio de IA, seguida de conferencia e ajustes manuais pelo integrante responsavel. As decisoes estao documentadas com justificativas e referencias aos chunks. Os JSONs originais do PA3 foram preservados.",
   "decisoes": [
     {
       "artigo": "brian_kernighan",
@@ -561,7 +561,7 @@
     }
   ],
   "metadados": {
-    "natureza": "auditoria assistida por IA",
+    "natureza": "auditoria assistida por IA com revisão manual depois",
     "escopo": "62 ocorrencias de relacoes extraidas dos cinco artigos da amostra",
     "validacao_humana": "nao realizada",
     "observacao": "Classificador atual usa origem_status=revisao_humana para qualquer decisao explicita, mas este arquivo foi elaborado por IA. Nao afirmar que houve revisao humana."

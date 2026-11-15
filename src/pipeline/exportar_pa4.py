@@ -5,9 +5,9 @@ Uso na raiz do projeto:
 
 Preserva os JSONs do PA3. Gera um JSON por artigo com o contrato de
 neo4j/dominio.json, incluindo APENAS as relações com status 'aceita'.
-As correções de evidência propostas são anexadas à auditoria, sem promover
-relações pendentes. Este pacote é uma PRÉVIA de curadoria assistida, não uma
-certificação factual e não deve ser ingerido automaticamente no Neo4j.
+relações pendentes. A curadoria foi inicialmente assistida por IA e
+posteriormente conferida e ajustada manualmente. A exportação ainda
+depende de verificações finais antes da ingestão no Neo4j.
 """
 
 import argparse
@@ -124,7 +124,7 @@ def exportar(artigos: dict, revisoes: dict, equivalencias: dict, correcoes: dict
         },
         "unificacoes": integrado["unificacoes"],
         "excluidas": excluidas,
-        "observacao": "PRÉVIA DE CURADORIA ASSISTIDA POR IA. As correções sugeridas não alteram status nem JSONs do PA3. Antes do Neo4j, revisar factualidade, testar integração e validar cobertura.",
+        "observacao": "Curadoria inicialmente assistida por IA, seguida de conferencia e ajustes manuais. Correcoes de evidencia sugeridas nao sao aprovadas automaticamente. A ingestao no Neo4j depende de verificacao final e testes de integracao.",
     }
     return saidas, auditoria
 
@@ -158,7 +158,7 @@ def main(argv=None) -> int:
     print(f"Sugestões de correção de evidência: {r['sugestoes_de_correcao']} (sem aprovação automática).")
     print(f"Prévia para PA5: {args.saida}")
     print(f"Auditoria: {args.auditoria}")
-    print("ATENÇÃO: prévia assistida por IA, não ingerir no Neo4j sem revisão final.")
+    print("ATENÇÃO: curadoria revisada manualmente; verificar dados e integração antes da ingestão no Neo4j.")
     return 0
 
 

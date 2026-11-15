@@ -13,7 +13,8 @@ import src.recuperacao.responder as modulo
 from src.api.servico import carregar_responder
 from src.contrato import Resposta
 from src.recuperacao.grounding import MENSAGEM_SEM_INFORMACAO
-from src.recuperacao.responder import responder
+from src.recuperacao.multi_hop import ordenar_caminhos
+from src.recuperacao.responder import LIMITE_CAMINHOS, responder
 
 PERGUNTA = "Que prêmio recebeu quem criou a linguagem que influenciou o C++?"
 
@@ -67,6 +68,36 @@ CAMINHO_DA_CYPHER = {
 
 CYPHER = "MATCH p = (:Pessoa)-[:CRIOU]->(:Tecnologia {id: 'tecnologia:c_mais_mais'}) RETURN p LIMIT 25"
 
+
+def caminho_entre(origem: tuple[str, str], relacao: str, destino: tuple[str, str], score: float) -> dict:
+    """Caminho de uma aresta no formato de expandir(); origem e destino são (nome, tipo)."""
+    nos = [
+        {"id": f"{tipo.lower()}:{nome.lower().replace(' ', '_')}", "nome": nome, "tipo": tipo,
+         "pagerank": 0.0, "comunidade": None}
+        for nome, tipo in (origem, destino)
+    ]
+    aresta = {"origem": nos[0]["id"], "destino": nos[1]["id"], "tipo": relacao, "fontes": ["c#0"]}
+    return {"chunk_origem": None, "nos": nos, "arestas": [aresta], "score": score}
+
+
+def sem_premio(quantos: int, score: float = 0.9) -> list[dict]:
+    return [
+        caminho_entre((f"Pessoa {i}", "Pessoa"), "TRABALHOU_EM", (f"Lab {i}", "Organizacao"), score)
+        for i in range(quantos)
+    ]
+
+
+def com_premio(quantos: int, score: float = 0.0) -> list[dict]:
+    return [
+        caminho_entre((f"Autor {i}", "Pessoa"), "RECEBEU", (f"Prêmio {i}", "Premio"), score)
+        for i in range(quantos)
+    ]
+
+
+def vetores_ortogonais(textos):
+    """Pergunta em [1, 0] e todo caminho em [0, 1]: similaridade 0 para todos."""
+    return [[1.0, 0.0]] + [[0.0, 1.0] for _ in textos[1:]]
+
 # Trechos que só aparecem nas fontes das arestas, fora do resultado da busca.
 TRECHOS_DO_BANCO = {
     f"extra#{i}": {
@@ -84,7 +115,9 @@ def chamadas(monkeypatch):
     """Troca embedding, busca, expansão, Text-to-Cypher e resolução por funções falsas.
 
     O registro guarda o que a busca, a expansão e o Text-to-Cypher devolvem (os
-    testes podem trocar) e se a expansão e o Text-to-Cypher foram chamados.
+    testes podem trocar) e se a expansão e o Text-to-Cypher foram chamados. A
+    ordenação da união é a de verdade, com os vetores de registro["gerar_vetores"]
+    no lugar do modelo de embeddings.
     """
     registro = {
         "resultados": [dict(r) for r in RESULTADOS],
@@ -92,6 +125,7 @@ def chamadas(monkeypatch):
         "expandir": False,
         "text_to_cypher": {"cypher": CYPHER, "caminhos": [], "erro": None},
         "gerar_e_executar": False,
+        "gerar_vetores": vetores_ortogonais,
     }
 
     def buscar_falso(driver, embedding, k=5):
@@ -108,7 +142,11 @@ def chamadas(monkeypatch):
         registro["gerar_e_executar"] = True
         return registro["text_to_cypher"]
 
+    def ordenar_sem_modelo(caminhos, pergunta=None):
+        return ordenar_caminhos(caminhos, pergunta, gerar_vetores=registro["gerar_vetores"])
+
     monkeypatch.setattr(modulo, "gerar_embedding", lambda t: [0.0])
+    monkeypatch.setattr(modulo, "ordenar_caminhos", ordenar_sem_modelo)
     monkeypatch.setattr(modulo, "buscar_chunks", buscar_falso)
     monkeypatch.setattr(modulo, "expandir", expandir_falso)
     monkeypatch.setattr(modulo, "gerar_e_executar", gerar_e_executar_falso)
@@ -227,16 +265,17 @@ def sinais_da_confianca(monkeypatch):
     return recebidos
 
 
-def test_confianca_recebe_a_maior_similaridade_dos_caminhos(chamadas, sinais_da_confianca):
-    chamadas["caminhos"] = [{**CAMINHO, "similaridade": 0.6}, {**CAMINHO, "similaridade": 0.3}]
+def vetores_com_similaridade(textos):
+    """Pergunta em [1, 0]; caminho com "criou" a 0.6 dela e os outros a 0.3."""
+    return [[1.0, 0.0]] + [[0.6, 0.8] if "criou" in t else [0.3, 0.9539] for t in textos[1:]]
+
+
+def test_confianca_recebe_a_maior_similaridade_da_uniao(chamadas, sinais_da_confianca):
+    chamadas["gerar_vetores"] = vetores_com_similaridade
+    chamadas["text_to_cypher"] = {"cypher": CYPHER, "caminhos": [CAMINHO_DA_CYPHER], "erro": None}
     responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1][F1]."))
     assert sinais_da_confianca["similaridade_caminho"] == 0.6
     assert sinais_da_confianca["resposta_gerada"] is True
-
-
-def test_caminho_sem_similaridade_passa_none(chamadas, sinais_da_confianca):
-    responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1]."))
-    assert sinais_da_confianca["similaridade_caminho"] is None
 
 
 def test_vetorial_passa_similaridade_none(chamadas, sinais_da_confianca):
@@ -273,7 +312,7 @@ def test_falha_do_text_to_cypher_nao_derruba_a_resposta(
     assert sinais_da_confianca["cypher_ok"] is False
 
 
-def test_caminhos_da_cypher_se_juntam_aos_da_expansao_sem_duplicar(chamadas):
+def test_caminho_da_cypher_repetido_da_expansao_aparece_uma_vez(chamadas):
     chamadas["text_to_cypher"] = {
         "cypher": CYPHER,
         "caminhos": [dict(CAMINHO, score=0.0, chunk_origem=None), CAMINHO_DA_CYPHER],
@@ -281,12 +320,37 @@ def test_caminhos_da_cypher_se_juntam_aos_da_expansao_sem_duplicar(chamadas):
     }
     dados = responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1][C2]."))
     Resposta.model_validate(dados)
-    assert [(c["id"], c["relacoes"]) for c in dados["caminhos"]] == [
-        ("C1", ["INFLUENCIADA_POR"]),
-        ("C2", ["CRIOU"]),
-    ]
+    assert [c["id"] for c in dados["caminhos"]] == ["C1", "C2"]
+    assert sorted(c["relacoes"][0] for c in dados["caminhos"]) == ["CRIOU", "INFLUENCIADA_POR"]
     assert "pessoa:bjarne_stroustrup" in dados["nos_consultados"]
     assert not any("Text-to-Cypher" in aviso for aviso in dados["avisos"])
+
+
+def tipos_das_pontas(dados: dict, caminho: dict) -> set[str]:
+    tipos = {no["id"]: no["tipo"] for no in dados["subgrafo"]["nos"]}
+    return {tipos[caminho["nos"][0]], tipos[caminho["nos"][-1]]}
+
+
+def test_uniao_segue_a_ordenacao_da_v3_e_corta_em_5(chamadas):
+    chamadas["caminhos"] = sem_premio(5)
+    chamadas["text_to_cypher"] = {"cypher": CYPHER, "caminhos": com_premio(3), "erro": None}
+    dados = responder(
+        "Que prêmio recebeu quem criou o C++?", driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1].")
+    )
+    Resposta.model_validate(dados)
+    assert LIMITE_CAMINHOS == 5
+    assert len(dados["caminhos"]) == 5
+    pontas = [tipos_das_pontas(dados, c) for c in dados["caminhos"]]
+    assert all("Premio" in p for p in pontas[:3])
+    assert not any("Premio" in p for p in pontas[3:])
+
+
+def test_25_caminhos_da_cypher_nao_passam_do_teto(chamadas):
+    chamadas["caminhos"] = sem_premio(4)
+    chamadas["text_to_cypher"] = {"cypher": CYPHER, "caminhos": com_premio(25), "erro": None}
+    dados = responder(PERGUNTA, driver=object(), llm=llm_fixo("Foi Dennis Ritchie [C1]."))
+    Resposta.model_validate(dados)
+    assert [c["id"] for c in dados["caminhos"]] == ["C1", "C2", "C3", "C4", "C5"]
 
 
 def test_confianca_conta_os_caminhos_da_cypher(chamadas, sinais_da_confianca):

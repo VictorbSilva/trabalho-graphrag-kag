@@ -16,8 +16,11 @@ BASE_URL = "https://routellm.abacus.ai/v1"
 TIMEOUT_S = 30
 
 
-def gerar_texto(mensagens: list[dict]) -> str:
-    """Manda as mensagens (formato chat da OpenAI) ao LLM e devolve o texto da resposta."""
+def gerar_texto(mensagens: list[dict], timeout: float = TIMEOUT_S) -> str:
+    """Manda as mensagens (formato chat da OpenAI) ao LLM e devolve o texto da resposta.
+
+    timeout (em segundos) vai para o cliente; o padrão é o da resposta final.
+    """
     load_dotenv(RAIZ / ".env")
     chave = os.getenv("ABACUS_API_KEY")
     modelo = os.getenv("ABACUS_MODELO")
@@ -26,6 +29,6 @@ def gerar_texto(mensagens: list[dict]) -> str:
     if not modelo:
         raise RuntimeError("ABACUS_MODELO não definido. Preencha o nome do modelo da Abacus no .env.")
 
-    cliente = OpenAI(base_url=BASE_URL, api_key=chave, timeout=TIMEOUT_S)
+    cliente = OpenAI(base_url=BASE_URL, api_key=chave, timeout=timeout)
     resposta = cliente.chat.completions.create(model=modelo, messages=mensagens, temperature=0)
     return resposta.choices[0].message.content.strip()

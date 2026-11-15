@@ -7,6 +7,10 @@ quando não tem, passa por EXPLAIN e só então executa, sempre em transação d
 leitura: o banco recusa CREATE, MERGE, SET e DELETE. Se a consulta falhar, o LLM
 recebe o erro e tem mais uma tentativa.
 
+O Text-to-Cypher é um extra da resposta, então tem limites de tempo próprios:
+TIMEOUT_LLM_S por chamada ao LLM, ORCAMENTO_S para tudo (sem segunda tentativa
+se a primeira já passou dele) e TIMEOUT_CONSULTA_S na execução da Cypher.
+
 Os caminhos devolvidos saem no formato de expandir() (src/recuperacao/multi_hop.py),
 para o responder juntá-los aos da expansão multi-hop.
 """
@@ -14,9 +18,11 @@ para o responder juntá-los aos da expansão multi-hop.
 import json
 import re
 import string
+import time
+from collections.abc import Callable
 from pathlib import Path
 
-from neo4j import RoutingControl
+from neo4j import Query, RoutingControl
 from neo4j.exceptions import Neo4jError
 from neo4j.graph import Path as CaminhoNeo4j
 
@@ -29,6 +35,9 @@ RELACOES_DO_DOMINIO = frozenset(r["tipo"] for r in DOMINIO["relacoes"])
 LIMITE_PADRAO = 25
 ENTIDADES_POR_TERMO = 5
 NOVAS_TENTATIVAS = 1
+TIMEOUT_LLM_S = 10
+ORCAMENTO_S = 20
+TIMEOUT_CONSULTA_S = 5
 
 # Consulta 1 de neo4j/consultas/exemplos.cypher, com o top 5 por termo.
 BUSCA_ENTIDADES = """
@@ -247,14 +256,22 @@ def _falha(erro: str) -> dict:
     return {"cypher": None, "caminhos": [], "erro": erro}
 
 
-def gerar_e_executar(driver, pergunta: str, llm=gerar_texto) -> dict:
+def gerar_e_executar(
+    driver,
+    pergunta: str,
+    llm=gerar_texto,
+    relogio: Callable[[], float] = time.monotonic,
+) -> dict:
     """Gera a Cypher da pergunta, valida e executa em transação de leitura.
 
     Devolve {"cypher", "caminhos", "erro"}: a consulta executada e os caminhos
     dela, ou cypher None, caminhos vazios e a mensagem de erro. Uma consulta que
-    falha na validação ou na execução volta ao LLM com o erro uma vez só. Nunca
-    levanta exceção: a falha do Text-to-Cypher não pode derrubar a resposta.
+    falha na validação ou na execução volta ao LLM com o erro uma vez só, desde
+    que a primeira tentativa não tenha passado de ORCAMENTO_S (medido com
+    relogio). Nunca levanta exceção: a falha do Text-to-Cypher não pode derrubar
+    a resposta.
     """
+    inicio = relogio()
     try:
         entidades = resolver_entidades(driver, pergunta)
     except Exception as erro:
@@ -262,9 +279,16 @@ def gerar_e_executar(driver, pergunta: str, llm=gerar_texto) -> dict:
 
     erro = None
     consulta = None
-    for _ in range(1 + NOVAS_TENTATIVAS):
+    for tentativa in range(1 + NOVAS_TENTATIVAS):
+        if tentativa > 0:
+            gasto = relogio() - inicio
+            if gasto > ORCAMENTO_S:
+                return _falha(
+                    f"Sem nova tentativa: a primeira gastou {gasto:.1f} s, acima do orçamento "
+                    f"de {ORCAMENTO_S} s do Text-to-Cypher. Erro da primeira: {erro}"
+                )
         try:
-            texto = llm(montar_prompt(pergunta, entidades, erro, consulta))
+            texto = llm(montar_prompt(pergunta, entidades, erro, consulta), timeout=TIMEOUT_LLM_S)
         except Exception as falha_llm:
             return _falha(f"Falha ao chamar o LLM ({type(falha_llm).__name__}).")
 
@@ -273,7 +297,9 @@ def gerar_e_executar(driver, pergunta: str, llm=gerar_texto) -> dict:
             erro = validar_cypher(driver, consulta)
             if erro is not None:
                 continue
-            registros, _, _ = driver.execute_query(consulta, routing_=RoutingControl.READ)
+            registros, _, _ = driver.execute_query(
+                Query(consulta, timeout=TIMEOUT_CONSULTA_S), routing_=RoutingControl.READ
+            )
         except Neo4jError as falha_neo4j:
             erro = _mensagem(falha_neo4j)
             continue

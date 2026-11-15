@@ -12,6 +12,8 @@ import pytest
 from src.recuperacao.carregar_semente import carregar_semente_no_banco
 from src.recuperacao.text_to_cypher import (
     EXEMPLOS,
+    ORCAMENTO_S,
+    TIMEOUT_LLM_S,
     garantir_limit,
     gerar_e_executar,
     montar_prompt,
@@ -35,12 +37,20 @@ def semente(banco):
     return banco
 
 
-def llm_em_sequencia(*respostas):
-    """LLM falso que devolve as respostas na ordem (repete a última) e guarda as mensagens."""
-    def llm(mensagens):
+def llm_em_sequencia(*respostas, relogio=None, demora=0.0):
+    """LLM falso que devolve as respostas na ordem (repete a última).
+
+    Guarda as mensagens e os argumentos nomeados de cada chamada. Com relogio
+    (um dict {"agora": segundos}), cada chamada avança o relógio em demora.
+    """
+    def llm(mensagens, **kwargs):
         llm.chamadas.append(mensagens)
+        llm.argumentos.append(kwargs)
+        if relogio is not None:
+            relogio["agora"] += demora
         return respostas[min(len(llm.chamadas), len(respostas)) - 1]
     llm.chamadas = []
+    llm.argumentos = []
     return llm
 
 
@@ -160,7 +170,7 @@ def test_llm_que_sempre_erra_para_na_segunda_chamada(semente):
 
 
 def test_falha_do_llm_volta_como_erro(semente):
-    def llm_quebrado(mensagens):
+    def llm_quebrado(mensagens, **kwargs):
         raise RuntimeError("fora do ar")
 
     resultado = gerar_e_executar(semente, "Quem criou o C?", llm=llm_quebrado)
@@ -202,6 +212,42 @@ def test_caminhos_fora_do_dominio_sao_descartados(semente):
     resultado = gerar_e_executar(semente, "O que o trecho cita?", llm=llm_em_sequencia(consulta))
     assert resultado["erro"] is None
     assert resultado["caminhos"] == []
+
+
+# ---------- limites de tempo ----------
+
+def test_cada_chamada_do_llm_usa_timeout_de_10_s(semente):
+    llm = llm_em_sequencia(CONSULTA_INVALIDA, CONSULTA_VALIDA)
+    gerar_e_executar(semente, "Quem criou o C?", llm=llm)
+    assert TIMEOUT_LLM_S == 10
+    assert llm.argumentos == [{"timeout": 10}, {"timeout": 10}]
+
+
+def test_primeira_tentativa_que_estoura_o_orcamento_nao_tem_segunda(semente):
+    relogio = {"agora": 0.0}
+    llm = llm_em_sequencia(CONSULTA_INVALIDA, relogio=relogio, demora=ORCAMENTO_S + 5)
+    resultado = gerar_e_executar(semente, "Quem criou o C?", llm=llm, relogio=lambda: relogio["agora"])
+    assert len(llm.chamadas) == 1
+    assert resultado["cypher"] is None
+    assert resultado["caminhos"] == []
+    assert "orçamento" in resultado["erro"]
+    assert f"{ORCAMENTO_S} s" in resultado["erro"]
+
+
+def test_primeira_tentativa_dentro_do_orcamento_ganha_a_segunda(semente):
+    relogio = {"agora": 0.0}
+    llm = llm_em_sequencia(CONSULTA_INVALIDA, CONSULTA_VALIDA, relogio=relogio, demora=ORCAMENTO_S - 5)
+    resultado = gerar_e_executar(semente, "Quem criou o C?", llm=llm, relogio=lambda: relogio["agora"])
+    assert len(llm.chamadas) == 2
+    assert resultado["erro"] is None
+
+
+def test_consulta_que_passa_do_timeout_de_execucao_e_recusada(semente):
+    llm = llm_em_sequencia("CALL apoc.util.sleep(6000) RETURN 1")
+    resultado = gerar_e_executar(semente, "Espere", llm=llm)
+    assert resultado["cypher"] is None
+    assert resultado["caminhos"] == []
+    assert resultado["erro"]
 
 
 # ---------- com o LLM de verdade ----------

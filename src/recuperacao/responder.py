@@ -22,11 +22,13 @@ from src.recuperacao.grounding import (
     resolver_trechos,
 )
 from src.recuperacao.llm import gerar_texto
-from src.recuperacao.multi_hop import expandir, montar_grafo
+from src.recuperacao.multi_hop import expandir, montar_grafo, ordenar_caminhos
 from src.recuperacao.text_to_cypher import gerar_e_executar
 
 MODOS = ("graphrag", "vetorial")
 MAX_FONTES = 8
+# Teto de caminhos da resposta, o mesmo para a expansão e para a união com a Cypher.
+LIMITE_CAMINHOS = 5
 AVISO_SEM_CONTEXTO = "Nenhum trecho ou caminho encontrado."
 RESPOSTA_FALHA_LLM = "Não foi possível gerar a resposta agora. Veja os trechos em fontes."
 AVISO_TEXT_TO_CYPHER = "Text-to-Cypher falhou; a resposta segue com a busca e a expansão ({erro})."
@@ -45,10 +47,13 @@ def _chave_das_arestas(caminho: dict) -> frozenset:
 
 
 def _unir_caminhos(da_expansao: list[dict], da_cypher: list[dict]) -> list[dict]:
-    """Os caminhos da expansão e, depois, os da Cypher com um conjunto de arestas novo."""
-    vistos = {_chave_das_arestas(c) for c in da_expansao}
-    unidos = list(da_expansao)
-    for caminho in da_cypher:
+    """Os caminhos da expansão e os da Cypher, um por conjunto de arestas.
+
+    Num repetido fica o da expansão, que tem o score do trecho de origem.
+    """
+    vistos: set[frozenset] = set()
+    unidos = []
+    for caminho in da_expansao + da_cypher:
         chave = _chave_das_arestas(caminho)
         if chave not in vistos:
             vistos.add(chave)
@@ -109,7 +114,7 @@ def responder(pergunta: str, modo: str = "graphrag", *, driver=None, llm=None) -
         da_expansao = expandir(
             driver,
             [r["chunk_id"] for r in resultados],
-            limite=5,
+            limite=LIMITE_CAMINHOS,
             scores={r["chunk_id"]: r["score"] for r in resultados},
             pergunta=pergunta,
         )
@@ -120,7 +125,8 @@ def responder(pergunta: str, modo: str = "graphrag", *, driver=None, llm=None) -
         else:
             primeira_linha = (str(text_to_cypher["erro"]).strip().splitlines() or ["sem detalhe"])[0]
             avisos.append(AVISO_TEXT_TO_CYPHER.format(erro=primeira_linha))
-        brutos = _unir_caminhos(da_expansao, text_to_cypher["caminhos"])
+        unidos = _unir_caminhos(da_expansao, text_to_cypher["caminhos"])
+        brutos = ordenar_caminhos(unidos, pergunta=pergunta)[:LIMITE_CAMINHOS]
         caminhos, subgrafo, nos_consultados = montar_grafo(brutos)
     else:
         brutos = []

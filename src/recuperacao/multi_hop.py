@@ -3,8 +3,9 @@
 Dos trechos chega às entidades citadas (MENTIONS) e anda de 1 a 3 saltos só
 pelas relações do domínio, lidas de neo4j/dominio.json. Com a pergunta, cada
 caminho vira uma frase e a ordem segue a semelhança dessa frase com a pergunta,
-pelo mesmo modelo de embeddings da busca. montar_grafo() converte os caminhos
-para o formato do contrato (src/contrato.py).
+pelo mesmo modelo de embeddings da busca. ordenar_caminhos() aplica essa ordem a
+qualquer lista de caminhos (o responder a usa na união com os da Cypher), e
+montar_grafo() converte os caminhos para o formato do contrato (src/contrato.py).
 """
 
 import json
@@ -89,14 +90,7 @@ def expandir(
 
     Cada caminho é {"chunk_origem", "nos", "arestas", "score"}, com o score do
     trecho de origem. Caminhos com o mesmo conjunto de arestas aparecem uma vez só
-    (fica o de maior score).
-
-    Com pergunta, cada caminho ganha "similaridade" (produto escalar entre os
-    vetores normalizados da pergunta e da frase do caminho). A ordem põe primeiro
-    os caminhos com uma ponta do tipo que a pergunta pede (tipo_esperado), sem
-    descartar os outros, e segue por similaridade, score, média do PageRank dos
-    nós e caminhos mais curtos. Sem pergunta, a ordem é a mesma sem o tipo e sem
-    a similaridade.
+    (fica o de maior score). A ordem é a de ordenar_caminhos(), cortada em limite.
     """
     if isinstance(max_saltos, bool) or not isinstance(max_saltos, int) or not 1 <= max_saltos <= 3:
         raise ValueError("max_saltos precisa ser um inteiro entre 1 e 3.")
@@ -126,19 +120,35 @@ def expandir(
             melhores[chave] = caminho
 
     caminhos = list(melhores.values())
+    return ordenar_caminhos(caminhos, pergunta, gerar_vetores)[:limite]
+
+
+def ordenar_caminhos(
+    caminhos: list[dict], pergunta: str | None = None, gerar_vetores=gerar_embeddings
+) -> list[dict]:
+    """Os caminhos (já sem repetidos) na ordem da V3, sem cortar.
+
+    Com pergunta, cada caminho ganha "similaridade" (produto escalar entre os
+    vetores normalizados da pergunta e da frase do caminho), numa cópia. A ordem
+    põe primeiro os caminhos com uma ponta do tipo que a pergunta pede
+    (tipo_esperado), sem descartar os outros, e segue por similaridade, score,
+    média do PageRank dos nós e caminhos mais curtos. Sem pergunta, a ordem é a
+    mesma sem o tipo e sem a similaridade.
+    """
     if pergunta is None:
-        ordenados = sorted(
+        return sorted(
             caminhos,
             key=lambda c: (-c["score"], -_media_pagerank(c), len(c["arestas"])),
         )
-        return ordenados[:limite]
 
     if caminhos:
         vetores = gerar_vetores([pergunta] + [verbalizar_caminho(c) for c in caminhos])
-        for caminho, vetor in zip(caminhos, vetores[1:]):
-            caminho["similaridade"] = _produto_escalar(vetores[0], vetor)
+        caminhos = [
+            {**caminho, "similaridade": _produto_escalar(vetores[0], vetor)}
+            for caminho, vetor in zip(caminhos, vetores[1:])
+        ]
     tipo = tipo_esperado(pergunta)
-    ordenados = sorted(
+    return sorted(
         caminhos,
         key=lambda c: (
             0 if tipo and tipo in (c["nos"][0]["tipo"], c["nos"][-1]["tipo"]) else 1,
@@ -148,7 +158,6 @@ def expandir(
             len(c["arestas"]),
         ),
     )
-    return ordenados[:limite]
 
 
 def montar_grafo(caminhos: list[dict]) -> tuple[list[dict], dict, list[str]]:

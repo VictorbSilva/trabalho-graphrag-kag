@@ -1,7 +1,8 @@
 """Ponto de entrada da recuperação: responder(pergunta, modo).
 
 Busca vetorial nos trechos (V1) e, no modo graphrag, expansão multi-hop a partir
-deles (V3). O texto da resposta sai do LLM a partir de um contexto numerado (C1,
+deles (V3) mais os caminhos de uma Cypher gerada pelo LLM e validada antes de
+executar (V2). O texto da resposta sai do LLM a partir de um contexto numerado (C1,
 F1...), com as citações conferidas (V4). A confiança vem de sinais observáveis da
 recuperação (V5).
 """
@@ -21,12 +22,43 @@ from src.recuperacao.grounding import (
     resolver_trechos,
 )
 from src.recuperacao.llm import gerar_texto
-from src.recuperacao.multi_hop import expandir, montar_grafo
+from src.recuperacao.multi_hop import expandir, montar_grafo, ordenar_caminhos
+from src.recuperacao.text_to_cypher import gerar_e_executar
 
 MODOS = ("graphrag", "vetorial")
 MAX_FONTES = 8
+# Teto de caminhos da resposta, o mesmo para a expansão e para a união com a Cypher.
+LIMITE_CAMINHOS = 5
 AVISO_SEM_CONTEXTO = "Nenhum trecho ou caminho encontrado."
 RESPOSTA_FALHA_LLM = "Não foi possível gerar a resposta agora. Veja os trechos em fontes."
+AVISO_TEXT_TO_CYPHER = "Text-to-Cypher falhou; a resposta segue com a busca e a expansão ({erro})."
+
+
+def _text_to_cypher(driver, pergunta: str, llm) -> dict:
+    """gerar_e_executar() sem deixar exceção escapar: a falha vira o campo erro."""
+    try:
+        return gerar_e_executar(driver, pergunta, llm)
+    except Exception as erro:
+        return {"cypher": None, "caminhos": [], "erro": type(erro).__name__}
+
+
+def _chave_das_arestas(caminho: dict) -> frozenset:
+    return frozenset((a["origem"], a["tipo"], a["destino"]) for a in caminho["arestas"])
+
+
+def _unir_caminhos(da_expansao: list[dict], da_cypher: list[dict]) -> list[dict]:
+    """Os caminhos da expansão e os da Cypher, um por conjunto de arestas.
+
+    Num repetido fica o da expansão, que tem o score do trecho de origem.
+    """
+    vistos: set[frozenset] = set()
+    unidos = []
+    for caminho in da_expansao + da_cypher:
+        chave = _chave_das_arestas(caminho)
+        if chave not in vistos:
+            vistos.add(chave)
+            unidos.append(caminho)
+    return unidos
 
 
 def _normalizar_recusa(texto: str) -> str:
@@ -74,15 +106,27 @@ def responder(pergunta: str, modo: str = "graphrag", *, driver=None, llm=None) -
     llm = llm or gerar_texto
 
     resultados = buscar_chunks(driver, gerar_embedding(pergunta), k=5)
+    avisos = []
+    cypher = None
+    cypher_ok = None
 
     if modo == "graphrag":
-        brutos = expandir(
+        da_expansao = expandir(
             driver,
             [r["chunk_id"] for r in resultados],
-            limite=5,
+            limite=LIMITE_CAMINHOS,
             scores={r["chunk_id"]: r["score"] for r in resultados},
             pergunta=pergunta,
         )
+        text_to_cypher = _text_to_cypher(driver, pergunta, llm)
+        cypher_ok = text_to_cypher["erro"] is None
+        if cypher_ok:
+            cypher = text_to_cypher["cypher"]
+        else:
+            primeira_linha = (str(text_to_cypher["erro"]).strip().splitlines() or ["sem detalhe"])[0]
+            avisos.append(AVISO_TEXT_TO_CYPHER.format(erro=primeira_linha))
+        unidos = _unir_caminhos(da_expansao, text_to_cypher["caminhos"])
+        brutos = ordenar_caminhos(unidos, pergunta=pergunta)[:LIMITE_CAMINHOS]
         caminhos, subgrafo, nos_consultados = montar_grafo(brutos)
     else:
         brutos = []
@@ -90,7 +134,6 @@ def responder(pergunta: str, modo: str = "graphrag", *, driver=None, llm=None) -
 
     fontes = _fontes(driver, resultados, caminhos)
     sem_contexto = not fontes and not caminhos
-    avisos = []
     llm_falhou = False
 
     if sem_contexto:
@@ -118,7 +161,7 @@ def responder(pergunta: str, modo: str = "graphrag", *, driver=None, llm=None) -
         melhor_score=max((r["score"] for r in resultados), default=None),
         caminhos=len(caminhos),
         caminhos_com_fonte=sum(1 for c in brutos if all(a["fontes"] for a in c["arestas"])),
-        cypher_ok=None,
+        cypher_ok=cypher_ok,
         sem_contexto=sem_contexto,
         similaridade_caminho=_maior_similaridade(brutos),
         resposta_gerada=not llm_falhou and not _e_recusa(resposta),
@@ -129,7 +172,7 @@ def responder(pergunta: str, modo: str = "graphrag", *, driver=None, llm=None) -
         "modo": modo,
         "resposta": resposta,
         "confianca": confianca,
-        "cypher": None,
+        "cypher": cypher,
         "caminhos": caminhos,
         "subgrafo": subgrafo,
         "nos_consultados": nos_consultados,

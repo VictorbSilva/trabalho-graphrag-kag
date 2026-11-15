@@ -15,6 +15,7 @@ from src.recuperacao.multi_hop import (
     RELACOES_DO_DOMINIO,
     expandir,
     montar_grafo,
+    ordenar_caminhos,
     verbalizar_caminho,
 )
 from tests.recuperacao.conftest import PREFIXO, RAIZ
@@ -191,3 +192,70 @@ def test_corte_da_consulta_fica_com_os_trechos_de_maior_score(semente):
     )
     assert caminhos
     assert all(c["chunk_origem"] == P + "c#2" for c in caminhos)
+
+
+# ---------- ordenar_caminhos ----------
+
+def caminho_falso(nos: list[tuple[str, str, float]], relacoes: list[str], score: float) -> dict:
+    """Caminho no formato de expandir(); nos é [(nome, tipo, pagerank)], ligados na ordem."""
+    nos_dict = [
+        {"id": f"{tipo.lower()}:{nome.lower()}", "nome": nome, "tipo": tipo,
+         "pagerank": pagerank, "comunidade": None}
+        for nome, tipo, pagerank in nos
+    ]
+    arestas = [
+        {"origem": a["id"], "destino": b["id"], "tipo": relacao, "fontes": ["x#0"]}
+        for a, b, relacao in zip(nos_dict, nos_dict[1:], relacoes)
+    ]
+    return {"chunk_origem": "x#0", "nos": nos_dict, "arestas": arestas, "score": score}
+
+
+def test_ordenar_sem_pergunta_segue_score_pagerank_e_tamanho():
+    curto = caminho_falso([("A", "Pessoa", 0.0), ("B", "Organizacao", 0.0)], ["TRABALHOU_EM"], 0.5)
+    longo = caminho_falso(
+        [("C", "Pessoa", 0.0), ("D", "Organizacao", 0.0), ("E", "Pessoa", 0.0)],
+        ["TRABALHOU_EM", "TRABALHOU_EM"],
+        0.5,
+    )
+    importante = caminho_falso([("F", "Pessoa", 0.9), ("G", "Organizacao", 0.9)], ["TRABALHOU_EM"], 0.5)
+    melhor_score = caminho_falso([("H", "Pessoa", 0.0), ("I", "Organizacao", 0.0)], ["TRABALHOU_EM"], 0.9)
+    assert ordenar_caminhos([longo, curto, importante, melhor_score]) == [
+        melhor_score, importante, curto, longo,
+    ]
+
+
+def test_ordenar_com_pergunta_poe_o_tipo_pedido_e_depois_a_similaridade():
+    perto = caminho_falso([("A", "Pessoa", 0.0), ("B", "Organizacao", 0.0)], ["TRABALHOU_EM"], 0.9)
+    longe = caminho_falso([("C", "Pessoa", 0.0), ("D", "Organizacao", 0.0)], ["TRABALHOU_EM"], 0.9)
+    premio = caminho_falso([("E", "Pessoa", 0.0), ("Prêmio F", "Premio", 0.0)], ["RECEBEU"], 0.0)
+
+    def vetores(textos):
+        return [[1.0, 0.0]] + [[0.8, 0.6] if t.startswith("A ") else [0.0, 1.0] for t in textos[1:]]
+
+    ordenados = ordenar_caminhos(
+        [longe, premio, perto], pergunta="Que prêmio recebeu quem criou o C++?", gerar_vetores=vetores
+    )
+    assert [c["nos"][0]["nome"] for c in ordenados] == ["E", "A", "C"]
+    assert [c["similaridade"] for c in ordenados] == [0.0, 0.8, 0.0]
+
+
+def test_ordenar_sem_caminhos_nao_gera_vetores():
+    def vetores_proibidos(textos):
+        raise AssertionError("não deveria gerar vetores sem caminhos")
+
+    assert ordenar_caminhos([], pergunta="Quem criou o C?", gerar_vetores=vetores_proibidos) == []
+
+
+def test_expandir_ja_sai_na_ordem_de_ordenar_caminhos(semente):
+    caminhos = expandir(semente, todos_os_trechos(semente), limite=1000)
+    assert caminhos == ordenar_caminhos(caminhos)
+
+
+def test_expandir_com_pergunta_ja_sai_na_ordem_de_ordenar_caminhos(semente):
+    pergunta = "Que prêmio recebeu quem criou o C++?"
+    caminhos = expandir(
+        semente, todos_os_trechos(semente), limite=1000, pergunta=pergunta,
+        gerar_vetores=vetores_contra_premio,
+    )
+    reordenados = ordenar_caminhos(caminhos, pergunta=pergunta, gerar_vetores=vetores_contra_premio)
+    assert [chave(c) for c in reordenados] == [chave(c) for c in caminhos]

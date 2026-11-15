@@ -9,10 +9,12 @@ import json
 
 import pytest
 
+from src.avaliacao import comparar
 from src.avaliacao.comparar import (
     _tabela_por_pergunta,
     acrescentar_classificacao,
     avaliar,
+    avaliar_respostas_salvas,
     carregar_classificacao,
     carregar_perguntas,
     classificar_sem_resposta,
@@ -348,3 +350,71 @@ def test_gerar_planilha_mostra_o_erro_quando_nao_houve_resposta():
 
     assert planilha.count("RuntimeError: banco fora do ar") == 2
     assert planilha.count("Classificação: ____") == 2
+
+
+# --- h) --so-relatorio: relatório a partir das respostas salvas ---------------
+
+def _respostas_salvas():
+    """Respostas no formato de data/avaliacao/resultados/respostas.json, com um erro."""
+    return [
+        {"id": "P01", "modo": "vetorial", "resposta": _resposta(UM_SALTO, "vetorial", texto="Guido [F1]."), "erro": None},
+        {"id": "P01", "modo": "graphrag", "resposta": None, "erro": "RuntimeError: banco fora do ar"},
+        {
+            "id": "P13", "modo": "vetorial",
+            "resposta": _resposta(SEM_RESPOSTA, "vetorial", texto=MENSAGEM_SEM_INFORMACAO), "erro": None,
+        },
+        {
+            "id": "P13", "modo": "graphrag",
+            "resposta": _resposta(SEM_RESPOSTA, "graphrag", texto=MENSAGEM_SEM_INFORMACAO), "erro": None,
+        },
+    ]
+
+
+def test_avaliar_respostas_salvas_refaz_as_linhas_e_mantem_o_erro():
+    perguntas = [UM_SALTO_COM_GABARITO, SEM_RESPOSTA_COM_GABARITO]
+    respostas = _respostas_salvas()
+
+    linhas = avaliar_respostas_salvas(perguntas, respostas)
+
+    assert [(l["id"], l["modo"]) for l in linhas] == [(r["id"], r["modo"]) for r in respostas]
+    assert linhas[0] == avaliar(UM_SALTO_COM_GABARITO, respostas[0]["resposta"])
+    assert linhas[1]["erro"] == "RuntimeError: banco fora do ar"
+    assert linhas[1]["evidencia_recuperada"] is None and linhas[1]["confianca"] is None
+    assert linhas[2]["recusa_correta"] is True
+
+
+def test_so_relatorio_regenera_so_o_relatorio_sem_chamar_o_responder(tmp_path, monkeypatch):
+    arquivos = {
+        "ARQUIVO_PERGUNTAS": tmp_path / "perguntas.json",
+        "ARQUIVO_RESPOSTAS": tmp_path / "respostas.json",
+        "ARQUIVO_CLASSIFICACAO": tmp_path / "classificacao.json",
+        "ARQUIVO_RELATORIO": tmp_path / "avaliacao-resultados.md",
+        "ARQUIVO_PLANILHA": tmp_path / "avaliacao-planilha.md",
+    }
+    for nome, caminho in arquivos.items():
+        monkeypatch.setattr(comparar, nome, caminho)
+    arquivos["ARQUIVO_PERGUNTAS"].write_text(
+        json.dumps({"perguntas": [UM_SALTO_COM_GABARITO, SEM_RESPOSTA_COM_GABARITO]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    arquivos["ARQUIVO_RESPOSTAS"].write_text(json.dumps(_respostas_salvas(), ensure_ascii=False), encoding="utf-8")
+    arquivos["ARQUIVO_CLASSIFICACAO"].write_text(
+        json.dumps({"P01": {"vetorial": "incompleta"}, "P13": {"vetorial": "correta"}}), encoding="utf-8"
+    )
+    antes = {nome: arquivos[nome].read_bytes() for nome in ("ARQUIVO_RESPOSTAS", "ARQUIVO_CLASSIFICACAO")}
+
+    def responder_proibido(*args, **kwargs):
+        raise AssertionError("--so-relatorio não pode chamar o responder()")
+
+    monkeypatch.setattr(comparar, "responder", responder_proibido)
+
+    comparar.main(["--so-relatorio"])
+
+    relatorio = arquivos["ARQUIVO_RELATORIO"].read_text(encoding="utf-8")
+    assert "| P01 | um_salto | vetorial |" in relatorio
+    assert any(l.startswith("| P01 | um_salto | vetorial |") and l.endswith("| incompleta |") for l in relatorio.splitlines())
+    assert any(l.startswith("| P13 | sem_resposta | vetorial |") and l.endswith("| correta |") for l in relatorio.splitlines())
+    assert "RuntimeError: banco fora do ar" in relatorio
+    assert not arquivos["ARQUIVO_PLANILHA"].exists()
+    for nome, conteudo in antes.items():
+        assert arquivos[nome].read_bytes() == conteudo

@@ -1,7 +1,7 @@
 """Verificação da issue V1 com a semente: a pergunta sobre um fato acha o trecho certo.
 
 Carrega data/semente/ com os embeddings do módulo único (o mesmo usado na
-pergunta) e confere que o trecho que sustenta o fato fica entre os 3 primeiros.
+pergunta) e confere que um trecho que sustenta o fato fica entre os 3 primeiros.
 Precisa do Neo4j no ar e do modelo de embeddings baixado (~470 MB).
 """
 
@@ -14,16 +14,25 @@ from tests.recuperacao.conftest import PREFIXO, limpar_dados_de_teste
 
 pytestmark = pytest.mark.modelo
 
-# Pergunta -> trecho da semente que sustenta a resposta, cobrindo os quatro artigos.
+# Pergunta -> trechos da semente que sustentam a resposta, cobrindo os quatro artigos.
+# Quando mais de um trecho responde, basta um deles entre os 3 primeiros.
 PERGUNTAS = {
-    "Quem criou a linguagem C?": "c#0",
-    "Por que a linguagem se chama C?": "c#1",
-    "Que linguagem a C substituiu nos microcomputadores?": "c#2",
-    "Qual era o nome original do C++?": "c_mais_mais#0",
-    "Quando Dennis Ritchie se aposentou?": "dennis_ritchie#2",
-    "Qual era a tese de doutorado de Dennis Ritchie?": "dennis_ritchie#3",
-    "Quem sugeriu o nome Unix?": "dennis_ritchie#4",
-    "Onde Ken Thompson nasceu?": "ken_thompson#0",
+    "Quem criou a linguagem C?": {"c#0"},
+    "Por que a linguagem se chama C?": {"c#1"},
+    "Que linguagem a C substituiu nos microcomputadores?": {"c#2"},
+    "Qual era o nome original do C++?": {"c_mais_mais#0"},
+    "Quando Dennis Ritchie se aposentou?": {"dennis_ritchie#2"},
+    "Qual era a tese de doutorado de Dennis Ritchie?": {"dennis_ritchie#3"},
+    "Quem sugeriu o nome Unix?": {"dennis_ritchie#4"},
+    "Onde Ken Thompson nasceu?": {"ken_thompson#0"},
+    # c#0 diz "criada em 1972"; c#1 situa o período mais criativo em 1972.
+    "Em que ano a linguagem C foi criada?": {"c#0", "c#1"},
+    # c_mais_mais#1 cita Simula e BCPL; c_mais_mais#0 diz que o C++ nasceu como
+    # adicional à C; c#2 sustenta a relação C++ INFLUENCIADA_POR C.
+    "Que linguagens inspiraram o C++?": {"c_mais_mais#0", "c_mais_mais#1", "c#2"},
+    "Que prêmios Dennis Ritchie recebeu?": {"dennis_ritchie#1"},
+    # Os dois trechos citam o Multics.
+    "Em que projeto Ken Thompson trabalhou nos Bell Labs?": {"ken_thompson#1", "dennis_ritchie#4"},
 }
 
 
@@ -64,6 +73,6 @@ def test_todos_os_trechos_da_semente_tem_embedding(semente_no_banco):
     assert [r["dim"] for r in registros] == [dimensoes_do_indice()] * 12
 
 
-@pytest.mark.parametrize(("pergunta", "trecho_certo"), PERGUNTAS.items())
-def test_trecho_certo_entre_os_3_primeiros(semente_no_banco, pergunta, trecho_certo):
-    assert trecho_certo in tres_primeiros_da_semente(semente_no_banco, pergunta)
+@pytest.mark.parametrize(("pergunta", "trechos_certos"), PERGUNTAS.items())
+def test_trecho_certo_entre_os_3_primeiros(semente_no_banco, pergunta, trechos_certos):
+    assert trechos_certos & set(tres_primeiros_da_semente(semente_no_banco, pergunta))

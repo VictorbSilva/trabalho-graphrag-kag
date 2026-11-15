@@ -4,6 +4,8 @@ Gerada por `python -m src.avaliacao.comparar`, a partir das respostas em [data/a
 
 As classes ficam em [data/avaliacao/classificacao.json](../data/avaliacao/classificacao.json), no formato `{"P01": {"vetorial": "correta", "graphrag": "incompleta"}}`. As perguntas `sem_resposta` já entram nesse arquivo pela regra: recusa correta vira correta, e qualquer outra resposta vira alucinada. Rodar o executor de novo regenera esta planilha, mas não apaga o arquivo de classificação.
 
+Critério usado nesta classificação: correta quando a resposta traz o que o gabarito pede e não afirma nada fora do contexto; incompleta quando falta parte do gabarito, inclusive quando o sistema recusa uma pergunta que tem resposta no dataset completo; alucinada quando afirma algo que não está no contexto ou que contradiz o gabarito. A execução rodou só com a semente no banco, então as recusas das perguntas com resposta vêm da falta do documento, e não de erro do método.
+
 ## P01 (um_salto)
 
 Pergunta: Quem criou a linguagem de programação Python?
@@ -20,7 +22,7 @@ Evidência recuperada: não (0/1)
 
 Caminho completo: não (0/1)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem os artigos do Python e de Guido van Rossum.
 
 ### P01 graphrag
 
@@ -32,7 +34,7 @@ Evidência recuperada: não (0/1)
 
 Caminho completo: não (0/1)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem os artigos do Python e de Guido van Rossum. A Cypher procurou o Python pelo nome e não devolveu nenhum caminho.
 
 ## P02 (um_salto)
 
@@ -50,7 +52,7 @@ Evidência recuperada: não (0/1)
 
 Caminho completo: não (0/1)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem o artigo do Java.
 
 ### P02 graphrag
 
@@ -62,7 +64,7 @@ Evidência recuperada: não (0/1)
 
 Caminho completo: não (0/1)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem o artigo do Java. A Cypher procurou o Java pelo nome e não devolveu nenhum caminho.
 
 ## P03 (um_salto)
 
@@ -80,7 +82,7 @@ Evidência recuperada: não (0/1)
 
 Caminho completo: não (0/1)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem os artigos do Linux e de Linus Torvalds.
 
 ### P03 graphrag
 
@@ -92,7 +94,7 @@ Evidência recuperada: não (0/1)
 
 Caminho completo: não (0/1)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem os artigos do Linux e de Linus Torvalds. A Cypher procurou o Linux pelo nome e não devolveu nenhum caminho.
 
 ## P04 (um_salto)
 
@@ -110,7 +112,7 @@ Evidência recuperada: não (0/1)
 
 Caminho completo: não (0/1)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem o artigo de Niklaus Wirth.
 
 ### P04 graphrag
 
@@ -122,7 +124,7 @@ Evidência recuperada: não (0/1)
 
 Caminho completo: não (0/1)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem o artigo de Niklaus Wirth. A Cypher procurou Wirth pelo nome e não devolveu nenhum caminho.
 
 ## P05 (um_salto)
 
@@ -140,7 +142,7 @@ Evidência recuperada: não (0/1)
 
 Caminho completo: não (0/1)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem o artigo de Brian Kernighan.
 
 ### P05 graphrag
 
@@ -152,7 +154,7 @@ Evidência recuperada: não (0/1)
 
 Caminho completo: não (0/1)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem o artigo de Brian Kernighan. A Cypher procurou Kernighan pelo nome e não devolveu nenhum caminho.
 
 ## P06 (multi_hop)
 
@@ -170,7 +172,7 @@ Evidência recuperada: não (0/2)
 
 Caminho completo: não (0/2)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem os artigos do Lisp e de John McCarthy.
 
 ### P06 graphrag
 
@@ -182,7 +184,7 @@ Evidência recuperada: não (0/2)
 
 Caminho completo: não (0/2)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem os artigos do Lisp e de John McCarthy. A Cypher procurou o Lisp pelo nome e não devolveu nenhum caminho.
 
 ## P07 (multi_hop)
 
@@ -200,7 +202,7 @@ Evidência recuperada: não (1/3)
 
 Caminho completo: não (0/5)
 
-Classificação: ____
+Classificação: incompleta. Recusou. Um trecho da busca cita o Simula 67, mas nenhum diz quem o criou nem que prêmio essas pessoas receberam. A semente não tem os artigos do Simula e dos seus criadores.
 
 ### P07 graphrag
 
@@ -212,7 +214,7 @@ Evidência recuperada: não (1/3)
 
 Caminho completo: não (1/5)
 
-Classificação: ____
+Classificação: incompleta. Recusou. O contexto tinha o caminho em que o C++ é influenciado pelo Simula (C2), mas a semente não tem os criadores do Simula nem o prêmio deles, e a Cypher não devolveu nenhum caminho.
 
 ## P08 (multi_hop)
 
@@ -230,7 +232,7 @@ Evidência recuperada: não (1/3)
 
 Caminho completo: não (0/3)
 
-Classificação: ____
+Classificação: incompleta. Recusou. Os trechos da busca dizem que o C veio do B, mas nenhum diz quem criou o B nem que prêmio essa pessoa recebeu.
 
 ### P08 graphrag
 
@@ -242,7 +244,7 @@ Evidência recuperada: não (2/3)
 
 Caminho completo: sim
 
-Classificação: ____
+Classificação: correta. B, Ken Thompson e Prêmio Turing de 1983, como no gabarito. As duas medalhas a mais estão no trecho F6, que cita Ritchie e Thompson.
 
 ## P09 (multi_hop)
 
@@ -260,7 +262,7 @@ Evidência recuperada: não (0/2)
 
 Caminho completo: não (0/2)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem o artigo de Tim Berners-Lee.
 
 ### P09 graphrag
 
@@ -272,7 +274,7 @@ Evidência recuperada: não (0/2)
 
 Caminho completo: não (0/2)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem o artigo de Tim Berners-Lee. A Cypher procurou o CERN pelo nome e não devolveu nenhum caminho.
 
 ## P10 (multi_hop)
 
@@ -290,7 +292,7 @@ Evidência recuperada: não (0/2)
 
 Caminho completo: não (0/2)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem os artigos de Alan Kay e do Smalltalk.
 
 ### P10 graphrag
 
@@ -302,7 +304,7 @@ Evidência recuperada: não (0/2)
 
 Caminho completo: não (0/2)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem os artigos de Alan Kay e do Smalltalk. A Cypher procurou o Smalltalk pelo nome e não devolveu nenhum caminho.
 
 ## P11 (multi_hop)
 
@@ -320,7 +322,7 @@ Evidência recuperada: não (2/3)
 
 Caminho completo: não (0/4)
 
-Classificação: ____
+Classificação: correta. Dennis Ritchie e Ken Thompson, com o Prêmio Turing de 1983, como no gabarito. As afirmações estão nos trechos F1 a F3.
 
 ### P11 graphrag
 
@@ -332,7 +334,7 @@ Evidência recuperada: sim
 
 Caminho completo: sim
 
-Classificação: ____
+Classificação: correta. As duas pessoas e o ano, como no gabarito. Diz ainda que o contexto não liga Bjarne Stroustrup ao prêmio, o que também está no gabarito.
 
 ## P12 (multi_hop)
 
@@ -350,7 +352,7 @@ Evidência recuperada: não (1/2)
 
 Caminho completo: não (0/2)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem o artigo do Python, que liga a sintaxe dele ao C.
 
 ### P12 graphrag
 
@@ -362,7 +364,7 @@ Evidência recuperada: não (1/2)
 
 Caminho completo: não (1/2)
 
-Classificação: ____
+Classificação: incompleta. Recusou, mas o gabarito tem resposta. O banco só tem a semente (4 documentos), sem o artigo do Python, que liga a sintaxe dele ao C. A Cypher procurou o Python pelo nome e não devolveu nenhum caminho.
 
 ## P13 (sem_resposta)
 
@@ -380,7 +382,7 @@ Evidência recuperada: n/a
 
 Caminho completo: n/a
 
-Classificação: ____
+Classificação: correta, pela regra das sem_resposta. Recusou, como pede o gabarito.
 
 ### P13 graphrag
 
@@ -392,7 +394,7 @@ Evidência recuperada: n/a
 
 Caminho completo: n/a
 
-Classificação: ____
+Classificação: correta, pela regra das sem_resposta. Recusou, como pede o gabarito.
 
 ## P14 (sem_resposta)
 
@@ -410,7 +412,7 @@ Evidência recuperada: n/a
 
 Caminho completo: n/a
 
-Classificação: ____
+Classificação: correta, pela regra das sem_resposta. Recusou, como pede o gabarito.
 
 ### P14 graphrag
 
@@ -422,7 +424,7 @@ Evidência recuperada: n/a
 
 Caminho completo: n/a
 
-Classificação: ____
+Classificação: correta, pela regra das sem_resposta. Recusou, como pede o gabarito.
 
 ## P15 (sem_resposta)
 
@@ -440,7 +442,7 @@ Evidência recuperada: n/a
 
 Caminho completo: n/a
 
-Classificação: ____
+Classificação: correta, pela regra das sem_resposta. Recusou, como pede o gabarito.
 
 ### P15 graphrag
 
@@ -452,5 +454,5 @@ Evidência recuperada: n/a
 
 Caminho completo: n/a
 
-Classificação: ____
+Classificação: correta, pela regra das sem_resposta. Recusou, como pede o gabarito.
 

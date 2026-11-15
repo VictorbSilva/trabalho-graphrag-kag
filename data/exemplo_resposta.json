@@ -1,0 +1,107 @@
+{
+  "pergunta": "Que prêmio recebeu quem criou a linguagem que influenciou o C++?",
+  "modo": "graphrag",
+  "resposta": "O C++ foi influenciado pela linguagem C, criada por Dennis Ritchie, que recebeu o Prêmio Turing [C1][F1].",
+  "confianca": {
+    "valor": 0.8,
+    "nivel": "alta",
+    "criterio": "caminho encontrado e todas as relações com trecho de origem"
+  },
+  "cypher": "MATCH p = (:Tecnologia {name: 'C++'})-[:INFLUENCIADA_POR]->(:Tecnologia)<-[:CRIOU]-(:Pessoa)-[:RECEBEU]->(:Premio) RETURN p LIMIT 10",
+  "caminhos": [
+    {
+      "id": "C1",
+      "nos": [
+        "C++",
+        "C",
+        "Dennis Ritchie",
+        "Prêmio Turing"
+      ],
+      "relacoes": [
+        "INFLUENCIADA_POR",
+        "CRIOU",
+        "RECEBEU"
+      ],
+      "fontes": [
+        "c_mais_mais#2",
+        "linguagem_c#0",
+        "dennis_ritchie#5"
+      ]
+    }
+  ],
+  "subgrafo": {
+    "nos": [
+      {
+        "id": "tecnologia:c_mais_mais",
+        "nome": "C++",
+        "tipo": "Tecnologia",
+        "pagerank": 2.4,
+        "comunidade": 4
+      },
+      {
+        "id": "tecnologia:c",
+        "nome": "C",
+        "tipo": "Tecnologia",
+        "pagerank": 1.9,
+        "comunidade": 4
+      },
+      {
+        "id": "pessoa:dennis_ritchie",
+        "nome": "Dennis Ritchie",
+        "tipo": "Pessoa",
+        "pagerank": 1.5,
+        "comunidade": 4
+      },
+      {
+        "id": "premio:premio_turing",
+        "nome": "Prêmio Turing",
+        "tipo": "Premio",
+        "pagerank": 1.2,
+        "comunidade": 4
+      }
+    ],
+    "arestas": [
+      {
+        "origem": "tecnologia:c_mais_mais",
+        "destino": "tecnologia:c",
+        "tipo": "INFLUENCIADA_POR",
+        "fontes": [
+          "c_mais_mais#2"
+        ]
+      },
+      {
+        "origem": "pessoa:dennis_ritchie",
+        "destino": "tecnologia:c",
+        "tipo": "CRIOU",
+        "fontes": [
+          "linguagem_c#0"
+        ]
+      },
+      {
+        "origem": "pessoa:dennis_ritchie",
+        "destino": "premio:premio_turing",
+        "tipo": "RECEBEU",
+        "fontes": [
+          "dennis_ritchie#5"
+        ]
+      }
+    ]
+  },
+  "nos_consultados": [
+    "tecnologia:c_mais_mais",
+    "tecnologia:c",
+    "pessoa:dennis_ritchie",
+    "premio:premio_turing"
+  ],
+  "fontes": [
+    {
+      "id": "F1",
+      "chunk_id": "dennis_ritchie#5",
+      "trecho": "Trecho demonstrativo da fonte utilizado para fundamentar a resposta.",
+      "documento": "Dennis Ritchie",
+      "url": "https://pt.wikipedia.org/wiki/Dennis_Ritchie",
+      "score": 0.71
+    }
+  ],
+  "avisos": []
+}

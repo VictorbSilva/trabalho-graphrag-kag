@@ -7,7 +7,12 @@ from urllib.request import Request, urlopen
 from pydantic import ValidationError
 from src.contrato import Resposta
 
-from src.interface.config import API_URL, ARQUIVO_EXEMPLO, FONTE_DADOS
+from src.interface.config import (
+    API_URL,
+    API_TIMEOUT_S_INTERFACE,
+    ARQUIVO_EXEMPLO,
+    FONTE_DADOS,
+)
 
 def _validar_resposta(dados: dict) -> dict:
     """Valida os dados utilizando o contrato oficial."""
@@ -50,7 +55,7 @@ def consultar_api(pergunta: str, modo: str) -> dict:
     )
 
     try:
-        with urlopen(requisicao, timeout=30) as resposta_http:
+        with urlopen(requisicao, timeout=API_TIMEOUT_S_INTERFACE) as resposta_http:
             dados = json.loads(resposta_http.read().decode("utf-8"))
 
     except HTTPError as erro:

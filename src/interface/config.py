@@ -12,3 +12,4 @@ ARQUIVO_EXEMPLO = ROOT_DIR / "data" / "exemplo_resposta.json"
 
 FONTE_DADOS = os.getenv("FONTE_DADOS", "json").strip().lower()
 API_URL = os.getenv("API_URL", "http://localhost:8000/perguntar")
+API_TIMEOUT_S_INTERFACE = float(os.getenv("API_TIMEOUT_S_INTERFACE", "75"))

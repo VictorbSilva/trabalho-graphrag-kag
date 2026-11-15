@@ -1,0 +1,23 @@
+{
+  "descricao": "Sugestões de correção de chunk_id, registradas para auditoria. Não autorizam aprovação automática nem alteram o PA3.",
+  "correcoes": [
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:dennis_ritchie",
+      "tipo": "RECEBEU",
+      "destino": "premio:medalha_ieee_richard_w_hamming",
+      "chunk_id_anterior": "dennis_ritchie#0",
+      "chunk_id_sugerido": "dennis_ritchie#1",
+      "justificativa": "O chunk #1 contém o nome completo da medalha e informa explicitamente que Ritchie a recebeu."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:ken_thompson",
+      "tipo": "RECEBEU",
+      "destino": "premio:medalha_ieee_richard_w_hamming",
+      "chunk_id_anterior": "dennis_ritchie#0",
+      "chunk_id_sugerido": "dennis_ritchie#1",
+      "justificativa": "O chunk #1 contém o nome completo da medalha e informa explicitamente que Thompson a recebeu."
+    }
+  ]
+}

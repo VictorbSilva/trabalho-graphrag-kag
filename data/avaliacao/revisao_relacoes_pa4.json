@@ -1,0 +1,569 @@
+{
+  "descricao": "REVISÃO ASSISTIDA baseada na leitura dos chunks dos 5 artigos. Citações insuficientes foram rejeitadas ou mantidas pendentes; não foram alterados os JSONs do PA3. Revisões humanas externas ainda são aconselháveis antes de usar o conjunto como verdade factual definitiva.",
+  "decisoes": [
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:alfred_aho",
+      "destino": "tecnologia:awk",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6",
+      "status": "aceita",
+      "justificativa": "Em brian_kernighan#6, AWK é listada como linguagem desenvolvida com Alfred Aho."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:ampl",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#1",
+      "status": "aceita",
+      "justificativa": "brian_kernighan#1 identifica Kernighan como coautor da linguagem AMPL."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:ampl",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6",
+      "status": "rejeitada",
+      "justificativa": "Referência inadequada: #6 não menciona AMPL. O fato é sustentado por #1, que já possui relação própria aceita. Rejeição somente desta evidência, não da autoria."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:awk",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#1",
+      "status": "aceita",
+      "justificativa": "brian_kernighan#1 atribui explicitamente a coautoria de AWK a Kernighan."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:awk",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6",
+      "status": "aceita",
+      "justificativa": "brian_kernighan#6 apresenta AWK entre os programas de Kernighan e cita coautores."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:ditroff",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6",
+      "status": "aceita",
+      "justificativa": "brian_kernighan#6 lista ditroff nos programas de Kernighan; #1 confirma sua autoria."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:eqn",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6",
+      "status": "aceita",
+      "justificativa": "brian_kernighan#6 lista a linguagem eqn com Lorinda Cherry entre as contribuições de Kernighan."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:m4",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6",
+      "status": "aceita",
+      "justificativa": "brian_kernighan#6 identifica m4 como linguagem de processamento de macros desenvolvida com Dennis Ritchie."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:pic",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6",
+      "status": "rejeitada",
+      "justificativa": "Referência inadequada: #6 não menciona pic; #7 lista o trabalho em pic. Recriar a relação com evidência #7 antes de aceitá-la."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:brian_kernighan",
+      "destino": "tecnologia:ratfor",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6",
+      "status": "aceita",
+      "justificativa": "brian_kernighan#6 lista Ratfor entre os programas de Kernighan."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:brian_kernighan",
+      "destino": "organizacao:bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brian_kernighan#0",
+      "status": "aceita",
+      "justificativa": "brian_kernighan#0 afirma expressamente que Kernighan trabalhou na Bell Labs."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:brian_kernighan",
+      "destino": "organizacao:universidade_de_princeton",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brian_kernighan#2",
+      "status": "aceita",
+      "justificativa": "brian_kernighan#2 informa que Kernighan é professor na Universidade de Princeton desde 2004."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "tecnologia:m4",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6",
+      "status": "aceita",
+      "justificativa": "brian_kernighan#6 apresenta m4 como trabalho realizado com Dennis Ritchie."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:lorinda_cherry",
+      "destino": "tecnologia:eqn",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6",
+      "status": "aceita",
+      "justificativa": "brian_kernighan#6 atribui o trabalho na linguagem eqn também a Lorinda Cherry."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "pessoa:peter_j_weinberger",
+      "destino": "tecnologia:awk",
+      "tipo": "CRIOU",
+      "chunk_id": "brian_kernighan#6",
+      "status": "pendente",
+      "justificativa": "O nome Peter J. Weinberger foi dividido entre #6 e #7. É necessário suportar evidência combinada dos chunks #6 e #7 (ou revisar o chunking) antes de confirmar esta ocorrência."
+    },
+    {
+      "artigo": "brian_kernighan",
+      "origem": "tecnologia:unix",
+      "destino": "organizacao:bell_labs",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "brian_kernighan#0",
+      "status": "rejeitada",
+      "justificativa": "A fonte #0 afirma que Kernighan trabalhou na Bell Labs e contribuiu com Unix, mas não localiza explicitamente o desenvolvimento de Unix ali. Rejeitada esta aresta por evidência indireta insuficiente."
+    },
+    {
+      "artigo": "c",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "tecnologia:c",
+      "tipo": "CRIOU",
+      "chunk_id": "c#0",
+      "status": "aceita",
+      "justificativa": "c#0 afirma expressamente que Dennis Ritchie criou C em 1972."
+    },
+    {
+      "artigo": "c",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "organizacao:at_t_bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "c#0",
+      "status": "aceita",
+      "justificativa": "c#0 situa Dennis Ritchie trabalhando na AT&T Bell Labs na criação de C; a entidade foi normalizada para Bell Labs."
+    },
+    {
+      "artigo": "c",
+      "origem": "pessoa:johnson",
+      "destino": "tecnologia:portable_c_compiler",
+      "tipo": "CRIOU",
+      "chunk_id": "c#6",
+      "status": "pendente",
+      "justificativa": "A expressão Portable C Compiler de Johnson estabelece associação/autoria possível, mas não comprova inequivocamente o predicado CRIOU. Necessária evidência específica ou relação menos forte, se o domínio permitir."
+    },
+    {
+      "artigo": "c",
+      "origem": "tecnologia:b",
+      "destino": "tecnologia:bcpl",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c#3",
+      "status": "aceita",
+      "justificativa": "c#3 descreve B como versão reduzida da linguagem BCPL; há relação de derivação/influência."
+    },
+    {
+      "artigo": "c",
+      "origem": "tecnologia:c",
+      "destino": "organizacao:at_t_bell_labs",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "c#0",
+      "status": "aceita",
+      "justificativa": "c#0 situa explicitamente o desenvolvimento de C na AT&T Bell Labs, normalizada para Bell Labs."
+    },
+    {
+      "artigo": "c",
+      "origem": "tecnologia:c",
+      "destino": "tecnologia:b",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c#3",
+      "status": "aceita",
+      "justificativa": "O trecho diz que as características de C vieram da linguagem B."
+    },
+    {
+      "artigo": "c",
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:c",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c#1",
+      "status": "aceita",
+      "justificativa": "c#1 diz que C influenciou C++ e que C++ começou como extensão de C."
+    },
+    {
+      "artigo": "c",
+      "origem": "tecnologia:java",
+      "destino": "tecnologia:c",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c#1",
+      "status": "aceita",
+      "justificativa": "c#1 cita Java como linguagem influenciada por C."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "pessoa:bjarne_stroustrup",
+      "destino": "tecnologia:c_mais_mais",
+      "tipo": "CRIOU",
+      "chunk_id": "c_mais_mais#1",
+      "status": "aceita",
+      "justificativa": "c_mais_mais#1 atribui explicitamente o desenvolvimento de C++ a Bjarne Stroustrup."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "pessoa:bjarne_stroustrup",
+      "destino": "tecnologia:c_mais_mais",
+      "tipo": "CRIOU",
+      "chunk_id": "c_mais_mais#5",
+      "status": "rejeitada",
+      "justificativa": "O chunk #5 descreve bases e inspirações da linguagem, sem atribuir explicitamente sua criação a Stroustrup. A criação já consta no #1, com evidência direta e relação aceita."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "pessoa:bjarne_stroustrup",
+      "destino": "tecnologia:c_mais_mais",
+      "tipo": "CRIOU",
+      "chunk_id": "c_mais_mais#6",
+      "status": "rejeitada",
+      "justificativa": "O chunk #6 menciona um compilador escrito por Stroustrup, não a criação da linguagem C++; #1 já sustenta a relação com evidência direta."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "pessoa:bjarne_stroustrup",
+      "destino": "organizacao:bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "c_mais_mais#1",
+      "status": "aceita",
+      "justificativa": "c_mais_mais#1 situa Bjarne Stroustrup desenvolvendo C++ no Bell Labs."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "organizacao:bell_labs",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "c_mais_mais#1",
+      "status": "aceita",
+      "justificativa": "c_mais_mais#1 informa que C++ foi desenvolvido no Bell Labs."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:ada",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c_mais_mais#5",
+      "status": "aceita",
+      "justificativa": "c_mais_mais#5 identifica Ada entre as linguagens que serviram de inspiração ao desenvolvimento de C++."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:algol_68",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c_mais_mais#5",
+      "status": "aceita",
+      "justificativa": "c_mais_mais#5 identifica ALGOL 68 entre as linguagens que inspiraram o desenvolvimento de C++."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:bcpl",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c_mais_mais#3",
+      "status": "rejeitada",
+      "justificativa": "O trecho indicado não documenta BCPL como influência de C++; não há sustentação para esta aresta nessa evidência."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:c",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c_mais_mais#5",
+      "status": "aceita",
+      "justificativa": "c_mais_mais#5 declara que C foi escolhida como base da nova linguagem C++."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:clu",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c_mais_mais#5",
+      "status": "aceita",
+      "justificativa": "c_mais_mais#5 identifica CLU entre as linguagens que inspiraram o desenvolvimento de C++."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:ml",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c_mais_mais#5",
+      "status": "aceita",
+      "justificativa": "c_mais_mais#5 identifica ML entre as linguagens que inspiraram o desenvolvimento de C++."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:simula_67",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c_mais_mais#4",
+      "status": "aceita",
+      "justificativa": "c_mais_mais#4 descreve a adição de elementos de Simula 67 ao C na criação de C++."
+    },
+    {
+      "artigo": "c_mais_mais",
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:unix",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c_mais_mais#3",
+      "status": "rejeitada",
+      "justificativa": "c_mais_mais#3 situa Unix como contexto e objetivo do projeto, não como influência tecnológica explícita de C++."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "tecnologia:b",
+      "tipo": "CRIOU",
+      "chunk_id": "dennis_ritchie#0",
+      "status": "rejeitada",
+      "justificativa": "Embora o resumo #0 use uma atribuição coletiva, #7 atribui especificamente a criação de B a Ken Thompson, corroborada por ken_thompson#0 e #1. Por prudência, não afirmar que Ritchie criou B."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "tecnologia:c",
+      "tipo": "CRIOU",
+      "chunk_id": "dennis_ritchie#0",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#0 atribui a Ritchie a criação de C em conjunto com trabalhos no Unix."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "tecnologia:c",
+      "tipo": "CRIOU",
+      "chunk_id": "dennis_ritchie#7",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#7 afirma expressamente que C foi criada por Ritchie."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "tecnologia:unix",
+      "tipo": "CRIOU",
+      "chunk_id": "dennis_ritchie#0",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#0 afirma que Ritchie colaborou na criação do sistema Unix."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "premio:medalha_ieee_richard_w_hamming",
+      "tipo": "RECEBEU",
+      "chunk_id": "dennis_ritchie#0",
+      "status": "pendente",
+      "justificativa": "O chunk #0 termina antes de completar o nome da medalha. A concessão a Ritchie está comprovada em #1; corrigir a referência para dennis_ritchie#1."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "premio:medalha_nacional_de_tecnologia_e_inovacao",
+      "tipo": "RECEBEU",
+      "chunk_id": "dennis_ritchie#1",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#1 registra a Medalha Nacional de Tecnologia e Inovação recebida por Dennis Ritchie."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "premio:premio_turing",
+      "tipo": "RECEBEU",
+      "chunk_id": "dennis_ritchie#0",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#0 registra o Prêmio Turing de Dennis Ritchie."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "organizacao:bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "dennis_ritchie#6",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#6 declara que Ritchie trabalhou nos Bell Labs no projeto Multics."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "organizacao:bell_labs_computing_science_research_center",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "dennis_ritchie#3",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#3 informa o início das atividades de Ritchie no Bell Labs Computing Science Research Center."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:dennis_ritchie",
+      "destino": "organizacao:lucent_technologies",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "dennis_ritchie#2",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#2 identifica Ritchie em cargo na Lucent Technologies até a aposentadoria."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:ken_thompson",
+      "destino": "tecnologia:b",
+      "tipo": "CRIOU",
+      "chunk_id": "dennis_ritchie#7",
+      "status": "aceita",
+      "justificativa": "O trecho atribui expressamente a criação da linguagem B a Thompson."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:ken_thompson",
+      "destino": "tecnologia:unix",
+      "tipo": "CRIOU",
+      "chunk_id": "dennis_ritchie#0",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#0 registra Ken Thompson como colaborador da criação do Unix."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:ken_thompson",
+      "destino": "premio:medalha_ieee_richard_w_hamming",
+      "tipo": "RECEBEU",
+      "chunk_id": "dennis_ritchie#0",
+      "status": "pendente",
+      "justificativa": "O chunk #0 termina antes de completar o nome da medalha. A concessão a Thompson está comprovada em #1; corrigir a referência para dennis_ritchie#1."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:ken_thompson",
+      "destino": "premio:medalha_nacional_de_tecnologia_e_inovacao",
+      "tipo": "RECEBEU",
+      "chunk_id": "dennis_ritchie#1",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#1 registra Ken Thompson como destinatário da Medalha Nacional de Tecnologia e Inovação."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:ken_thompson",
+      "destino": "premio:premio_turing",
+      "tipo": "RECEBEU",
+      "chunk_id": "dennis_ritchie#0",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#0 registra o Prêmio Turing recebido por Ken Thompson."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:ken_thompson",
+      "destino": "organizacao:bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "dennis_ritchie#6",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#6 informa que Ken Thompson trabalhou no projeto Multics nos Bell Labs."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "pessoa:ken_thompson",
+      "destino": "organizacao:bell_labs_computing_science_research_center",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "dennis_ritchie#5",
+      "status": "rejeitada",
+      "justificativa": "O chunk #5 situa Thompson em Bell Labs genericamente; não comprova o vínculo com a unidade Computing Science Research Center. Não confundir instituição e departamento."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "tecnologia:multics",
+      "destino": "organizacao:bell_labs",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "dennis_ritchie#6",
+      "status": "aceita",
+      "justificativa": "dennis_ritchie#6 informa que havia desenvolvimento do projeto Multics nos Bell Labs."
+    },
+    {
+      "artigo": "dennis_ritchie",
+      "origem": "tecnologia:multics",
+      "destino": "organizacao:bell_labs_computing_science_research_center",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "dennis_ritchie#5",
+      "status": "rejeitada",
+      "justificativa": "O chunk #5 vincula trabalho em Multics ao Bell Labs, mas não o localiza na unidade Computing Science Research Center. Sem evidência para o local específico."
+    },
+    {
+      "artigo": "ken_thompson",
+      "origem": "pessoa:ken_thompson",
+      "destino": "tecnologia:b",
+      "tipo": "CRIOU",
+      "chunk_id": "ken_thompson#1",
+      "status": "aceita",
+      "justificativa": "ken_thompson#1 afirma explicitamente que Ken Thompson criou a linguagem B."
+    },
+    {
+      "artigo": "ken_thompson",
+      "origem": "pessoa:ken_thompson",
+      "destino": "tecnologia:go",
+      "tipo": "CRIOU",
+      "chunk_id": "ken_thompson#1",
+      "status": "aceita",
+      "justificativa": "ken_thompson#1 afirma que Thompson co-inventou a linguagem Go na Google."
+    },
+    {
+      "artigo": "ken_thompson",
+      "origem": "pessoa:ken_thompson",
+      "destino": "tecnologia:unix",
+      "tipo": "CRIOU",
+      "chunk_id": "ken_thompson#0",
+      "status": "aceita",
+      "justificativa": "ken_thompson#0 declara que Thompson e Ritchie criaram juntos Unix."
+    },
+    {
+      "artigo": "ken_thompson",
+      "origem": "pessoa:ken_thompson",
+      "destino": "organizacao:bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "ken_thompson#0",
+      "status": "aceita",
+      "justificativa": "ken_thompson#0 informa contratação de Thompson para o projeto Multics na Bell Labs."
+    },
+    {
+      "artigo": "ken_thompson",
+      "origem": "pessoa:ken_thompson",
+      "destino": "organizacao:google",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "ken_thompson#1",
+      "status": "aceita",
+      "justificativa": "ken_thompson#1 relata que Thompson trabalha na Google desde 2006."
+    },
+    {
+      "artigo": "ken_thompson",
+      "origem": "tecnologia:b",
+      "destino": "tecnologia:c",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "ken_thompson#1",
+      "status": "rejeitada",
+      "justificativa": "O trecho diz que B é precursora de C; a orientação da relação está invertida."
+    }
+  ],
+  "metadados": {
+    "natureza": "auditoria assistida por IA",
+    "escopo": "62 ocorrencias de relacoes extraidas dos cinco artigos da amostra",
+    "validacao_humana": "nao realizada",
+    "observacao": "Classificador atual usa origem_status=revisao_humana para qualquer decisao explicita, mas este arquivo foi elaborado por IA. Nao afirmar que houve revisao humana."
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "descricao": "Equivalências revisadas no PA4, aplicadas por IDs. Não unificar subunidades como Bell Labs Computing Science Research Center.",
+  "equivalencias": [
+    {
+      "de": "pessoa:alfred_aho",
+      "para": "pessoa:alfred_v_aho",
+      "justificativa": "Alfred Aho e Alfred V. Aho designam a mesma pessoa, citada no artigo sobre Brian Kernighan."
+    },
+    {
+      "de": "pessoa:johnson",
+      "para": "pessoa:stephen_c_johnson",
+      "justificativa": "Nos trechos c#5 e c#6, Johnson refere-se a Stephen C. Johnson e ao Portable C Compiler."
+    },
+    {
+      "de": "organizacao:at_t_bell_labs",
+      "para": "organizacao:bell_labs",
+      "justificativa": "AT&T Bell Labs e Bell Labs são formas do mesmo laboratório nas fontes; o centro de pesquisa específico permanece separado."
+    }
+  ]
+}

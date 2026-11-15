@@ -18,8 +18,14 @@ uma classe do arquivo. A planilha para classificar as outras sai em
 docs/avaliacao-planilha.md. O resultado depende do que estiver carregado no banco.
 
     python -m src.avaliacao.comparar
+    python -m src.avaliacao.comparar --so-relatorio
+
+Com --so-relatorio, o executor não chama o responder(): refaz só o relatório a
+partir de data/avaliacao/resultados/respostas.json e da classificação, sem gravar
+respostas, classificação nem planilha.
 """
 
+import argparse
 import json
 from datetime import datetime
 from pathlib import Path
@@ -134,16 +140,36 @@ def avaliar(pergunta: dict, resposta: dict) -> dict:
     }
 
 
-def _linha_com_erro(pergunta: dict, modo: str, erro: Exception) -> dict:
-    """Linha de uma pergunta em que o responder() levantou exceção: sem métricas."""
+def _linha_com_erro(pergunta: dict, modo: str, erro: Exception | str) -> dict:
+    """Linha de uma pergunta em que o responder() levantou exceção: sem métricas.
+
+    erro é a exceção ou o texto dela já salvo em respostas.json.
+    """
     return {
         "id": pergunta["id"],
         "tipo": pergunta["tipo"],
         "modo": modo,
         **{metrica: None for metrica in METRICAS},
         "confianca": None,
-        "erro": f"{type(erro).__name__}: {erro}",
+        "erro": erro if isinstance(erro, str) else f"{type(erro).__name__}: {erro}",
     }
+
+
+def avaliar_respostas_salvas(perguntas: list[dict], respostas: list[dict]) -> list[dict]:
+    """As linhas da tabela refeitas a partir de respostas.json, sem chamar o responder().
+
+    respostas são as de main(): {"id", "modo", "resposta", "erro"}. Uma resposta
+    salva com erro vira linha com erro, como na execução original.
+    """
+    por_id = {p["id"]: p for p in perguntas}
+    linhas = []
+    for registro in respostas:
+        pergunta = por_id[registro["id"]]
+        if registro["resposta"] is None:
+            linhas.append(_linha_com_erro(pergunta, registro["modo"], registro["erro"] or "sem resposta"))
+        else:
+            linhas.append(avaliar(pergunta, registro["resposta"]))
+    return linhas
 
 
 def _fracao(valores: list) -> float | None:
@@ -377,7 +403,30 @@ def gerar_planilha(linhas: list[dict], perguntas: list[dict], respostas: list[di
     return "\n".join(saida)
 
 
-def main() -> None:
+def so_relatorio() -> None:
+    """Refaz só o relatório a partir das respostas salvas e da classificação."""
+    perguntas = carregar_perguntas(ARQUIVO_PERGUNTAS)
+    respostas = json.loads(ARQUIVO_RESPOSTAS.read_text(encoding="utf-8"))
+    classificacao = carregar_classificacao(ARQUIVO_CLASSIFICACAO)
+    linhas = avaliar_respostas_salvas(perguntas, respostas)
+    ARQUIVO_RELATORIO.write_text(
+        _relatorio(linhas, resumir(linhas, classificacao), datetime.now(), classificacao) + "\n",
+        encoding="utf-8",
+    )
+    print(f"Relatório em {ARQUIVO_RELATORIO}")
+
+
+def main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(description="Comparação RAG vetorial vs GraphRAG (V7).")
+    parser.add_argument(
+        "--so-relatorio",
+        action="store_true",
+        help="refaz só o relatório a partir das respostas salvas, sem chamar o responder()",
+    )
+    if parser.parse_args(argv).so_relatorio:
+        so_relatorio()
+        return
+
     perguntas = carregar_perguntas()
     existente = carregar_classificacao()  # antes de rodar: uma classe inválida para já aqui
     linhas, respostas = [], []

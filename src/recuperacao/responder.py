@@ -1,25 +1,52 @@
-"""Ponto de entrada da recuperação: responder(pergunta, modo) (issue V1).
+"""Ponto de entrada da recuperação: responder(pergunta, modo).
 
-Por enquanto devolve o JSON de exemplo do contrato, validado, para a API e a
-interface já trabalharem. A recuperação de verdade entra nas issues V2 a V5.
+Busca vetorial nos trechos (V1) e, no modo graphrag, expansão multi-hop a partir
+deles (V3). O texto da resposta ainda é provisório: a geração com o LLM entra na
+issue V4 e o cálculo da confiança na V5.
 """
 
-import json
-from pathlib import Path
-
 from src.contrato import Resposta
+from src.recuperacao.busca_vetorial import buscar_chunks
+from src.recuperacao.conexao import obter_driver
+from src.recuperacao.embeddings import gerar_embedding
+from src.recuperacao.multi_hop import expandir, montar_grafo
 
-RAIZ = Path(__file__).resolve().parents[2]
-EXEMPLO = RAIZ / "data" / "exemplo_resposta.json"
-AVISO_ESQUELETO = "Resposta de exemplo: a recuperação ainda não está ligada."
+MODOS = ("graphrag", "vetorial")
+AVISO_SEM_LLM = "Geração da resposta com o LLM ainda não ligada (issue V4)."
 
 
-def responder(pergunta: str, modo: str = "graphrag") -> dict:
+def responder(pergunta: str, modo: str = "graphrag", *, driver=None) -> dict:
     """Responde a pergunta no formato do contrato (src/contrato.py)."""
-    dados = json.loads(EXEMPLO.read_text(encoding="utf-8"))
-    dados["pergunta"] = pergunta
-    dados["modo"] = modo
-    if modo == "vetorial":
-        dados["cypher"] = None
-    dados["avisos"] = [*dados["avisos"], AVISO_ESQUELETO]
+    if modo not in MODOS:
+        raise ValueError(f"Modo inválido: {modo!r}. Use 'graphrag' ou 'vetorial'.")
+    driver = driver or obter_driver()
+
+    resultados = buscar_chunks(driver, gerar_embedding(pergunta), k=5)
+    fontes = [{"id": f"F{i}", **r} for i, r in enumerate(resultados, 1)]
+
+    if modo == "graphrag":
+        brutos = expandir(
+            driver,
+            [r["chunk_id"] for r in resultados],
+            limite=5,
+            scores={r["chunk_id"]: r["score"] for r in resultados},
+        )
+        caminhos, subgrafo, nos_consultados = montar_grafo(brutos)
+    else:
+        caminhos, subgrafo, nos_consultados = [], {"nos": [], "arestas": []}, []
+
+    dados = {
+        "pergunta": pergunta,
+        "modo": modo,
+        "resposta": (
+            f"Encontrei {len(caminhos)} caminhos no grafo e {len(fontes)} trechos relacionados."
+        ),
+        "confianca": {"valor": 0.0, "nivel": "baixa", "criterio": "Ainda não calculado (issue V5)."},
+        "cypher": None,
+        "caminhos": caminhos,
+        "subgrafo": subgrafo,
+        "nos_consultados": nos_consultados,
+        "fontes": fontes,
+        "avisos": [AVISO_SEM_LLM],
+    }
     return Resposta.model_validate(dados).model_dump()

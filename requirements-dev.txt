@@ -4,6 +4,8 @@ pytest==9.2.0
 python-dotenv==1.2.4
 httpx==0.28.1
 pydantic==2.14.3
+# LLM da Abacus RouteLLM (src/recuperacao/llm.py), pela API compatível com a da OpenAI
+openai==3.51.0
 # Embeddings (src/recuperacao/embeddings.py). No Linux, o torch do PyPI vem com CUDA
 # (vários GB); para usar só a CPU, instale-o antes dos requirements:
 #   pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu

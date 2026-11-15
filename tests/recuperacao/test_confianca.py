@@ -89,6 +89,33 @@ def test_resultado_valida_no_contrato_e_fica_entre_0_e_1(sinais):
 @pytest.mark.parametrize(
     "sinais",
     [
+        {"melhor_score": 0.95, "caminhos": -1, "caminhos_com_fonte": 0},
+        {"melhor_score": 0.95, "caminhos": 2, "caminhos_com_fonte": -1},
+        {"melhor_score": 0.95, "caminhos": 2, "caminhos_com_fonte": 5},
+        {"melhor_score": 1.5, "caminhos": 3, "caminhos_com_fonte": 3},
+        {"melhor_score": -0.1, "caminhos": 3, "caminhos_com_fonte": 3},
+    ],
+)
+def test_sinais_impossiveis_levantam_value_error(sinais):
+    with pytest.raises(ValueError):
+        calcular_confianca(**sinais)
+
+
+@pytest.mark.parametrize(
+    "sinais",
+    [
+        {"melhor_score": 0.0, "caminhos": 3, "caminhos_com_fonte": 3},
+        {"melhor_score": 1.0, "caminhos": 3, "caminhos_com_fonte": 3},
+        {"melhor_score": 0.95, "caminhos": 0, "caminhos_com_fonte": 0},
+    ],
+)
+def test_sinais_nos_extremos_continuam_aceitos(sinais):
+    Confianca.model_validate(calcular_confianca(**sinais))
+
+
+@pytest.mark.parametrize(
+    "sinais",
+    [
         {"melhor_score": 0.95, "caminhos": 3, "caminhos_com_fonte": 3},
         {"melhor_score": 0.95, "caminhos": 0, "caminhos_com_fonte": 0},
         {"melhor_score": None, "caminhos": 2, "caminhos_com_fonte": 1, "cypher_ok": False},

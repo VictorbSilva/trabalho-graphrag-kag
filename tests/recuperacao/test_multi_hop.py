@@ -10,7 +10,13 @@ import pytest
 
 from src.contrato import Caminho, No, Subgrafo
 from src.recuperacao.carregar_semente import carregar_semente_no_banco
-from src.recuperacao.multi_hop import expandir, montar_grafo
+from src.recuperacao.multi_hop import (
+    FRASES_DAS_RELACOES,
+    RELACOES_DO_DOMINIO,
+    expandir,
+    montar_grafo,
+    verbalizar_caminho,
+)
 from tests.recuperacao.conftest import PREFIXO, RAIZ
 from tests.recuperacao.test_carregar_semente import vetores_falsos
 
@@ -109,3 +115,47 @@ def test_montar_grafo_segue_o_contrato(semente):
 def test_max_saltos_fora_de_1_a_3_e_recusado(max_saltos):
     with pytest.raises(ValueError):
         expandir(object(), [P + "c#0"], max_saltos=max_saltos)
+
+
+def test_toda_relacao_do_dominio_tem_frase():
+    assert set(FRASES_DAS_RELACOES) == set(RELACOES_DO_DOMINIO)
+
+
+def test_verbaliza_cada_aresta_de_origem_para_destino():
+    caminho = {
+        "nos": [
+            {"id": "tecnologia:c_mais_mais", "nome": "C++"},
+            {"id": "tecnologia:c", "nome": "C"},
+            {"id": "pessoa:dennis_ritchie", "nome": "Dennis Ritchie"},
+        ],
+        "arestas": [
+            {"origem": "tecnologia:c_mais_mais", "destino": "tecnologia:c", "tipo": "INFLUENCIADA_POR"},
+            {"origem": "pessoa:dennis_ritchie", "destino": "tecnologia:c", "tipo": "CRIOU"},
+        ],
+    }
+    assert verbalizar_caminho(caminho) == "C++ foi influenciada por C; Dennis Ritchie criou C"
+
+
+def vetores_por_palavra(textos):
+    return [[1.0, 0.0] if "Prêmio Turing" in t else [0.0, 1.0] for t in textos]
+
+
+def test_com_pergunta_ordena_pela_semelhanca_com_o_caminho(semente):
+    caminhos = expandir(
+        semente, [P + "c#2"], limite=3, pergunta="Prêmio Turing", gerar_vetores=vetores_por_palavra
+    )
+    assert len(caminhos) == 3
+    for caminho in caminhos:
+        assert P + "premio:premio_turing" in {n["id"] for n in caminho["nos"]}
+
+
+def test_corte_da_consulta_fica_com_os_trechos_de_maior_score(semente):
+    caminhos = expandir(
+        semente,
+        [P + "c#0", P + "c#2"],
+        limite=1000,
+        limite_consulta=10,
+        scores={P + "c#2": 0.9, P + "c#0": 0.1},
+    )
+    assert caminhos
+    assert all(c["chunk_origem"] == P + "c#2" for c in caminhos)

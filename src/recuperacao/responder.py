@@ -30,6 +30,7 @@ def responder(pergunta: str, modo: str = "graphrag", *, driver=None) -> dict:
             [r["chunk_id"] for r in resultados],
             limite=5,
             scores={r["chunk_id"]: r["score"] for r in resultados},
+            pergunta=pergunta,
         )
         caminhos, subgrafo, nos_consultados = montar_grafo(brutos)
     else:

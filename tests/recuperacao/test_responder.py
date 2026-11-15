@@ -56,7 +56,7 @@ def chamadas(monkeypatch):
     def buscar_falso(driver, embedding, k=5):
         return [dict(r) for r in RESULTADOS]
 
-    def expandir_falso(driver, chunk_ids, max_saltos=3, limite=10, scores=None):
+    def expandir_falso(driver, chunk_ids, **kwargs):
         registro["expandir"] = True
         return [CAMINHO]
 

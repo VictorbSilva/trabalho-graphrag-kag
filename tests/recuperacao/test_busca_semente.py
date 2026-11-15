@@ -8,10 +8,8 @@ Precisa do Neo4j no ar e do modelo de embeddings baixado (~470 MB).
 import pytest
 
 from src.recuperacao.busca_vetorial import buscar_chunks
-from src.recuperacao.embeddings import dimensoes_do_indice, gerar_embedding, gerar_embeddings
-# Dependência: estas três funções vêm de tests/neo4j/conftest.py (a mesma ingestão
-# dos testes do banco). Se forem renomeadas ou movidas lá, ajuste este import.
-from tests.neo4j.conftest import carregar_semente, com_prefixo, ingerir
+from src.recuperacao.carregar_semente import carregar_semente_no_banco
+from src.recuperacao.embeddings import dimensoes_do_indice, gerar_embedding
 from tests.recuperacao.conftest import PREFIXO, limpar_dados_de_teste
 
 pytestmark = pytest.mark.modelo
@@ -33,10 +31,7 @@ PERGUNTAS = {
 def semente_no_banco(driver):
     """Semente ingerida uma vez para o módulo, com o embedding de cada trecho."""
     limpar_dados_de_teste(driver)
-    for artigo in carregar_semente().values():
-        vetores = gerar_embeddings([c["text"] for c in artigo["chunks"]])
-        chunks = [{**c, "embedding": v} for c, v in zip(artigo["chunks"], vetores)]
-        ingerir(driver, com_prefixo({**artigo, "chunks": chunks}, PREFIXO))
+    carregar_semente_no_banco(driver, prefixo=PREFIXO)
     yield driver
     limpar_dados_de_teste(driver)
 
@@ -66,8 +61,7 @@ def test_todos_os_trechos_da_semente_tem_embedding(semente_no_banco):
         "MATCH (c:Chunk) WHERE c.id STARTS WITH $p RETURN size(c.embedding) AS dim",
         p=PREFIXO,
     )
-    total = sum(len(a["chunks"]) for a in carregar_semente().values())
-    assert [r["dim"] for r in registros] == [dimensoes_do_indice()] * total
+    assert [r["dim"] for r in registros] == [dimensoes_do_indice()] * 12
 
 
 @pytest.mark.parametrize(("pergunta", "trecho_certo"), PERGUNTAS.items())

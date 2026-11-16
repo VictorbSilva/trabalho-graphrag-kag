@@ -6,6 +6,7 @@ lugar do modelo de embeddings e ids prefixados por teste::, apagados no final.
 
 import copy
 import json
+import random
 from pathlib import Path
 
 import pytest
@@ -18,6 +19,7 @@ from src.banco.ingestor import (
     ingerir_artigo,
     ingerir_pasta,
     main,
+    texto_da_entidade,
     validar_artigo,
 )
 
@@ -28,6 +30,15 @@ CONTAGENS_DA_SEMENTE = {"documentos": 4, "trechos": 12, "entidades": 13, "relaco
 
 def vetores_falsos(textos):
     return [[1.0] + [0.0] * (DIMENSOES - 1) for _ in textos]
+
+
+def vetores_distintos(textos):
+    """Um vetor diferente por texto, sempre o mesmo para o mesmo texto (para a busca por cosseno)."""
+    vetores = []
+    for texto in textos:
+        sorteio = random.Random(texto)
+        vetores.append([sorteio.gauss(0, 1) for _ in range(DIMENSOES)])
+    return vetores
 
 
 def artigo_c() -> dict:
@@ -113,6 +124,18 @@ def test_validacao_aponta_o_problema(estragar, trecho_do_erro):
     assert any(trecho_do_erro in e for e in erros), erros
 
 
+# ---------- Texto do embedding da entidade (sem banco) ----------
+
+def test_texto_da_entidade_junta_nome_e_descricao():
+    entidade = {"name": "Dennis Ritchie", "description": "cientista da computação"}
+    assert texto_da_entidade(entidade) == "Dennis Ritchie. cientista da computação"
+
+
+@pytest.mark.parametrize("descricao", [None, ""])
+def test_texto_da_entidade_sem_descricao_e_so_o_nome(descricao):
+    assert texto_da_entidade({"name": "Dennis Ritchie", "description": descricao}) == "Dennis Ritchie"
+
+
 # ---------- Ingestão (com banco) ----------
 
 def test_ingerir_duas_vezes_nao_muda_as_contagens(banco, tmp_path):
@@ -130,6 +153,53 @@ def test_todo_trecho_recebe_embedding_do_tamanho_do_indice(banco, tmp_path):
         "MATCH (c:Chunk) WHERE c.id STARTS WITH $p RETURN size(c.embedding) AS dim", p=PREFIXO
     )
     assert [r["dim"] for r in registros] == [DIMENSOES] * CONTAGENS_DA_SEMENTE["trechos"]
+
+
+def test_toda_entidade_recebe_embedding_do_tamanho_do_indice(banco, tmp_path):
+    ingerir_pasta(banco, pasta_com_a_semente(tmp_path), prefixo=PREFIXO, gerar_vetores=vetores_falsos)
+    registros, _, _ = banco.execute_query(
+        "MATCH (e:Entity) WHERE e.id STARTS WITH $p RETURN size(e.embedding) AS dim", p=PREFIXO
+    )
+    assert [r["dim"] for r in registros] == [DIMENSOES] * CONTAGENS_DA_SEMENTE["entidades"]
+
+
+def test_indice_entity_embedding_encontra_a_propria_entidade(banco, tmp_path):
+    ingerir_pasta(banco, pasta_com_a_semente(tmp_path), prefixo=PREFIXO, gerar_vetores=vetores_distintos)
+    alvo = PREFIXO + "pessoa:dennis_ritchie"
+    registros, _, _ = banco.execute_query(
+        """MATCH (alvo:Entity {id: $id})
+           CALL db.index.vector.queryNodes('entity_embedding', 1, alvo.embedding)
+           YIELD node
+           RETURN node.id AS id""",
+        id=alvo,
+    )
+    assert [r["id"] for r in registros] == [alvo]
+
+
+def test_ingerir_duas_vezes_mantem_o_embedding_das_entidades(banco, tmp_path):
+    pasta = pasta_com_a_semente(tmp_path)
+    primeira = ingerir_pasta(banco, pasta, prefixo=PREFIXO, gerar_vetores=vetores_falsos)
+    segunda = ingerir_pasta(banco, pasta, prefixo=PREFIXO, gerar_vetores=vetores_falsos)
+    assert primeira.contagens == segunda.contagens == CONTAGENS_DA_SEMENTE
+    registros, _, _ = banco.execute_query(
+        "MATCH (e:Entity {id: $id}) RETURN size(e.embedding) AS dim", id=PREFIXO + "pessoa:dennis_ritchie"
+    )
+    assert registros[0]["dim"] == DIMENSOES
+
+
+def test_vetor_de_tamanho_errado_para_as_entidades_nao_grava_o_artigo(banco, tmp_path):
+    artigo = artigo_c()
+    gravar(tmp_path, "c.json", artigo)
+    textos_das_entidades = {texto_da_entidade(e) for e in artigo["entidades"]}
+
+    def certo_para_trechos_errado_para_entidades(textos):
+        de_entidades = bool(textos) and all(t in textos_das_entidades for t in textos)
+        tamanho = DIMENSOES - 1 if de_entidades else DIMENSOES
+        return [[1.0] + [0.0] * (tamanho - 1) for _ in textos]
+
+    with pytest.raises(ValueError, match="entidade"):
+        ingerir_pasta(banco, tmp_path, prefixo=PREFIXO, gerar_vetores=certo_para_trechos_errado_para_entidades)
+    assert contar(banco, PREFIXO) == {"documentos": 0, "trechos": 0, "entidades": 0, "relacoes": 0}
 
 
 def test_arquivo_invalido_nao_entra_e_os_outros_entram(banco, tmp_path):

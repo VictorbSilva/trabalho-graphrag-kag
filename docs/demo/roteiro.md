@@ -14,7 +14,7 @@ Na máquina da defesa, com o projeto já instalado pelo [README](../../README.md
 | 2 | `docker compose down -v` e `docker compose up -d` (banco limpo) | `docker compose logs neo4j-schema` termina com `OK` |
 | 3 | `python -m src.recuperacao.carregar_semente` | imprime 4 documentos, 12 trechos, 13 entidades e 19 relações |
 | 4 | `docker compose run --rm neo4j-gds` | termina sem erro |
-| 5 | Terminal 1: `uvicorn src.api.app:app --port 8000`, com `API_FONTE=recuperacao` no `.env` | http://localhost:8000/saude mostra `"status":"ok"` e `"fonte":"recuperacao"` |
+| 5 | Terminal 1: `uvicorn src.api.app:app --port 8000`, com `API_FONTE=recuperacao` no `.env` | http://localhost:8000/saude mostra `"status":"ok"`, `"fonte":"recuperacao"` e `"neo4j":"ok"` |
 | 6 | Terminal 2: `$env:FONTE_DADOS="api"`, `$env:API_URL="http://localhost:8000/perguntar"` e `python -m streamlit run src/interface/app.py` | a barra lateral da interface diz que a fonte é a API |
 | 7 | **Aquecer:** fazer a pergunta 1 uma vez | a primeira pergunta carrega o modelo de embeddings e demora; as seguintes são rápidas |
 | 8 | Fazer as perguntas 2 a 4 uma vez e comparar com a tabela da seção 2 | a resposta bate com o "resultado esperado" |

@@ -140,12 +140,12 @@ Mais detalhes em [neo4j/README.md](neo4j/README.md#subir-o-banco).
 
 Escolha **uma** das duas fontes:
 
-| Fonte | Comando | Para quê | O comando imprime |
+| Fonte | Comando | Para quê | Contagem no fim (banco vazio antes) |
 |---|---|---|---|
 | Semente: 4 artigos anotados à mão | `python -m src.recuperacao.carregar_semente` | avaliação, demo e a pergunta de teste do passo 8 | 4 documentos, 12 trechos, 13 entidades, 19 relações |
-| Processados: 17 artigos do pipeline | `python -m src.banco.ingestor` | o grafo completo, de `data/processado/extraido` | 17 documentos e as contagens do grafo completo |
+| Processados: 17 artigos do pipeline | `python -m src.banco.ingestor` | o grafo completo, de `data/processado/extraido` | 17 documentos, 567 trechos, 467 entidades, 259 relações |
 
-Na primeira execução o comando baixa o modelo de embeddings (cerca de 470 MB).
+Na primeira execução o comando baixa o modelo de embeddings (cerca de 470 MB). No fim, os dois comandos imprimem as contagens do banco (a semente, em JSON: `{"documentos": 4, "trechos": 12, ...}`).
 
 **Não carregue as duas no mesmo banco:** elas usam os mesmos ids de documento e de trecho, com textos diferentes. Para trocar de uma para a outra, apague o banco, suba de novo e carregue a outra (depois, refaça o passo 6):
 
@@ -180,6 +180,8 @@ Pela linha de comando, num segundo terminal:
 ```powershell
 Invoke-RestMethod -Method Post -Uri http://localhost:8000/perguntar -ContentType "application/json; charset=utf-8" -Body '{"pergunta": "Quem criou o C?", "modo": "graphrag"}'
 ```
+
+No Windows PowerShell 5.1, os acentos da resposta podem aparecer trocados nesse comando (`caracterÃ­sticas` no lugar de `características`). É só a exibição no terminal: em http://localhost:8000/docs e na interface eles aparecem certos.
 
 Linux/Mac (ou o Git Bash no Windows):
 
@@ -242,7 +244,11 @@ Para conferir os números da avaliação do artigo a partir das respostas salvas
 python -m src.avaliacao.comparar --so-relatorio
 ```
 
-O comando refaz [docs/avaliacao-resultados.md](docs/avaliacao-resultados.md) a partir de `data/avaliacao/resultados/respostas.json` e da classificação manual (`data/avaliacao/classificacao.json`).
+O comando refaz [docs/avaliacao-resultados.md](docs/avaliacao-resultados.md) a partir de `data/avaliacao/resultados/respostas.json` e da classificação manual (`data/avaliacao/classificacao.json`). Para conferir, rode `git diff docs/avaliacao-resultados.md`: as tabelas com os números não mudam. Mudam só a data e a seção "Análise de erros", que foi escrita à mão e que o comando troca pelo modelo vazio. Para voltar ao arquivo versionado:
+
+```powershell
+git restore docs/avaliacao-resultados.md
+```
 
 **Cuidado:** sem a flag, `python -m src.avaliacao.comparar` refaz as 15 perguntas nos dois modos e **sobrescreve** `data/avaliacao/resultados/respostas.json`, o relatório e a planilha. Ele precisa do banco com a semente, do GDS e da chave da Abacus, e o resultado depende do que estiver no banco *(não testado)*.
 

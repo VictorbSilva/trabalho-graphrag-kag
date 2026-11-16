@@ -1,3 +1,4 @@
+
 {
   "descricao": "Equivalências revisadas no PA4, aplicadas por IDs. Não unificar subunidades como Bell Labs Computing Science Research Center.",
   "equivalencias": [
@@ -15,6 +16,11 @@
       "de": "organizacao:at_t_bell_labs",
       "para": "organizacao:bell_labs",
       "justificativa": "AT&T Bell Labs e Bell Labs são formas do mesmo laboratório nas fontes; o centro de pesquisa específico permanece separado."
+    },
+    {
+      "de": "premio:premio_turing_2001_a_m",
+      "para": "premio:premio_turing",
+      "justificativa": "O Prêmio Turing de 2001 concedido pela ACM a Kristen Nygaard e Ole-Johan Dahl corresponde ao Prêmio Turing, registrado no domínio com o ID canônico premio:premio_turing."
     }
   ]
 }

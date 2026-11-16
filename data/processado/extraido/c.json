@@ -363,6 +363,40 @@
   ],
   "entidades": [
     {
+      "id": "organizacao:american_national_standards_institute",
+      "name": "American National Standards Institute",
+      "type": "Organizacao",
+      "aliases": [
+        "ANSI"
+      ],
+      "description": "Instituto norte‑americano de padrões que criou o comitê X3J11.",
+      "chunk_ids": [
+        "c#15"
+      ]
+    },
+    {
+      "id": "organizacao:ansi",
+      "name": "ANSI",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Instituto de padrões que definiu a especificação da linguagem C em 1983.",
+      "chunk_ids": [
+        "c#14",
+        "c#18",
+        "c#19"
+      ]
+    },
+    {
+      "id": "organizacao:at_t",
+      "name": "AT&T",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa que fornecia compiladores para C.",
+      "chunk_ids": [
+        "c#10"
+      ]
+    },
+    {
       "id": "organizacao:at_t_bell_labs",
       "name": "AT&T Bell Labs",
       "type": "Organizacao",
@@ -370,6 +404,101 @@
       "description": "Laboratório onde a linguagem C foi criada.",
       "chunk_ids": [
         "c#0"
+      ]
+    },
+    {
+      "id": "organizacao:bell_labs",
+      "name": "Bell Labs",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Laboratórios onde Bjarne Stroustrup trabalhou.",
+      "chunk_ids": [
+        "c#13"
+      ]
+    },
+    {
+      "id": "organizacao:borland",
+      "name": "Borland",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa de software que produz compiladores para C.",
+      "chunk_ids": [
+        "c#22"
+      ]
+    },
+    {
+      "id": "organizacao:ibm",
+      "name": "IBM",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa cujo PC recebeu adaptação da linguagem C na década de 1980.",
+      "chunk_ids": [
+        "c#13"
+      ]
+    },
+    {
+      "id": "organizacao:international_organization_for_standardization",
+      "name": "International Organization for Standardization",
+      "type": "Organizacao",
+      "aliases": [
+        "ISO"
+      ],
+      "description": "Organização internacional que adotou o padrão ANSI C e criou o grupo de trabalho WG14.",
+      "chunk_ids": [
+        "c#16"
+      ]
+    },
+    {
+      "id": "organizacao:iso",
+      "name": "ISO",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "International Organization for Standardization, responsável pela norma ISO 9899:1999.",
+      "chunk_ids": [
+        "c#18",
+        "c#19"
+      ]
+    },
+    {
+      "id": "organizacao:microsoft",
+      "name": "Microsoft",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Companhia cujos sistemas operacionais utilizam amplamente C++.",
+      "chunk_ids": [
+        "c#14",
+        "c#22",
+        "c#23"
+      ]
+    },
+    {
+      "id": "organizacao:wg14",
+      "name": "WG14",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Grupo de trabalho da ISO responsável pela especificação da linguagem C.",
+      "chunk_ids": [
+        "c#16"
+      ]
+    },
+    {
+      "id": "organizacao:x3j11",
+      "name": "X3J11",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Comitê do ANSI responsável pela especificação do padrão da linguagem C.",
+      "chunk_ids": [
+        "c#15"
+      ]
+    },
+    {
+      "id": "pessoa:bjarne_stroustrup",
+      "name": "Bjarne Stroustrup",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Criador da linguagem C++.",
+      "chunk_ids": [
+        "c#13"
       ]
     },
     {
@@ -384,16 +513,6 @@
         "c#0",
         "c#3",
         "c#4"
-      ]
-    },
-    {
-      "id": "pessoa:johnson",
-      "name": "Johnson",
-      "type": "Pessoa",
-      "aliases": [],
-      "description": "Desenvolvedor associado ao Portable C Compiler.",
-      "chunk_ids": [
-        "c#6"
       ]
     },
     {
@@ -421,6 +540,28 @@
       ]
     },
     {
+      "id": "tecnologia:algol",
+      "name": "ALGOL",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação que influenciou o sistema de tipos de C.",
+      "chunk_ids": [
+        "c#40"
+      ]
+    },
+    {
+      "id": "tecnologia:ansi_c",
+      "name": "ANSI C",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Padrão ANSI da linguagem C.",
+      "chunk_ids": [
+        "c#15",
+        "c#16",
+        "c#9"
+      ]
+    },
+    {
       "id": "tecnologia:assembly",
       "name": "Assembly",
       "type": "Tecnologia",
@@ -442,6 +583,16 @@
       ]
     },
     {
+      "id": "tecnologia:basic",
+      "name": "BASIC",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação substituída pelo C nos microcomputadores.",
+      "chunk_ids": [
+        "c#12"
+      ]
+    },
+    {
       "id": "tecnologia:bcpl",
       "name": "BCPL",
       "type": "Tecnologia",
@@ -460,10 +611,44 @@
       "chunk_ids": [
         "c#0",
         "c#1",
+        "c#12",
+        "c#13",
+        "c#15",
+        "c#18",
+        "c#21",
         "c#3",
+        "c#33",
+        "c#39",
         "c#4",
-        "c#6",
-        "c#7"
+        "c#40",
+        "c#41",
+        "c#51",
+        "c#56",
+        "c#60",
+        "c#61"
+      ]
+    },
+    {
+      "id": "tecnologia:c11",
+      "name": "C11",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Revisão do padrão da linguagem C publicada em 2011.",
+      "chunk_ids": [
+        "c#23"
+      ]
+    },
+    {
+      "id": "tecnologia:c99",
+      "name": "C99",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Versão padrão da linguagem C publicada como ISO 9899:1999.",
+      "chunk_ids": [
+        "c#18",
+        "c#19",
+        "c#20",
+        "c#21"
       ]
     },
     {
@@ -473,7 +658,90 @@
       "aliases": [],
       "description": "Linguagem de programação que começou como extensão de C.",
       "chunk_ids": [
-        "c#1"
+        "c#1",
+        "c#13",
+        "c#14",
+        "c#21",
+        "c#56",
+        "c#61"
+      ]
+    },
+    {
+      "id": "tecnologia:clion",
+      "name": "CLion",
+      "type": "Tecnologia",
+      "aliases": [
+        "JetBrains CLion"
+      ],
+      "description": "IDE da JetBrains para C/C++.",
+      "chunk_ids": [
+        "c#70"
+      ]
+    },
+    {
+      "id": "tecnologia:code_blocks",
+      "name": "Code::Blocks",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "IDE de código aberto para C/C++.",
+      "chunk_ids": [
+        "c#70"
+      ]
+    },
+    {
+      "id": "tecnologia:dev_c_mais_mais",
+      "name": "Dev-C++",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Ambiente de desenvolvimento integrado para C/C++.",
+      "chunk_ids": [
+        "c#70"
+      ]
+    },
+    {
+      "id": "tecnologia:gcc",
+      "name": "GCC",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Compilador GNU para várias linguagens, incluindo C.",
+      "chunk_ids": [
+        "c#22"
+      ]
+    },
+    {
+      "id": "tecnologia:gnu_compiler_collection",
+      "name": "GNU Compiler Collection",
+      "type": "Tecnologia",
+      "aliases": [
+        "GCC"
+      ],
+      "description": "Coleção de compiladores de código aberto.",
+      "chunk_ids": [
+        "c#70"
+      ]
+    },
+    {
+      "id": "tecnologia:ieee_754_1985",
+      "name": "IEEE 754-1985",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Padrão para representação de ponto flutuante.",
+      "chunk_ids": [
+        "c#54",
+        "c#55"
+      ]
+    },
+    {
+      "id": "tecnologia:iso_iec_9899_1990",
+      "name": "ISO/IEC 9899:1990",
+      "type": "Tecnologia",
+      "aliases": [
+        "C89",
+        "C90"
+      ],
+      "description": "Versão da linguagem C padronizada pela ISO em 1990.",
+      "chunk_ids": [
+        "c#16"
       ]
     },
     {
@@ -484,6 +752,46 @@
       "description": "Linguagem de programação influenciada por C.",
       "chunk_ids": [
         "c#1"
+      ]
+    },
+    {
+      "id": "tecnologia:k_r_c",
+      "name": "K&R C",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Versão inicial da linguagem C descrita no livro de Kernighan e Ritchie.",
+      "chunk_ids": [
+        "c#9"
+      ]
+    },
+    {
+      "id": "tecnologia:make",
+      "name": "make",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Ferramenta de automação de compilação.",
+      "chunk_ids": [
+        "c#70"
+      ]
+    },
+    {
+      "id": "tecnologia:netbeans",
+      "name": "NetBeans",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "IDE que suporta desenvolvimento em C/C++.",
+      "chunk_ids": [
+        "c#70"
+      ]
+    },
+    {
+      "id": "tecnologia:pascal",
+      "name": "Pascal",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem descendente de ALGOL citada como exemplo de sistema de tipos similar ao de C.",
+      "chunk_ids": [
+        "c#40"
       ]
     },
     {
@@ -504,8 +812,7 @@
       "aliases": [],
       "description": "Compilador que serviu de base para várias implementações de C.",
       "chunk_ids": [
-        "c#5",
-        "c#6"
+        "c#5"
       ]
     },
     {
@@ -516,11 +823,19 @@
       "description": "Sistema operacional desenvolvido em Assembly e posteriormente em C.",
       "chunk_ids": [
         "c#0",
+        "c#14",
+        "c#39",
         "c#4"
       ]
     }
   ],
   "relacoes": [
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "destino": "organizacao:bell_labs",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "c#13"
+    },
     {
       "origem": "pessoa:dennis_ritchie",
       "destino": "tecnologia:c",
@@ -534,10 +849,10 @@
       "chunk_id": "c#0"
     },
     {
-      "origem": "pessoa:johnson",
-      "destino": "tecnologia:portable_c_compiler",
-      "tipo": "CRIOU",
-      "chunk_id": "c#6"
+      "origem": "tecnologia:ansi_c",
+      "destino": "organizacao:american_national_standards_institute",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "c#15"
     },
     {
       "origem": "tecnologia:b",
@@ -558,10 +873,52 @@
       "chunk_id": "c#3"
     },
     {
+      "origem": "tecnologia:c",
+      "destino": "tecnologia:c_mais_mais",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c#21"
+    },
+    {
+      "origem": "tecnologia:c",
+      "destino": "tecnologia:c_mais_mais",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c#61"
+    },
+    {
+      "origem": "tecnologia:c99",
+      "destino": "organizacao:ansi",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "c#19"
+    },
+    {
+      "origem": "tecnologia:c99",
+      "destino": "organizacao:iso",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "c#19"
+    },
+    {
       "origem": "tecnologia:c_mais_mais",
       "destino": "tecnologia:c",
       "tipo": "INFLUENCIADA_POR",
       "chunk_id": "c#1"
+    },
+    {
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:c",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c#13"
+    },
+    {
+      "origem": "tecnologia:c_mais_mais",
+      "destino": "tecnologia:c",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "c#56"
+    },
+    {
+      "origem": "tecnologia:iso_iec_9899_1990",
+      "destino": "organizacao:international_organization_for_standardization",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "c#16"
     },
     {
       "origem": "tecnologia:java",

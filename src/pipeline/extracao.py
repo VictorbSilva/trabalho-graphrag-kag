@@ -47,8 +47,8 @@ CACHE = RAIZ / ".cache" / "extracao"
 
 VERSAO_PROMPT = "3"  # mude ao alterar o prompt: invalida o cache
 MODELO_PADRAO = "openai/gpt-oss-120b"
-TRECHOS_POR_LOTE = 3
-LIMITE_CARACTERES_LOTE = 1400
+TRECHOS_POR_LOTE = 5
+LIMITE_CARACTERES_LOTE = 2400
 MAX_TOKENS_RESPOSTA = 2000
 REQUISICOES_POR_MINUTO = 28  # o limite medido é 30
 TOKENS_POR_MINUTO = 7000     # o limite medido é 8000
@@ -97,20 +97,20 @@ Regras:
     em seu desenvolvimento e de trabalhar na
     organização onde ela foi desenvolvida.
 12. INFLUENCIADA_POR aponta sempre da tecnologia
-influenciada para aquela que exerceu influência.
-Exemplo: "C influenciou C++" significa
-C++ -INFLUENCIADA_POR-> C, nunca o contrário.
+    influenciada para aquela que exerceu influência.
+    Exemplo: "C influenciou C++" significa
+    C++ -INFLUENCIADA_POR-> C, nunca o contrário.
 13. Se o texto afirmar que duas pessoas receberam
-o mesmo prêmio, registre uma relação RECEBEU
-para cada pessoa. Não omita fatos explicitamente
-afirmados e compatíveis com o domínio.
+    o mesmo prêmio, registre uma relação RECEBEU
+    para cada pessoa. Não omita fatos explicitamente
+    afirmados e compatíveis com o domínio.
 14. Quando houver uma afirmação genérica de criação
-coletiva e outra específica atribuindo a autoria,
-priorize a atribuição específica. Não distribua
-automaticamente todas as criações a todos os autores.
+    coletiva e outra específica atribuindo a autoria,
+    priorize a atribuição específica. Não distribua
+    automaticamente todas as criações a todos os autores.
 15. Extraia todas as relações claramente sustentadas
-pelo texto, sem sacrificar a cobertura por excesso
-de cautela.
+    pelo texto, sem sacrificar a cobertura por excesso
+    de cautela.
 
 Formato:
 {{"entidades": [{{"nome": "...", "tipo": "Pessoa", "aliases": ["..."], "descricao": "uma frase curta", "trechos": [0]}}],
@@ -327,31 +327,46 @@ def opcoes_do_modelo(modelo: str, esforco: str | None) -> dict:
 
 
 def chamar_modelo(modelo: str, mensagens: list[dict], opcoes: dict, ritmo: Ritmo) -> tuple[dict, int]:
-    """Uma chamada com repetição: 429 espera o retry-after, JSON inválido tenta de novo."""
+    """Chama o Groq com retentativas limitadas e diagnóstico de HTTP 429."""
     estimativa = sum(len(m["content"]) for m in mensagens) // 3 + MAX_TOKENS_RESPOSTA // 2
     opcoes = dict(opcoes)
     esperas_429 = tentativas = 0
+    MAX_RETENTATIVAS_429 = 3
+    MAX_ESPERA_429 = 90  # segundos, para não ficar preso em esperas diárias
+
     while True:
         tentativas += 1
         ritmo.esperar(estimativa)
         try:
             resposta, _ = conversar(modelo, mensagens, **opcoes)
         except ErroGroq as erro:
-            if erro.status == 429 and esperas_429 < 8:
+            if erro.status == 429:
                 esperas_429 += 1
+                cabecalhos = {str(k).lower(): v for k, v in (erro.cabecalhos or {}).items()}
                 try:
-                    espera = float(erro.cabecalhos.get("retry-after") or 5)
-                except ValueError:
+                    espera = float(cabecalhos.get("retry-after") or 5)
+                except (TypeError, ValueError):
                     espera = 5.0
+                print(f"\n[Groq 429] Limite atingido. Tentativa {esperas_429}/{MAX_RETENTATIVAS_429}. "
+                      f"Espera solicitada: {espera:.1f}s.", flush=True)
+                print(f"[Groq] Detalhes: {erro}", flush=True)
+                if esperas_429 >= MAX_RETENTATIVAS_429:
+                    raise RuntimeError("Groq retornou HTTP 429 repetidamente. Verifique a cota da conta.") from erro
+                if not (0 <= espera <= MAX_ESPERA_429):
+                    raise RuntimeError(f"Groq solicitou espera de {espera:.1f}s. "
+                                       "Execução interrompida; cache das chamadas concluídas preservado.") from erro
+                print(f"[Groq] Nova tentativa em {espera + 0.5:.1f}s.", flush=True)
                 time.sleep(espera + 0.5)
                 continue
-            if erro.status == 400:  # o modelo pode não aceitar um dos parâmetros opcionais
-                retirou = [c for c in ("reasoning_effort", "response_format") if c in opcoes and c in str(erro).lower()]
+            if erro.status == 400:
+                retirou = [c for c in ("reasoning_effort", "response_format")
+                           if c in opcoes and c in str(erro).lower()]
                 for chave in retirou:
                     opcoes.pop(chave)
                 if retirou:
                     continue
             if erro.status >= 500 and tentativas < 4:
+                print(f"\n[Groq] Erro HTTP {erro.status}. Nova tentativa em 5s.", flush=True)
                 time.sleep(5)
                 continue
             raise

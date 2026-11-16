@@ -1,0 +1,577 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+
+% Template oficial da SBC (sbc-template.sty e sbc.bst, do modelo "SBC Conferences"
+% do Overleaf). Sem esses arquivos, o preâmbulo usa uma configuração equivalente
+% para o documento compilar em qualquer instalação do LaTeX.
+\newif\ifsbcoficial
+\IfFileExists{sbc-template.sty}{\sbcoficialtrue}{\sbcoficialfalse}
+\ifsbcoficial
+  \usepackage{sbc-template}
+\else
+  \usepackage[a4paper,top=3.5cm,bottom=2.5cm,left=3cm,right=3cm]{geometry}
+  \newcommand{\inst}[1]{\textsuperscript{#1}}
+  \newcommand{\address}[1]{\gdef\enderecoautores{#1}}
+  \makeatletter
+  \renewcommand{\maketitle}{%
+    \begin{center}
+      {\Large\bfseries \@title\par}\vspace{1em}
+      {\bfseries \@author\par}\vspace{0.6em}
+      {\small \enderecoautores\par}
+    \end{center}\vspace{1em}}
+  \makeatother
+  \renewenvironment{abstract}{\begin{quote}\small\textbf{\textit{Abstract.}}~\itshape}{\end{quote}}
+  \newenvironment{resumo}{\begin{quote}\small\textbf{\textit{Resumo.}}~\itshape}{\end{quote}}
+\fi
+% "Autor [ano]" no texto. O template da SBC já define; senão, usa o \cite comum.
+\providecommand{\citeasnoun}[1]{\cite{#1}}
+
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit}
+
+\sloppy
+
+\title{GraphRAG e KAG sobre a história da computação:\\
+perguntas multi-hop com um grafo de conhecimento no Neo4j}
+
+\author{Victor Basilio\inst{1}, Nicolas Brito\inst{1}, Patrick Sardenberg\inst{1},\\
+Gabriel Xavier\inst{1}, Pedro Jorge Fernandes Medeiros de Oliveira\inst{1}}
+
+\address{\inst{1}[Nome da instituição] -- Tendências em Ciência da Computação\\
+Prof. Ricardo Roberto de Lima -- 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Large language models answer fluently but may invent facts, and retrieval-augmented
+generation based only on vector search tends to fail on questions that require
+combining facts from different documents. This paper presents a GraphRAG/KAG question
+answering system about the history of computing, built from Portuguese Wikipedia
+articles. Texts are split into passages, entities and relations are extracted by an
+LLM under a predefined domain schema, and everything is stored as a labeled property
+graph in Neo4j, where each relation points to the passage that supports it. Retrieval
+combines vector search, multi-hop expansion over the graph and LLM-generated Cypher
+queries, and the answer cites the paths and passages it used, with a confidence level
+computed from retrieval signals. In an evaluation with 15 questions, GraphRAG correctly
+answered 2 of 7 multi-hop questions, against 1 for vector RAG, and neither mode
+produced a hallucinated answer.
+\end{abstract}
+
+\begin{resumo}
+Modelos de linguagem respondem com fluência, mas podem inventar fatos, e a geração
+aumentada por recuperação baseada só em busca vetorial tende a falhar em perguntas que
+exigem combinar fatos de documentos diferentes. Este artigo apresenta um sistema
+GraphRAG/KAG de perguntas e respostas sobre a história da computação, construído a
+partir de artigos da Wikipédia em português. Os textos são divididos em trechos, as
+entidades e relações são extraídas por um LLM sob um schema de domínio pré-definido, e
+tudo é gravado como um grafo de propriedades rotuladas no Neo4j, em que cada relação
+aponta para o trecho que a sustenta. A recuperação combina busca vetorial, expansão
+multi-hop pelo grafo e consultas Cypher geradas por LLM, e a resposta cita os caminhos e
+trechos usados, com um nível de confiança calculado a partir de sinais da recuperação.
+Numa avaliação com 15 perguntas, o GraphRAG respondeu corretamente 2 de 7 perguntas
+multi-hop, contra 1 do RAG vetorial, e nenhum dos modos produziu resposta alucinada.
+\end{resumo}
+
+% =====================================================================
+\section{Introdução}
+
+Modelos de linguagem de grande porte (LLMs) produzem texto fluente, mas podem afirmar
+fatos que não constam de nenhuma fonte, fenômeno conhecido como alucinação
+\cite{ji2023survey}. A geração aumentada por recuperação (RAG) reduz esse risco ao
+entregar ao modelo, junto com a pergunta, trechos de documentos recuperados de uma base
+de conhecimento, e ao pedir que a resposta se apoie neles \cite{lewis2020rag}.
+
+Na forma mais comum, a recuperação é uma busca vetorial: a pergunta e os trechos viram
+vetores, e entram no contexto os trechos mais parecidos com a pergunta. Essa estratégia
+funciona quando um único trecho contém a resposta, mas falha em perguntas
+\textit{multi-hop}, que exigem encadear fatos espalhados por documentos diferentes. Na
+pergunta ``Que prêmio recebeu quem criou a linguagem que influenciou o C++?'', o trecho
+que fala do prêmio de Dennis Ritchie não menciona o C++ e, por isso, dificilmente está
+entre os trechos mais parecidos com a pergunta.
+
+As abordagens GraphRAG representam o conhecimento extraído dos documentos como um grafo
+de entidades e relações e usam a estrutura desse grafo na recuperação
+\cite{edge2024graphrag,peng2024graphragsurvey}. O KAG (\textit{Knowledge Augmented
+Generation}) vai além e propõe a indexação mútua entre o grafo e os trechos de texto, o
+raciocínio guiado por formas lógicas e o alinhamento do conhecimento extraído
+\cite{liang2024kag}.
+
+Este trabalho apresenta um sistema GraphRAG/KAG de perguntas e respostas sobre a
+história da computação, construído a partir de artigos da Wikipédia em português. As
+contribuições são: (i) um modelo de grafo de propriedades rotuladas no Neo4j com duas
+camadas, texto e domínio, em que cada relação guarda o trecho que a sustenta; (ii) um
+pipeline Text-to-Graph que extrai entidades e relações com um LLM restrito a um schema
+de domínio; (iii) uma recuperação híbrida que combina busca vetorial, expansão
+multi-hop e consultas Cypher geradas por LLM, com citação dos caminhos e trechos e um
+nível de confiança calculado a partir de sinais observáveis; (iv) uma interface que
+mostra o subgrafo e a procedência de cada resposta; e (v) uma avaliação comparativa entre
+o RAG vetorial e o GraphRAG.
+
+O restante do artigo está organizado assim. A Seção~\ref{sec:relacionados} discute
+trabalhos relacionados. A Seção~\ref{sec:arquitetura} apresenta a arquitetura. As
+Seções~\ref{sec:modelagem} a \ref{sec:interface} detalham a modelagem do grafo, o
+pipeline, a recuperação e a interface. A Seção~\ref{sec:avaliacao} apresenta a
+avaliação, e a Seção~\ref{sec:conclusao} conclui.
+
+% =====================================================================
+\section{Trabalhos relacionados}
+\label{sec:relacionados}
+
+\citeasnoun{lewis2020rag} propuseram combinar um recuperador denso com um gerador, de
+modo que a resposta dependa de documentos recuperados e não apenas dos parâmetros do
+modelo. O levantamento de \citeasnoun{ji2023survey} organiza os tipos de alucinação e
+aponta o apoio em fontes externas como uma das principais formas de mitigação.
+
+A combinação de LLMs com grafos de conhecimento é discutida por \citeasnoun{pan2024unifying},
+que descrevem tanto o uso de grafos para dar fatos verificáveis aos LLMs quanto o uso de
+LLMs para construir grafos. O GraphRAG de \citeasnoun{edge2024graphrag} extrai um grafo de
+entidades dos documentos, agrupa as entidades em comunidades com o algoritmo de Leiden e
+gera resumos dessas comunidades para responder a perguntas globais sobre o corpus. O
+levantamento de \citeasnoun{peng2024graphragsurvey} classifica as variantes de GraphRAG
+pelas etapas de indexação, recuperação e geração.
+
+O KAG \cite{liang2024kag} foi proposto para domínios profissionais, em que a precisão
+importa mais do que a cobertura. Suas ideias centrais são a indexação mútua entre o grafo
+e os trechos de origem, o uso de formas lógicas para decompor a pergunta em passos de
+consulta e o alinhamento semântico do conhecimento extraído.
+
+Este trabalho adota a indexação mútua do KAG, ligando cada entidade aos trechos que a
+mencionam e cada relação ao trecho que a sustenta, e usa medidas de grafo como a
+centralidade do PageRank \cite{page1999pagerank} e as comunidades do Louvain
+\cite{blondel2008louvain}. O foco é a resposta local a perguntas multi-hop, com
+procedência até o texto original e recusa explícita quando o contexto não tem a resposta.
+
+% =====================================================================
+\section{Arquitetura}
+\label{sec:arquitetura}
+
+A Figura~\ref{fig:arquitetura} mostra os módulos do sistema. O pipeline transforma os
+artigos em arquivos JSON com trechos, entidades e relações. O ingestor grava esses
+arquivos no Neo4j. A recuperação responde às perguntas consultando o grafo e um LLM. A
+API expõe a recuperação por HTTP, e a interface mostra a resposta e as evidências.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  caixa/.style={draw, rounded corners, align=center, font=\footnotesize,
+                minimum height=0.9cm, text width=2.2cm, fill=gray!8},
+  seta/.style={-{Stealth[length=2mm]}, thick}]
+  \node[caixa] (wiki) {Wikipédia\\(32 artigos)};
+  \node[caixa, right=0.5cm of wiki] (chunk) {Chunking\\(trechos)};
+  \node[caixa, right=0.5cm of chunk] (extr) {Extração\\(LLM + schema)};
+  \node[caixa, right=0.5cm of extr] (ing) {Ingestor\\(validação)};
+  \node[caixa, below=1.1cm of ing, fill=blue!8] (neo) {Neo4j\\(grafo + índices)};
+  \node[caixa, left=0.5cm of neo] (rec) {Recuperação\\(vetor + grafo)};
+  \node[caixa, left=0.5cm of rec] (api) {API\\(FastAPI)};
+  \node[caixa, left=0.5cm of api] (ui) {Interface\\(Streamlit)};
+  \draw[seta] (wiki) -- (chunk);
+  \draw[seta] (chunk) -- (extr);
+  \draw[seta] (extr) -- (ing);
+  \draw[seta] (ing) -- (neo);
+  \draw[seta] (neo) -- (rec);
+  \draw[seta] (rec) -- (api);
+  \draw[seta] (api) -- (ui);
+\end{tikzpicture}
+\caption{Módulos do sistema, da coleta dos artigos à interface.}
+\label{fig:arquitetura}
+\end{figure}
+
+Dois contratos ligam os módulos. O primeiro é o schema do domínio, um arquivo JSON com os
+rótulos, as relações e suas direções, a regra dos identificadores e o formato do arquivo
+por artigo. O mesmo arquivo alimenta o prompt de extração e o prompt de geração de
+Cypher, o que evita que os dois módulos usem nomes diferentes para a mesma relação. O
+segundo é o contrato da resposta, definido com Pydantic, com o texto, a confiança, a
+consulta Cypher, os caminhos, o subgrafo, os nós consultados, as fontes e os avisos.
+
+O banco roda em contêiner Docker, com o Neo4j 5.26 (LTS, edição Community) e os plugins
+APOC e Graph Data Science (GDS) embutidos numa imagem própria, com versões fixas e o
+download do plugin conferido por \textit{checksum}. Um único comando sobe o banco e
+aplica constraints e índices.
+
+% =====================================================================
+\section{Modelagem do grafo}
+\label{sec:modelagem}
+
+O conhecimento é representado como um grafo de propriedades rotuladas (LPG), em que nós
+e relações têm rótulos e propriedades \cite{robinson2015graphdatabases}. O grafo tem duas
+camadas ligadas entre si (Figura~\ref{fig:schema}).
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  no/.style={draw, rounded corners, align=center, font=\scriptsize,
+             minimum height=0.8cm, text width=2.3cm},
+  lex/.style={no, fill=gray!10},
+  dom/.style={no, fill=blue!8},
+  rel/.style={-{Stealth[length=1.8mm]}, thick},
+  rot/.style={font=\scriptsize, fill=white, inner sep=1pt}]
+  \node[lex] (doc) {:Document\\id, title, source};
+  \node[lex, right=1.6cm of doc] (c1) {:Chunk\\id, index, text,\\embedding};
+  \node[lex, right=1.6cm of c1] (c2) {:Chunk};
+  \node[dom, below=1.5cm of doc] (pes) {:Entity:Pessoa\\Dennis Ritchie};
+  \node[dom, right=1.6cm of pes] (tec) {:Entity:Tecnologia\\C};
+  \node[dom, right=1.6cm of tec] (org) {:Entity:Organizacao\\Bell Labs};
+  \node[dom, below=1.3cm of pes] (pre) {:Entity:Premio\\Prêmio Turing};
+  \node[dom, below=1.3cm of tec] (cpp) {:Entity:Tecnologia\\C++};
+  \draw[rel] (c1) -- node[rot, above] {PART\_OF} (doc);
+  \draw[rel] (c1) -- node[rot, above] {NEXT} (c2);
+  \draw[rel] (c1) -- node[rot, pos=0.4] {MENTIONS} (pes);
+  \draw[rel] (c1) -- node[rot, pos=0.5] {MENTIONS} (tec);
+  \draw[rel] (pes) -- node[rot, above] {CRIOU} (tec);
+  \draw[rel] (tec) -- node[rot, above] {DESENVOLVIDA\_EM} (org);
+  \draw[rel] (pes) -- node[rot, left] {RECEBEU} (pre);
+  \draw[rel] (cpp) -- node[rot, right] {INFLUENCIADA\_POR} (tec);
+\end{tikzpicture}
+\caption{Camada léxica (cinza) e camada de domínio (azul). Toda relação de domínio
+guarda em \texttt{source\_chunk\_ids} os trechos que a sustentam.}
+\label{fig:schema}
+\end{figure}
+
+A \textbf{camada léxica} contém os documentos (\texttt{Document}) e seus trechos
+(\texttt{Chunk}), cada um com o texto e o vetor de embedding. A relação \texttt{PART\_OF}
+liga o trecho ao documento, e \texttt{NEXT} liga trechos consecutivos. A \textbf{camada de
+domínio} contém as entidades extraídas. Toda entidade tem o rótulo genérico
+\texttt{Entity} e um rótulo do domínio. As camadas se ligam de duas formas: a relação
+\texttt{MENTIONS} vai do trecho às entidades que ele cita, e cada relação de domínio
+guarda na propriedade \texttt{source\_chunk\_ids} os identificadores dos trechos que a
+sustentam. Essa indexação mútua, inspirada no KAG \cite{liang2024kag}, permite ir de um
+trecho às suas entidades e de uma relação ao texto que a justifica, o que é a base da
+procedência das respostas.
+
+\subsection{Schema do domínio}
+
+O domínio usa quatro rótulos e cinco relações com direção fixa
+(Tabela~\ref{tab:dominio}). Optou-se por um schema pré-definido em vez de deixar o LLM
+criar tipos livremente: isso reduz a variação entre artigos e torna previsíveis as
+consultas Cypher geradas na recuperação.
+
+\begin{table}[ht]
+\centering
+\caption{Rótulos e relações do domínio.}
+\label{tab:dominio}
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{Relação} & \textbf{De $\rightarrow$ Para} & \textbf{Exemplo} \\
+\midrule
+\texttt{CRIOU} & Pessoa $\rightarrow$ Tecnologia ou Organizacao & Dennis Ritchie criou o C \\
+\texttt{TRABALHOU\_EM} & Pessoa $\rightarrow$ Organizacao & Ritchie trabalhou no Bell Labs \\
+\texttt{DESENVOLVIDA\_EM} & Tecnologia $\rightarrow$ Organizacao & Unix desenvolvido no Bell Labs \\
+\texttt{INFLUENCIADA\_POR} & Tecnologia $\rightarrow$ Tecnologia & C++ influenciado pelo C \\
+\texttt{RECEBEU} & Pessoa $\rightarrow$ Premio & Ritchie recebeu o Prêmio Turing \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Cada entidade tem um identificador canônico no formato \texttt{prefixo:nome}, em que o
+nome é normalizado: sem a desambiguação entre parênteses, com ``+'' trocado por ``mais'',
+sem acentos, em minúsculas e com os demais caracteres trocados por sublinhado. Assim,
+``C++'' vira \texttt{tecnologia:c\_mais\_mais}. É esse identificador que faz a mesma
+entidade, citada em artigos diferentes, virar um único nó.
+
+\subsection{Restrições e índices}
+
+A Tabela~\ref{tab:indices} resume as restrições e os índices, conforme listados por
+\texttt{SHOW CONSTRAINTS} e \texttt{SHOW INDEXES} no banco carregado (todos com estado
+\texttt{ONLINE}). As restrições de unicidade sobre o \texttt{id} impedem nós duplicados.
+Os índices Range atendem a filtros e ordenações; no Neo4j 5, o índice BTree pedido no
+enunciado foi substituído pelo Range. Os índices fulltext usam o analisador
+\texttt{brazilian}, adequado ao português, e os vetoriais usam 384 dimensões e
+similaridade de cosseno, com busca aproximada por HNSW \cite{malkov2020hnsw}.
+
+\begin{table}[ht]
+\centering
+\caption{Restrições e índices do banco.}
+\label{tab:indices}
+\small
+\begin{tabular}{llp{5.2cm}}
+\toprule
+\textbf{Tipo} & \textbf{Nome} & \textbf{Alvo} \\
+\midrule
+Unicidade & \texttt{document/chunk/entity\_id\_unique} & \texttt{id} de Document, Chunk e Entity \\
+Range & \texttt{entity\_name}, \texttt{entity\_type} & \texttt{name} e \texttt{type} de Entity \\
+Range & \texttt{entity\_pagerank}, \texttt{entity\_community} & resultados do GDS \\
+Range & \texttt{document\_source} & URL do documento \\
+Fulltext & \texttt{entity\_search} & \texttt{name}, \texttt{aliases}, \texttt{description} \\
+Fulltext & \texttt{chunk\_text} & texto do trecho \\
+Vetorial & \texttt{chunk\_embedding} & embedding do trecho (384, cosseno) \\
+Vetorial & \texttt{entity\_embedding} & embedding da entidade (384, cosseno) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A edição Community do Neo4j não oferece restrições de existência de propriedade nem
+usuários com papéis restritos. Por isso, a obrigatoriedade das propriedades é verificada
+pelo ingestor, e a proteção contra escrita nas consultas geradas pelo LLM é feita
+executando-as em transação de leitura, em que o banco recusa qualquer escrita.
+
+\subsection{Ingestão}
+
+O ingestor lê um arquivo JSON por artigo e valida cada um contra o schema do domínio:
+chaves obrigatórias, tipos de entidade e de relação, direção das relações, prefixo dos
+identificadores e existência dos trechos referenciados. Em seguida, calcula o embedding de
+cada trecho com o mesmo módulo usado depois para as perguntas e grava o artigo numa
+única transação: ou o artigo entra inteiro, ou nada dele entra. Toda escrita usa
+\texttt{MERGE} pelo identificador, de modo que reprocessar a mesma pasta não altera as
+contagens.
+
+\subsection{Algoritmos de grafo e o grafo carregado}
+
+Depois da ingestão, o GDS projeta em memória apenas as entidades e as relações entre elas
+e executa o PageRank \cite{page1999pagerank} e o Louvain \cite{blondel2008louvain}. O
+PageRank, que convergiu em 88 iterações, é gravado em cada entidade e usado pela
+recuperação para desempatar caminhos; as comunidades do Louvain são gravadas para
+enriquecer a análise e a visualização.
+
+A Tabela~\ref{tab:grafo} resume o grafo carregado com os cinco artigos já processados
+pelo pipeline até a escrita deste texto. As entidades de maior PageRank foram, em ordem,
+Brian Kernighan, C++, Dennis Ritchie, Ken Thompson e Bell Labs. Nenhuma relação ficou sem
+trecho de origem. O relatório de validação também apontou pontos a melhorar na extração:
+4 pares de possíveis duplicatas (por exemplo, ``AT\&T Bell Labs'' e ``Bell Labs''), 11
+entidades sem nenhuma relação e 217 dos 247 trechos sem nenhuma entidade mencionada.
+
+\begin{table}[ht]
+\centering
+\caption{Grafo carregado com os cinco artigos processados.}
+\label{tab:grafo}
+\small
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Documentos} & \textbf{Trechos} & \textbf{Entidades} & \textbf{Relações} & \textbf{Comunidades} \\
+\midrule
+5 & 247 & 49 & 52 & 16 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =====================================================================
+\section{Pipeline Text-to-Graph}
+\label{sec:pipeline}
+
+\textbf{Coleta.} O dataset parte de uma lista de 32 artigos da Wikipédia em português,
+escolhidos por se citarem entre si: pioneiros e o Prêmio Turing, a família C e Unix,
+Java e Sun, Python, Lisp e linguagens históricas, Linux e a web. Um script baixa o texto
+puro de cada artigo, sem marcação e sem as seções de referências, e registra num
+manifesto o título, a URL, a revisão exata, a data de acesso e a licença (CC BY-SA 4.0).
+
+\textbf{Divisão em trechos.} O modelo de embeddings lê no máximo 128 \textit{tokens} de
+cada texto. Por isso, os artigos são divididos em trechos de até 450 caracteres, cortados
+entre frases, com a última frase de cada trecho repetida no início do seguinte. Só uma
+frase que sozinha passa do limite é quebrada, entre palavras. Com essa regra, 17 dos
+1.633 trechos do dataset (1\%) ainda passam de 128 \textit{tokens}.
+
+\textbf{Extração.} As entidades e relações são extraídas por um LLM, o modelo
+\texttt{openai/gpt-oss-120b}, acessado pela API do Groq. Os trechos de cada artigo são
+enviados em lotes de até três, e o prompt traz o schema do domínio. A resposta do modelo é
+validada contra o domínio, e o que não respeita os tipos ou as direções é descartado. As
+respostas ficam em cache, para que uma nova execução não repita chamadas já feitas.
+
+\textbf{Resolução de entidades.} A resolução atribui o identificador canônico e une
+entidades equivalentes a partir de mapeamentos explícitos. Uma triagem semântica
+conservadora sinaliza relações suspeitas para revisão manual, sem removê-las nem
+invertê-las automaticamente. Até a escrita deste texto, cinco artigos tinham passado pela
+extração: Brian Kernighan, C, C++, Dennis Ritchie e Ken Thompson.
+
+% =====================================================================
+\section{Recuperação}
+\label{sec:recuperacao}
+
+A recuperação recebe uma pergunta e funciona em dois modos. No modo vetorial, usa apenas
+os trechos mais parecidos com a pergunta. No modo GraphRAG, parte desses trechos, chega às
+entidades que eles citam e percorre o grafo a partir delas. Nos dois modos, a resposta é
+gerada por um LLM a partir de um contexto numerado, as citações são conferidas, a
+confiança é calculada e o resultado é validado contra o contrato da resposta. Todas as
+consultas ao Neo4j rodam em transação de leitura.
+
+\textbf{Busca vetorial.} Trechos e perguntas são convertidos em vetores normalizados de 384
+dimensões pelo modelo \texttt{paraphrase-multilingual-MiniLM-L12-v2}
+\cite{reimers2019sbert,reimers2020multilingual}. A busca devolve os cinco trechos mais
+parecidos, com o título e a URL do documento. O índice devolve o score na faixa de 0 a 1,
+calculado como $(1+\cos)/2$, e o cálculo da confiança desfaz essa conversão. Com o grafo
+semente, um conjunto de trechos, entidades e relações anotados à mão, 12 de 12 perguntas
+de teste tiveram um trecho correto entre os três primeiros resultados.
+
+\textbf{Expansão multi-hop.} A partir das entidades citadas nos trechos recuperados, a
+expansão percorre de 1 a 3 saltos, usando só as relações do domínio. Cada caminho é escrito
+como uma frase e comparado com a pergunta pelo mesmo modelo de embeddings. O sistema
+identifica pelo início da pergunta o tipo de entidade pedido (``Quem'' pede uma pessoa,
+``Que prêmio'' pede um prêmio) e ordena os caminhos dando prioridade aos que terminam
+nesse tipo; depois, pela similaridade com a pergunta, pelo score do trecho de origem, pela
+média do PageRank dos nós e pelo tamanho. Os cinco primeiros caminhos entram no contexto,
+junto com os trechos que sustentam suas relações, até o limite de oito fontes.
+
+\textbf{Text-to-Cypher.} No modo GraphRAG, o sistema também pede ao LLM uma consulta Cypher.
+O prompt traz o schema do domínio, os identificadores das entidades encontradas na pergunta
+pelo índice fulltext e três exemplos. A consulta gerada recebe \texttt{LIMIT 25} se não
+tiver limite, passa pelo \texttt{EXPLAIN} do Neo4j, que detecta erros sem executá-la, e
+só então roda, em transação de leitura. Se falhar, o LLM recebe a mensagem de erro e tem
+mais uma tentativa. A proteção contra escrita fica com o banco: em transação de leitura,
+o Neo4j recusa \texttt{CREATE}, \texttt{MERGE}, \texttt{SET} e \texttt{DELETE}. Os caminhos da
+Cypher disputam lugar com os da expansão na mesma ordenação, e uma falha do Text-to-Cypher
+vira um aviso, sem interromper a resposta.
+
+\textbf{Grounding e procedência.} O LLM recebe um contexto em que cada caminho é
+identificado como C1, C2\ldots{} e cada trecho como F1, F2\ldots, e deve responder só com
+base nele, citando cada afirmação. Se o contexto não tiver a resposta, deve escrever
+``Não encontrei essa informação no dataset.'' A chamada usa a API da Abacus RouteLLM com
+temperatura 0. Citações inexistentes não são apagadas: viram avisos na resposta. Cada
+caminho guarda os trechos que sustentam suas relações, e cada fonte traz o trecho, o
+documento e a URL, de modo que uma afirmação pode ser seguida até o artigo de origem.
+
+\textbf{Nível de confiança.} A confiança sai só de sinais observáveis da recuperação, sem
+pedir ao LLM que avalie a própria resposta. No modo GraphRAG, é a média entre o cosseno
+do melhor trecho e a maior similaridade entre a pergunta e um caminho, multiplicada pela
+fração de caminhos com trecho de origem em todas as relações; uma falha do Text-to-Cypher
+desconta 0,1. No modo vetorial, é 0,7 vezes o cosseno, pois sem caminhos não há relações a
+conferir. O valor é zero quando não há contexto ou quando o modelo recusa. A partir de
+0,7 o nível é alto, de 0,4 a 0,7 é médio e, abaixo disso, baixo.
+
+\textbf{Exemplo.} Para a pergunta ``Que prêmio recebeu quem criou a linguagem que
+influenciou o C++?'', o Text-to-Cypher gerou e executou a consulta:
+
+\begin{verbatim}
+MATCH p = (:Tecnologia {id: 'tecnologia:c_mais_mais'})
+          -[:INFLUENCIADA_POR]->(:Tecnologia)<-[:CRIOU]-(:Pessoa)
+          -[:RECEBEU]->(:Premio)
+RETURN p LIMIT 25
+\end{verbatim}
+
+A resposta citou dois caminhos, como o LLM os recebeu no contexto:
+
+\begin{verbatim}
+[C1] C++ -[INFLUENCIADA_POR]-> C <-[CRIOU]- Dennis Ritchie
+     -[RECEBEU]-> Prêmio Turing
+[C4] C++ -[INFLUENCIADA_POR]-> C <-[CRIOU]- Dennis Ritchie
+     -[RECEBEU]-> Medalha Nacional de Tecnologia e Inovação
+\end{verbatim}
+
+O texto gerado afirma que o C++ foi influenciado pelo C, criado por Dennis Ritchie no
+AT\&T Bell Labs, e que Ritchie recebeu o Prêmio Turing em 1983. O trecho que sustenta o
+prêmio não estava entre os cinco da busca vetorial: entrou nas fontes porque sustenta a
+relação \texttt{RECEBEU} do caminho C1. No modo vetorial, nenhum dos cinco trechos do
+contexto falaria de prêmio. A confiança foi 0,59 (nível médio): cosseno do melhor trecho
+0,64, similaridade do caminho 0,54 e cinco de cinco caminhos com trecho de origem.
+
+% =====================================================================
+\section{Interface e explicabilidade}
+\label{sec:interface}
+
+A interface foi construída com Streamlit e consome a API, que expõe a rota
+\texttt{POST /perguntar} com a pergunta e o modo (\texttt{graphrag} ou \texttt{vetorial}) e
+devolve o objeto do contrato da resposta. Além do texto da resposta, a interface mostra:
+
+\begin{itemize}
+\item o \textbf{subgrafo de contexto}, desenhado com a biblioteca streamlit-agraph
+(baseada em vis-network), com nós arrastáveis, cores por tipo de entidade, tamanho
+proporcional ao PageRank, rótulos nas relações, destaque dos caminhos citados e detalhes do
+nó selecionado;
+\item a \textbf{lista de nós consultados};
+\item a \textbf{consulta Cypher} gerada e executada;
+\item o \textbf{nível de confiança}, acompanhado do critério com os números usados no
+cálculo;
+\item as \textbf{fontes}, com o trecho, o documento e a URL, e os \textbf{avisos}, como
+citações inexistentes ou falhas do Text-to-Cypher.
+\end{itemize}
+
+Com esses painéis, o usuário pode conferir de onde veio cada afirmação, em vez de confiar
+apenas no texto gerado.
+
+% =====================================================================
+\section{Avaliação}
+\label{sec:avaliacao}
+
+A avaliação comparou o RAG vetorial e o GraphRAG em 15 perguntas com gabarito: 5 de um
+salto, 7 multi-hop e 3 sem resposta no dataset. Cada pergunta tem a resposta esperada, os
+trechos que a sustentam e, nas multi-hop, o caminho esperado no grafo. Foram medidas: a
+\textit{evidência recuperada}, quando todos os trechos do gabarito estão nas fontes; o
+\textit{caminho completo}, quando todas as relações do gabarito estão no subgrafo; e a
+\textit{recusa correta}, nas perguntas sem resposta. Cada resposta foi ainda classificada
+manualmente como correta, incompleta ou alucinada. A Tabela~\ref{tab:avaliacao} resume os
+resultados.
+
+\begin{table}[ht]
+\centering
+\caption{RAG vetorial e GraphRAG nas 15 perguntas de avaliação.}
+\label{tab:avaliacao}
+\small
+\begin{tabular}{llcccccc}
+\toprule
+\textbf{Modo} & \textbf{Tipo} & \textbf{N} & \textbf{Evid.} & \textbf{Caminho} & \textbf{Correta} & \textbf{Incompl.} & \textbf{Alucin.} \\
+\midrule
+Vetorial & Um salto & 5 & 0\% & 0\% & 0 & 5 & 0 \\
+Vetorial & Multi-hop & 7 & 0\% & 0\% & 1 & 6 & 0 \\
+Vetorial & Sem resposta & 3 & -- & -- & 3 & 0 & 0 \\
+GraphRAG & Um salto & 5 & 0\% & 0\% & 0 & 5 & 0 \\
+GraphRAG & Multi-hop & 7 & 14\% & 29\% & 2 & 5 & 0 \\
+GraphRAG & Sem resposta & 3 & -- & -- & 3 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Nas perguntas multi-hop, o GraphRAG deu duas respostas corretas em sete, e o vetorial,
+uma. A diferença está na pergunta sobre o prêmio de quem criou a linguagem que deu origem
+ao C: o modo vetorial recusou, porque a busca não trouxe o trecho do prêmio, que não cita
+o C nem o B, enquanto o GraphRAG chegou a esse trecho seguindo o grafo, do C ao B, do B a
+Ken Thompson e dele ao Prêmio Turing. O GraphRAG também montou o caminho completo do
+gabarito em duas das sete perguntas multi-hop. Os dois modos recusaram as três perguntas
+sem resposta, e nenhuma resposta foi classificada como alucinada: quando o contexto não
+tinha a resposta, o sistema recusou em vez de inventar.
+
+Os resultados têm um limite claro. Quando as respostas foram geradas, o banco tinha
+apenas quatro documentos, e 20 das 24 respostas a perguntas com resposta são recusas de
+perguntas que dependem de artigos que não estavam carregados. Por isso, nenhum dos modos
+acertou as perguntas de um salto, e os números indicam uma tendência, não uma diferença
+estatisticamente significativa. A análise dos erros também mostrou casos em que a
+expansão parou antes do último salto, por falta de uma relação extraída, e um caso em que
+a consulta Cypher filtrou uma entidade pelo nome em vez do identificador e não encontrou
+caminho.
+
+% =====================================================================
+\section{Conclusão}
+\label{sec:conclusao}
+
+Este trabalho apresentou um sistema GraphRAG/KAG de perguntas e respostas sobre a
+história da computação. O grafo no Neo4j combina uma camada léxica, com os trechos e seus
+embeddings, e uma camada de domínio, com entidades e relações restritas a um schema
+pré-definido, ligadas por indexação mútua. Essa ligação permitiu que a recuperação chegasse
+a trechos que a busca vetorial não encontraria e que cada afirmação da resposta fosse
+seguida até o texto original. Na avaliação, o GraphRAG superou o RAG vetorial nas
+perguntas multi-hop, e nenhum dos modos produziu resposta alucinada.
+
+As principais limitações são o dataset ainda parcial, com 5 dos 32 artigos processados
+pela extração, as duplicatas e lacunas apontadas pelo relatório de validação, a checagem
+de citações, que confere se o identificador existe, mas não se o trecho sustenta a
+afirmação, e a dependência do LLM na geração das consultas Cypher. Como trabalhos futuros,
+ficam o processamento de todo o dataset, uma resolução de entidades mais ampla, o uso de
+embeddings das entidades na recuperação, a verificação de que cada citação sustenta a
+afirmação e uma avaliação com mais perguntas.
+
+% =====================================================================
+\section*{Créditos}
+
+O código está no repositório do projeto, com instruções de reprodução. O sistema usa o
+Neo4j 5.26 Community com os plugins APOC e Graph Data Science; o driver Python do Neo4j;
+a biblioteca sentence-transformers e o modelo
+\texttt{paraphrase-multilingual-MiniLM-L12-v2}, sobre o PyTorch; a API do Groq, com o
+modelo \texttt{openai/gpt-oss-120b}, na extração; a API da Abacus RouteLLM na geração das
+respostas e das consultas Cypher; FastAPI, Uvicorn e Pydantic na API; Streamlit e
+streamlit-agraph na interface; pytest nos testes; e Docker no ambiente do banco.
+
+Os textos do dataset são da Wikipédia em português e estão sob a licença Creative Commons
+Atribuição-CompartilhaIgual 4.0 (CC BY-SA 4.0). Os autores são os editores de cada artigo,
+listados no histórico das páginas. O título, a URL e a revisão exata de cada artigo usado
+estão no manifesto do dataset, no repositório.
+
+\IfFileExists{sbc.bst}{\bibliographystyle{sbc}}{\bibliographystyle{apalike}}
+\bibliography{referencias}
+
+\end{document}

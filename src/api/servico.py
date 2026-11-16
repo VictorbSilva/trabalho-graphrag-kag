@@ -29,6 +29,10 @@ def carregar_responder(fonte: str = config.FONTE, alvo: str = config.RESPONDER) 
     """Escolhe a função que responde às perguntas conforme a configuração."""
     if fonte == "exemplo":
         return responder_exemplo
+    if fonte == "gravado":
+        from src.api.gravado import responder_gravado
+
+        return responder_gravado
     if fonte == "recuperacao":
         if ":" not in alvo:
             raise ValueError(
@@ -36,7 +40,7 @@ def carregar_responder(fonte: str = config.FONTE, alvo: str = config.RESPONDER) 
             )
         modulo, funcao = alvo.split(":", 1)
         return getattr(importlib.import_module(modulo), funcao)
-    raise ValueError("API_FONTE inválida. Use 'exemplo' ou 'recuperacao'.")
+    raise ValueError("API_FONTE inválida. Use 'exemplo', 'gravado' ou 'recuperacao'.")
 
 
 def verificar_neo4j() -> None:

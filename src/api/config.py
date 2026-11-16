@@ -14,6 +14,7 @@ ARQUIVO_EXEMPLO = RAIZ / "data" / "exemplo_resposta.json"
 # De onde vem a resposta:
 #   exemplo      devolve o JSON de exemplo (PE1, não precisa de banco nem de LLM)
 #   recuperacao  chama a função indicada em API_RESPONDER (PE2)
+#   gravado      respostas reais gravadas, sem banco nem LLM (plano B da demo, PE7)
 FONTE = os.getenv("API_FONTE", "exemplo").strip().lower()
 
 # Função de recuperação no formato "modulo:funcao", usada quando FONTE=recuperacao.

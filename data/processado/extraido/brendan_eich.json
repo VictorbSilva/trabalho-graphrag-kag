@@ -1,0 +1,515 @@
+{
+  "documento": {
+    "id": "brendan_eich",
+    "title": "Brendan Eich",
+    "source": "https://pt.wikipedia.org/wiki/Brendan_Eich"
+  },
+  "chunks": [
+    {
+      "id": "brendan_eich#0",
+      "index": 0,
+      "text": "Brendan Eich ([ˈaɪk]; nascido em 4 de julho de 1961) é um tecnólogo e programador de computadores americano. Ele é o criador da linguagem de programação JavaScript e cofundador do projeto Mozilla, da Mozilla Foundation e da Mozilla Corporation. Eich serviu brevemente como CEO da Mozilla Corporation antes de renunciar devido a controvérsias políticas."
+    },
+    {
+      "id": "brendan_eich#1",
+      "index": 1,
+      "text": "Eich serviu brevemente como CEO da Mozilla Corporation antes de renunciar devido a controvérsias políticas. Atualmente, é o CEO da Brave Software, empresa que desenvolve o navegador focado em privacidade Brave e a criptomoeda Basic Attention Token (BAT)."
+    },
+    {
+      "id": "brendan_eich#2",
+      "index": 2,
+      "text": "Atualmente, é o CEO da Brave Software, empresa que desenvolve o navegador focado em privacidade Brave e a criptomoeda Basic Attention Token (BAT). Formação e início de carreira\nEich obteve seu bacharelado em matemática e ciência da computação pela Universidade de Santa Clara e, em 1986, concluiu seu mestrado na Universidade de Illinois em Urbana-Champaign."
+    },
+    {
+      "id": "brendan_eich#3",
+      "index": 3,
+      "text": "Iniciou sua carreira profissional na Silicon Graphics, onde trabalhou por sete anos em código de sistemas operacionais e redes. Posteriormente, atuou na MicroUnity Systems Engineering, onde escreveu microkernels e trabalhou no porte do compilador GCC para a arquitetura MIPS. Netscape e a criação do JavaScript\nEm abril de 1995, Eich ingressou na Netscape Communications Corporation."
+    },
+    {
+      "id": "brendan_eich#4",
+      "index": 4,
+      "text": "Netscape e a criação do JavaScript\nEm abril de 1995, Eich ingressou na Netscape Communications Corporation. Inicialmente contratado para implementar a linguagem Scheme no navegador Netscape Navigator, seus superiores insistiram que a sintaxe da nova linguagem fosse semelhante à do Java. Eich desenvolveu o protótipo funcional em apenas dez dias em maio de 1995, sob o nome interno de Mocha."
+    },
+    {
+      "id": "brendan_eich#5",
+      "index": 5,
+      "text": "Eich desenvolveu o protótipo funcional em apenas dez dias em maio de 1995, sob o nome interno de Mocha. Mais tarde, o nome foi alterado para LiveScript e, finalmente, para JavaScript em uma estratégia conjunta de marketing com a Sun Microsystems. A linguagem rapidamente se tornou o padrão de fato para a programação do lado do cliente na web. Projeto Mozilla e saída em 2014\nEich ajudou a fundar o mozilla.org em 1998, servindo como arquiteto-chefe."
+    },
+    {
+      "id": "brendan_eich#6",
+      "index": 6,
+      "text": "Projeto Mozilla e saída em 2014\nEich ajudou a fundar o mozilla.org em 1998, servindo como arquiteto-chefe. Após a compra da Netscape pela AOL, ele desempenhou um papel crucial na criação da Mozilla Foundation em 2003. Em 24 de março de 2014, Eich foi promovido a CEO da Mozilla Corporation."
+    },
+    {
+      "id": "brendan_eich#7",
+      "index": 7,
+      "text": "Em 24 de março de 2014, Eich foi promovido a CEO da Mozilla Corporation. No entanto, sua nomeação gerou protestos devido a uma doação de US$ 1.000 feita por ele em 2008 para a campanha da Proposição 8 da Califórnia, que buscava proibir o casamento entre pessoas do mesmo sexo no estado. Após pressão interna de funcionários e boicotes externos, Eich renunciou ao cargo em 3 de abril de 2014."
+    },
+    {
+      "id": "brendan_eich#8",
+      "index": 8,
+      "text": "Após pressão interna de funcionários e boicotes externos, Eich renunciou ao cargo em 3 de abril de 2014. Brave Software e BAT\nEm 2015, Eich fundou a Brave Software junto com Brian Bondy. A empresa desenvolveu o navegador Brave, que bloqueia anúncios e rastreadores nativamente para aumentar a privacidade e a velocidade de navegação."
+    },
+    {
+      "id": "brendan_eich#9",
+      "index": 9,
+      "text": "A empresa desenvolveu o navegador Brave, que bloqueia anúncios e rastreadores nativamente para aumentar a privacidade e a velocidade de navegação. Para reformular o modelo de publicidade digital, Eich introduziu o Basic Attention Token (BAT), um sistema baseado na Blockchain do Ethereum que recompensa usuários por sua atenção e permite que criadores de conteúdo recebam doações diretamente."
+    },
+    {
+      "id": "brendan_eich#10",
+      "index": 10,
+      "text": "Em sua Oferta Inicial de Moedas (ICO) em 2017, o projeto arrecadou US$ 35 milhões em menos de 30 segundos."
+    }
+  ],
+  "entidades": [
+    {
+      "id": "organizacao:aol",
+      "name": "AOL",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa que comprou a Netscape.",
+      "chunk_ids": [
+        "brendan_eich#6"
+      ]
+    },
+    {
+      "id": "organizacao:brave_software",
+      "name": "Brave Software",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa que desenvolve o navegador Brave e a criptomoeda Basic Attention Token.",
+      "chunk_ids": [
+        "brendan_eich#1",
+        "brendan_eich#2",
+        "brendan_eich#8",
+        "brendan_eich#9"
+      ]
+    },
+    {
+      "id": "organizacao:microunity_systems_engineering",
+      "name": "MicroUnity Systems Engineering",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa onde Eich escreveu microkernels e trabalhou no compilador GCC.",
+      "chunk_ids": [
+        "brendan_eich#3"
+      ]
+    },
+    {
+      "id": "organizacao:mozilla",
+      "name": "Mozilla",
+      "type": "Organizacao",
+      "aliases": [
+        "projeto Mozilla"
+      ],
+      "description": "Projeto de tecnologia cofundado por Brendan Eich.",
+      "chunk_ids": [
+        "brendan_eich#0"
+      ]
+    },
+    {
+      "id": "organizacao:mozilla_corporation",
+      "name": "Mozilla Corporation",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa onde Brendan Eich atuou como CEO.",
+      "chunk_ids": [
+        "brendan_eich#0",
+        "brendan_eich#6",
+        "brendan_eich#7"
+      ]
+    },
+    {
+      "id": "organizacao:mozilla_foundation",
+      "name": "Mozilla Foundation",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Fundação cofundada por Brendan Eich.",
+      "chunk_ids": [
+        "brendan_eich#0",
+        "brendan_eich#6"
+      ]
+    },
+    {
+      "id": "organizacao:mozilla_org",
+      "name": "mozilla.org",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Organização ajudada a fundar por Eich.",
+      "chunk_ids": [
+        "brendan_eich#5",
+        "brendan_eich#6"
+      ]
+    },
+    {
+      "id": "organizacao:netscape",
+      "name": "Netscape",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa comprada pela AOL.",
+      "chunk_ids": [
+        "brendan_eich#6"
+      ]
+    },
+    {
+      "id": "organizacao:netscape_communications_corporation",
+      "name": "Netscape Communications Corporation",
+      "type": "Organizacao",
+      "aliases": [
+        "Netscape"
+      ],
+      "description": "Empresa onde Eich ingressou em abril de 1995.",
+      "chunk_ids": [
+        "brendan_eich#3",
+        "brendan_eich#4"
+      ]
+    },
+    {
+      "id": "organizacao:silicon_graphics",
+      "name": "Silicon Graphics",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa onde Eich iniciou sua carreira profissional.",
+      "chunk_ids": [
+        "brendan_eich#3"
+      ]
+    },
+    {
+      "id": "organizacao:sun_microsystems",
+      "name": "Sun Microsystems",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa parceira em estratégia de marketing.",
+      "chunk_ids": [
+        "brendan_eich#5"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_de_illinois_em_urbana_champaign",
+      "name": "Universidade de Illinois em Urbana-Champaign",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Universidade onde Eich concluiu seu mestrado.",
+      "chunk_ids": [
+        "brendan_eich#2"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_de_santa_clara",
+      "name": "Universidade de Santa Clara",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Universidade onde Eich obteve seu bacharelado.",
+      "chunk_ids": [
+        "brendan_eich#2"
+      ]
+    },
+    {
+      "id": "pessoa:brendan_eich",
+      "name": "Brendan Eich",
+      "type": "Pessoa",
+      "aliases": [
+        "Eich"
+      ],
+      "description": "Tecnólogo e programador americano, criador do JavaScript e cofundador do projeto Mozilla.",
+      "chunk_ids": [
+        "brendan_eich#0",
+        "brendan_eich#1",
+        "brendan_eich#2",
+        "brendan_eich#3",
+        "brendan_eich#4",
+        "brendan_eich#5",
+        "brendan_eich#6",
+        "brendan_eich#7",
+        "brendan_eich#8",
+        "brendan_eich#9"
+      ]
+    },
+    {
+      "id": "pessoa:brian_bondy",
+      "name": "Brian Bondy",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Co-fundador da Brave Software.",
+      "chunk_ids": [
+        "brendan_eich#8"
+      ]
+    },
+    {
+      "id": "tecnologia:basic_attention_token",
+      "name": "Basic Attention Token",
+      "type": "Tecnologia",
+      "aliases": [
+        "BAT"
+      ],
+      "description": "Criptomoeda desenvolvida pela Brave Software.",
+      "chunk_ids": [
+        "brendan_eich#1",
+        "brendan_eich#2",
+        "brendan_eich#8",
+        "brendan_eich#9"
+      ]
+    },
+    {
+      "id": "tecnologia:brave",
+      "name": "Brave",
+      "type": "Tecnologia",
+      "aliases": [
+        "navegador Brave"
+      ],
+      "description": "Navegador focado em privacidade.",
+      "chunk_ids": [
+        "brendan_eich#1",
+        "brendan_eich#2",
+        "brendan_eich#8",
+        "brendan_eich#9"
+      ]
+    },
+    {
+      "id": "tecnologia:gcc",
+      "name": "GCC",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Compilador.",
+      "chunk_ids": [
+        "brendan_eich#3"
+      ]
+    },
+    {
+      "id": "tecnologia:java",
+      "name": "Java",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem com sintaxe semelhante à nova linguagem solicitada.",
+      "chunk_ids": [
+        "brendan_eich#4"
+      ]
+    },
+    {
+      "id": "tecnologia:javascript",
+      "name": "JavaScript",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação.",
+      "chunk_ids": [
+        "brendan_eich#0",
+        "brendan_eich#5"
+      ]
+    },
+    {
+      "id": "tecnologia:livescript",
+      "name": "LiveScript",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Nome alterado do protótipo.",
+      "chunk_ids": [
+        "brendan_eich#5"
+      ]
+    },
+    {
+      "id": "tecnologia:mips",
+      "name": "MIPS",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Arquitetura de hardware.",
+      "chunk_ids": [
+        "brendan_eich#3"
+      ]
+    },
+    {
+      "id": "tecnologia:mocha",
+      "name": "Mocha",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Nome interno do protótipo funcional desenvolvido por Eich.",
+      "chunk_ids": [
+        "brendan_eich#4",
+        "brendan_eich#5"
+      ]
+    },
+    {
+      "id": "tecnologia:netscape_navigator",
+      "name": "Netscape Navigator",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Navegador da web.",
+      "chunk_ids": [
+        "brendan_eich#4"
+      ]
+    },
+    {
+      "id": "tecnologia:scheme",
+      "name": "Scheme",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem a ser implementada no navegador Netscape Navigator.",
+      "chunk_ids": [
+        "brendan_eich#4"
+      ]
+    }
+  ],
+  "relacoes": [
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:brave_software",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#8"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:mozilla",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#0"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:mozilla_corporation",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#0"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:mozilla_foundation",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#0"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:mozilla_foundation",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#6"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:mozilla_org",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#5"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:mozilla_org",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#6"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "tecnologia:basic_attention_token",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#9"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "tecnologia:javascript",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#0"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "tecnologia:javascript",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#5"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "tecnologia:mocha",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#4"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:brave_software",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brendan_eich#1"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:brave_software",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brendan_eich#2"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:microunity_systems_engineering",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brendan_eich#3"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:mozilla_corporation",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brendan_eich#0"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:mozilla_corporation",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brendan_eich#6"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:mozilla_org",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brendan_eich#6"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:netscape_communications_corporation",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brendan_eich#3"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:netscape_communications_corporation",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brendan_eich#4"
+    },
+    {
+      "origem": "pessoa:brendan_eich",
+      "destino": "organizacao:silicon_graphics",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "brendan_eich#3"
+    },
+    {
+      "origem": "pessoa:brian_bondy",
+      "destino": "organizacao:brave_software",
+      "tipo": "CRIOU",
+      "chunk_id": "brendan_eich#8"
+    },
+    {
+      "origem": "tecnologia:basic_attention_token",
+      "destino": "organizacao:brave_software",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "brendan_eich#1"
+    },
+    {
+      "origem": "tecnologia:basic_attention_token",
+      "destino": "organizacao:brave_software",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "brendan_eich#2"
+    },
+    {
+      "origem": "tecnologia:brave",
+      "destino": "organizacao:brave_software",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "brendan_eich#1"
+    },
+    {
+      "origem": "tecnologia:brave",
+      "destino": "organizacao:brave_software",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "brendan_eich#2"
+    },
+    {
+      "origem": "tecnologia:brave",
+      "destino": "organizacao:brave_software",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "brendan_eich#8"
+    },
+    {
+      "origem": "tecnologia:mocha",
+      "destino": "tecnologia:java",
+      "tipo": "INFLUENCIADA_POR",
+      "chunk_id": "brendan_eich#4"
+    }
+  ]
+}

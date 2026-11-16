@@ -46,7 +46,7 @@ Para conferir, `SHOW VECTOR INDEXES` no Browser deve mostrar 384 nos dois índic
 Com o ambiente virtual ativo e o banco no ar:
 
 ```bash
-python -m src.banco.ingestor                  # artigos processados: data/processado/extraido
+python -m src.banco.ingestor                  # artigos curados: data/processado/curado
 python -m src.banco.ingestor data/semente     # grafo semente anotado à mão
 ```
 

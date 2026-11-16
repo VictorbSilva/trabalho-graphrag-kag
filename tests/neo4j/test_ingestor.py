@@ -51,7 +51,8 @@ def pasta_com_a_semente(tmp_path: Path) -> Path:
 @pytest.mark.parametrize(
     "caminho",
     sorted((RAIZ / "data" / "semente").glob("*.json"))
-    + sorted((RAIZ / "data" / "processado" / "extraido").glob("*.json")),
+    + sorted((RAIZ / "data" / "processado" / "extraido").glob("*.json"))
+    + sorted((RAIZ / "data" / "processado" / "curado").glob("*.json")),
     ids=lambda p: f"{p.parent.name}/{p.name}",
 )
 def test_semente_e_artigos_processados_sao_validos(caminho):

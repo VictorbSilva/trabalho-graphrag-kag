@@ -35,7 +35,7 @@ requirements-dev.txt   dependências do projeto (inclui requirements-api.txt)
 requirements-interface.txt  dependências da interface
 data/
   bruto/               texto puro dos artigos da Wikipédia e manifesto.json (título, URL e revisão)
-  processado/          chunks/ e extraido/ (um JSON por artigo), saída do pipeline Text-to-Graph
+  processado/          chunks/, extraido/ e curado/ (um JSON por artigo), saída do pipeline Text-to-Graph
   semente/             grafo semente anotado à mão (4 artigos)
   avaliacao/           as 15 perguntas com gabarito, a classificação manual e resultados/respostas.json
   exemplo_resposta.json  JSON de exemplo do contrato da resposta
@@ -143,7 +143,7 @@ Escolha **uma** das duas fontes:
 | Fonte | Comando | Para quê | Contagem no fim (banco vazio antes) |
 |---|---|---|---|
 | Semente: 4 artigos anotados à mão | `python -m src.recuperacao.carregar_semente` | avaliação, demo e a pergunta de teste do passo 8 | 4 documentos, 12 trechos, 13 entidades, 19 relações |
-| Processados: 31 artigos do pipeline | `python -m src.banco.ingestor` | o grafo completo, de `data/processado/extraido` | as que o comando imprimir no fim (o relatório em [docs/relatorio-grafo.md](docs/relatorio-grafo.md) é da carga com 17 artigos) |
+| Processados: 31 artigos do pipeline | `python -m src.banco.ingestor` | o grafo completo, de `data/processado/curado` | as que o comando imprimir no fim (o relatório em [docs/relatorio-grafo.md](docs/relatorio-grafo.md) é da carga com 17 artigos) |
 
 Na primeira execução o comando baixa o modelo de embeddings (cerca de 470 MB). No fim, os dois comandos imprimem as contagens do banco (a semente, em JSON: `{"documentos": 4, "trechos": 12, ...}`).
 
@@ -261,11 +261,12 @@ Não é preciso para rodar o projeto. Os scripts rodam na raiz do repositório, 
 | 3 | `python src/pipeline/extracao.py --todos --max-chunks 0` | Extrai entidades e relações com o Groq e grava `data/processado/extraido/`. Precisa de `GROQ_API_KEY` no `.env`. Sem as flags, processa só os artigos das perguntas de avaliação e 20 trechos por artigo. |
 | 4 | `python src/pipeline/conferir_extracao.py` | Só mostra a cobertura: quantas relações esperadas pelas perguntas de avaliação a extração encontrou. |
 | 5 | `python src/pipeline/resolucao_entidades.py`, `python src/pipeline/validacao_semantica.py`, `python src/pipeline/integrar_pa4.py`, `python src/pipeline/exportar_pa4.py` | Independentes entre si. Gravam só em `.cache/`, para auditoria e curadoria. |
+| 6 | `python src/pipeline/exportar_pa4.py --incluir-pendentes --saida data/processado/curado` | Grava `data/processado/curado/`, a entrada do ingestor: relações aceitas e pendentes, sem as rejeitadas, com ids canônicos. Rode antes do `python -m src.banco.ingestor`. |
 
 Avisos:
 
 - O `data/processado/` versionado é a referência do projeto. Refazer a extração gera arquivos diferentes, porque a saída do LLM varia de uma execução para outra, e os passos 2 e 3 gravam por cima dos arquivos de `data/processado/`.
-- Hoje o ingestor carrega `data/processado/extraido`, sem a curadoria do passo 5.
+- O ingestor carrega `data/processado/curado`, a saída da curadoria: aceitas e pendentes, sem as rejeitadas.
 
 ## Problemas comuns
 

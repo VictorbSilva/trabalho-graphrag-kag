@@ -212,7 +212,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m src.banco.relatorio",
                                      description="Gera o relatório de validação do grafo carregado no Neo4j.")
     parser.add_argument("--saida", default=str(SAIDA_PADRAO), help="arquivo Markdown de saída")
-    parser.add_argument("--origem", default="data/processado/extraido",
+    parser.add_argument("--origem", default="data/processado/curado",
                         help="pasta de onde os dados foram ingeridos (só aparece no texto)")
     args = parser.parse_args(argv)
 

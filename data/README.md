@@ -15,6 +15,7 @@ Por causa da licença, os arquivos derivados (chunks e JSON extraídos) mantêm 
 | `lista_artigos.txt` | Títulos dos artigos escolhidos | à mão |
 | `bruto/` | Texto puro de cada artigo, sem marcação wiki e sem as seções de referências, e `manifesto.json` | `python src/pipeline/baixar_artigos.py` |
 | `processado/` | Um JSON por artigo no formato do contrato C1 (sem embeddings) | pipeline de extração |
+| `processado/curado/` | O que vai para o banco: relações aceitas e pendentes, sem as rejeitadas, com ids canônicos | `python src/pipeline/exportar_pa4.py --incluir-pendentes --saida data/processado/curado` |
 | `semente/` | Grafo semente anotado à mão | Nicolas |
 
 ## Como refazer o download

@@ -20,6 +20,7 @@ from src.pipeline.baixar_artigos import gerar_slug
 
 RAIZ = Path(__file__).resolve().parents[2]
 SAIDA_PADRAO = RAIZ / "docs" / "relatorio-grafo.md"
+LIMITE_EXEMPLOS = 12  # mantém o relatório curto: listas longas viram contagem + exemplos
 
 CONSULTAS = {
     "documentos": """
@@ -153,20 +154,38 @@ def gerar_markdown(dados: dict, origem: str, hoje: date | None = None) -> str:
     l += [f"  - {r['origem']} `{r['tipo']}` {r['destino']}" for r in sem_fonte]
     l.append(f"- **Trechos que não mencionam nenhuma entidade:** {dados['trechos_sem_entidade']} de {dados['trechos']}.")
     soltas = dados["sem_relacao"]
-    l.append(f"- **Entidades sem nenhuma relação de domínio:** {len(soltas)}"
-             + (". Aparecem nos trechos, mas não se ligam a nenhuma outra entidade:" if soltas else "."))
-    l += [f"  - {e['nome']} (`{e['tipo']}`)" for e in soltas]
+    l.append(f"- **Entidades sem nenhuma relação de domínio:** {len(soltas)} de {dados['entidades']}"
+             + (". Aparecem nos trechos, mas não se ligam a nenhuma outra entidade." if soltas else "."))
+    if soltas:
+        por_tipo: dict[str, list[str]] = {}
+        for e in soltas:
+            por_tipo.setdefault(e["tipo"], []).append(e["nome"])
+        for tipo, nomes in sorted(por_tipo.items(), key=lambda t: -len(t[1])):
+            exemplos = ", ".join(nomes[:LIMITE_EXEMPLOS]) + (", ..." if len(nomes) > LIMITE_EXEMPLOS else "")
+            l.append(f"  - `{tipo}`: {len(nomes)} (ex.: {exemplos})")
+
     dup = dados["possiveis_duplicatas"]
-    l.append(f"- **Possíveis duplicatas** (mesmo tipo, nomes parecidos): {len(dup)}" + (":" if dup else "."))
-    l += [f"  - {p['a']} / {p['b']} (`{p['tipo']}`): {p['motivo']}" for p in dup]
+    provaveis = [p for p in dup if p["motivo"] != "um nome contém o outro"]
+    parecidas = [p for p in dup if p["motivo"] == "um nome contém o outro"]
+    l.append(f"- **Prováveis duplicatas** (mesmo nome normalizado, ou o nome de uma é apelido da outra): "
+             f"{len(provaveis)}" + (":" if provaveis else "."))
+    l += [f"  - {p['a']} / {p['b']} (`{p['tipo']}`)" for p in provaveis]
+    l.append(f"- **Nomes contidos um no outro:** {len(parecidas)} pares do mesmo tipo. Muitos são versões ou "
+             "variantes legítimas (ex.: Java e Java SE), mas alguns podem ser a mesma entidade"
+             + (":" if parecidas else "."))
+    l += [f"  - {p['a']} / {p['b']} (`{p['tipo']}`)" for p in parecidas[:LIMITE_EXEMPLOS]]
+    if len(parecidas) > LIMITE_EXEMPLOS:
+        l.append(f"  - ... e mais {len(parecidas) - LIMITE_EXEMPLOS} pares")
 
     l += ["", "## Entidades mais importantes (PageRank)", ""]
     if gds:
         l += ["| # | Entidade | Rótulo | PageRank |", "|---|---|---|---|"]
         l += [f"| {i} | {e['nome']} | `{e['tipo']}` | {e['pagerank']:.3f} |"
               for i, e in enumerate(dados["top_pagerank"], 1)]
+        com_mais_de_uma = sum(1 for c in dados["comunidades"] if c["tamanho"] > 1)
         l += ["", "## Comunidades (Louvain)", "",
-              f"{len(dados['comunidades'])} comunidades. As maiores, com as entidades de maior PageRank de cada uma:", "",
+              f"{len(dados['comunidades'])} comunidades, {com_mais_de_uma} delas com mais de uma entidade "
+              "(as entidades sem relação ficam sozinhas). As maiores, com as entidades de maior PageRank de cada uma:", "",
               "| Comunidade | Entidades | Principais |", "|---|---|---|"]
         l += [f"| {c['comunidade']} | {c['tamanho']} | {', '.join(c['principais'])} |"
               for c in dados["comunidades"][:8]]

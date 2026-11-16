@@ -56,8 +56,8 @@ backend o endereço e a confirmação de que o endpoint está funcionando.
 - A resposta é demonstrativa quando `FONTE_DADOS=json`.
 - Não há consulta real ao Neo4j nesta etapa.
 - A visualização interativa do subgrafo será adicionada na tarefa G3.
-- O prompt oficial do Mentor está versionado em `src/mentor/system_prompt.txt`;
-  a conexão com um LLM depende de configuração própria e não é simulada aqui.
+- O agente Mentor não faz parte desta interface: ele roda no terminal com o prompt
+  oficial de `src/mentor/system_prompt.txt`. Ver [docs/mentor.md](docs/mentor.md).
 
 
 ## G3 — Visualização interativa

@@ -33,9 +33,11 @@ from pathlib import Path
 try:  # como pacote (testes) ou como script
     from .baixar_artigos import gerar_slug
     from .groq_cliente import ErroGroq, carregar_env, conversar
+    from .gemini_cliente import ErroGemini, conversar_gemini
 except ImportError:
     from baixar_artigos import gerar_slug
     from groq_cliente import ErroGroq, carregar_env, conversar
+    from gemini_cliente import ErroGemini, conversar_gemini
 
 RAIZ = Path(__file__).resolve().parents[2]
 DOMINIO = RAIZ / "neo4j" / "dominio.json"
@@ -45,10 +47,11 @@ CHUNKS = RAIZ / "data" / "processado" / "chunks"
 SAIDA = RAIZ / "data" / "processado" / "extraido"
 CACHE = RAIZ / ".cache" / "extracao"
 
-VERSAO_PROMPT = "3"  # mude ao alterar o prompt: invalida o cache
+VERSAO_PROMPT = "1"  # mude ao alterar o prompt: invalida o cache
 MODELO_PADRAO = "openai/gpt-oss-120b"
-TRECHOS_POR_LOTE = 5
-LIMITE_CARACTERES_LOTE = 2400
+MODELO_GEMINI_PADRAO = "gemini-2.5-flash"
+TRECHOS_POR_LOTE = 3
+LIMITE_CARACTERES_LOTE = 1400
 MAX_TOKENS_RESPOSTA = 2000
 REQUISICOES_POR_MINUTO = 28  # o limite medido é 30
 TOKENS_POR_MINUTO = 7000     # o limite medido é 8000
@@ -84,33 +87,6 @@ Regras:
 5. Toda entidade usada em uma relação precisa estar em "entidades".
 6. "trecho" é o número do trecho que sustenta o fato, o N de [TN].
 7. Sem nada a extrair, devolva listas vazias.
-8. CRIOU exige autoria ou criação explicitamente
-   sustentada pelo trecho. Nomear, adaptar,
-   modificar ou contribuir não significa criar.
-9. Quando um trecho mencionar vários criadores
-   e várias tecnologias, não atribua automaticamente
-   todas as criações a todas as pessoas.
-10. Não associe uma relação a um trecho que
-    não sustente a afirmação específica.
-    Na dúvida, omita a relação.
-11. Diferencie criar uma tecnologia de colaborar
-    em seu desenvolvimento e de trabalhar na
-    organização onde ela foi desenvolvida.
-12. INFLUENCIADA_POR aponta sempre da tecnologia
-    influenciada para aquela que exerceu influência.
-    Exemplo: "C influenciou C++" significa
-    C++ -INFLUENCIADA_POR-> C, nunca o contrário.
-13. Se o texto afirmar que duas pessoas receberam
-    o mesmo prêmio, registre uma relação RECEBEU
-    para cada pessoa. Não omita fatos explicitamente
-    afirmados e compatíveis com o domínio.
-14. Quando houver uma afirmação genérica de criação
-    coletiva e outra específica atribuindo a autoria,
-    priorize a atribuição específica. Não distribua
-    automaticamente todas as criações a todos os autores.
-15. Extraia todas as relações claramente sustentadas
-    pelo texto, sem sacrificar a cobertura por excesso
-    de cautela.
 
 Formato:
 {{"entidades": [{{"nome": "...", "tipo": "Pessoa", "aliases": ["..."], "descricao": "uma frase curta", "trechos": [0]}}],
@@ -327,46 +303,31 @@ def opcoes_do_modelo(modelo: str, esforco: str | None) -> dict:
 
 
 def chamar_modelo(modelo: str, mensagens: list[dict], opcoes: dict, ritmo: Ritmo) -> tuple[dict, int]:
-    """Chama o Groq com retentativas limitadas e diagnóstico de HTTP 429."""
+    """Uma chamada com repetição: 429 espera o retry-after, JSON inválido tenta de novo."""
     estimativa = sum(len(m["content"]) for m in mensagens) // 3 + MAX_TOKENS_RESPOSTA // 2
     opcoes = dict(opcoes)
     esperas_429 = tentativas = 0
-    MAX_RETENTATIVAS_429 = 3
-    MAX_ESPERA_429 = 90  # segundos, para não ficar preso em esperas diárias
-
     while True:
         tentativas += 1
         ritmo.esperar(estimativa)
         try:
             resposta, _ = conversar(modelo, mensagens, **opcoes)
         except ErroGroq as erro:
-            if erro.status == 429:
+            if erro.status == 429 and esperas_429 < 8:
                 esperas_429 += 1
-                cabecalhos = {str(k).lower(): v for k, v in (erro.cabecalhos or {}).items()}
                 try:
-                    espera = float(cabecalhos.get("retry-after") or 5)
-                except (TypeError, ValueError):
+                    espera = float(erro.cabecalhos.get("retry-after") or 5)
+                except ValueError:
                     espera = 5.0
-                print(f"\n[Groq 429] Limite atingido. Tentativa {esperas_429}/{MAX_RETENTATIVAS_429}. "
-                      f"Espera solicitada: {espera:.1f}s.", flush=True)
-                print(f"[Groq] Detalhes: {erro}", flush=True)
-                if esperas_429 >= MAX_RETENTATIVAS_429:
-                    raise RuntimeError("Groq retornou HTTP 429 repetidamente. Verifique a cota da conta.") from erro
-                if not (0 <= espera <= MAX_ESPERA_429):
-                    raise RuntimeError(f"Groq solicitou espera de {espera:.1f}s. "
-                                       "Execução interrompida; cache das chamadas concluídas preservado.") from erro
-                print(f"[Groq] Nova tentativa em {espera + 0.5:.1f}s.", flush=True)
                 time.sleep(espera + 0.5)
                 continue
-            if erro.status == 400:
-                retirou = [c for c in ("reasoning_effort", "response_format")
-                           if c in opcoes and c in str(erro).lower()]
+            if erro.status == 400:  # o modelo pode não aceitar um dos parâmetros opcionais
+                retirou = [c for c in ("reasoning_effort", "response_format") if c in opcoes and c in str(erro).lower()]
                 for chave in retirou:
                     opcoes.pop(chave)
                 if retirou:
                     continue
             if erro.status >= 500 and tentativas < 4:
-                print(f"\n[Groq] Erro HTTP {erro.status}. Nova tentativa em 5s.", flush=True)
                 time.sleep(5)
                 continue
             raise
@@ -378,6 +339,40 @@ def chamar_modelo(modelo: str, mensagens: list[dict], opcoes: dict, ritmo: Ritmo
         except ValueError:
             if tentativas >= 4:
                 raise RuntimeError("o modelo não devolveu JSON válido depois de 4 tentativas")
+
+
+def chamar_gemini(modelo: str, mensagens: list[dict], ritmo: Ritmo) -> tuple[dict, int]:
+    """Extrai JSON pelo Gemini REST sem alterar os formatos do pipeline."""
+    estimativa = sum(len(m["content"]) for m in mensagens) // 3 + MAX_TOKENS_RESPOSTA // 2
+    tentativas = 0
+    while True:
+        tentativas += 1
+        ritmo.esperar(estimativa)
+        try:
+            dados, usados = conversar_gemini(modelo, mensagens, max_tokens=3000)
+            resposta = extrair_json(dados)
+            ritmo.registrar(usados or estimativa)
+            return resposta, usados or estimativa
+        except ErroGemini as erro:
+            if erro.status == 0 and tentativas < 2:
+                print("\n[Gemini] Timeout/falha de rede. Tentando mais uma vez em 5s.", flush=True)
+                time.sleep(5)
+                continue
+            if erro.status == 429:
+                # Limite diário não deve deixar a execução presa em repetidas esperas.
+                espera = erro.espera if erro.espera is not None else 30.0
+                print(f"\n[Gemini 429] Cota atingida: {erro}. Espera sugerida: {espera:.1f}s.", flush=True)
+                if tentativas >= 3 or espera > 60:
+                    raise RuntimeError("Limite do Gemini atingido; cache preservado. Verifique cotas no AI Studio.") from erro
+                time.sleep(max(1.0, espera) + 0.5)
+                continue
+            if erro.status >= 500 and tentativas < 4:
+                time.sleep(5 * tentativas)
+                continue
+            raise RuntimeError(str(erro)) from erro
+        except ValueError as erro:
+            if tentativas >= 3:
+                raise RuntimeError("Gemini não devolveu JSON válido após 3 tentativas") from erro
 
 
 def chave_do_cache(modelo: str, titulo: str, lote: list[dict], esforco: str | None) -> str:
@@ -397,17 +392,21 @@ def processar_artigo(artigo: str, args, dominio: dict, prompt: str, ritmo: Ritmo
     descartes: Counter = Counter()
 
     for lote in montar_lotes(selecionados, args.lote):
-        arquivo = CACHE / f"{chave_do_cache(args.modelo, titulo, lote, args.esforco)}.json"
+        chave_modelo = args.modelo if getattr(args, "provedor", "groq") == "groq" else f"gemini:{args.modelo}"
+        arquivo = CACHE / f"{chave_do_cache(chave_modelo, titulo, lote, args.esforco)}.json"
         if arquivo.exists():
             resposta = json.loads(arquivo.read_text(encoding="utf-8"))
             estat["chamadas_do_cache"] += 1
         else:
             mensagens = [{"role": "system", "content": prompt},
                          {"role": "user", "content": mensagem_do_lote(titulo, lote)}]
-            resposta, usados = chamar_modelo(args.modelo, mensagens, opcoes_do_modelo(args.modelo, args.esforco), ritmo)
+            if getattr(args, "provedor", "groq") == "gemini":
+                resposta, usados = chamar_gemini(args.modelo, mensagens, ritmo)
+            else:
+                resposta, usados = chamar_modelo(args.modelo, mensagens, opcoes_do_modelo(args.modelo, args.esforco), ritmo)
             arquivo.parent.mkdir(parents=True, exist_ok=True)
             arquivo.write_text(json.dumps(resposta, ensure_ascii=False), encoding="utf-8")
-            estat["chamadas_ao_groq"] += 1
+            estat[f"chamadas_ao_{getattr(args, 'provedor', 'groq')}"] += 1
             estat["tokens"] += usados
         novas, rels = processar_resposta(resposta, lote, dominio, descartes)
         unir(entidades, novas)
@@ -442,21 +441,32 @@ def escolher_artigos(args) -> list[str]:
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description="Extrai entidades e relações dos trechos com o Groq.")
+    parser = argparse.ArgumentParser(description="Extrai entidades e relações dos trechos com Groq ou Gemini.")
+    parser.add_argument("--provedor", choices=["groq", "gemini"], default="groq", help="API utilizada (padrão: groq)")
+    parser.add_argument("--somente-pendentes", action="store_true", help="não reprocessa arquivos já existentes em data/processado/extraido")
     parser.add_argument("--artigos", nargs="+", help="ids dos artigos (padrão: os das perguntas de avaliação)")
     parser.add_argument("--todos", action="store_true", help="todos os artigos do manifesto")
     parser.add_argument("--max-chunks", type=int, default=20, help="primeiros N trechos de cada artigo (0 = todos)")
     parser.add_argument("--lote", type=int, default=TRECHOS_POR_LOTE, help="trechos por chamada")
-    parser.add_argument("--modelo", default=None, help=f"modelo do Groq (padrão: GROQ_MODEL do .env ou {MODELO_PADRAO})")
+    parser.add_argument("--modelo", default=None, help="modelo escolhido (GROQ_MODEL ou GEMINI_MODEL no .env)")
     parser.add_argument("--esforco", default=None, help="reasoning_effort (low, medium, high), se o modelo aceitar")
     parser.add_argument("--dry-run", action="store_true", help="só conta as chamadas, sem usar a cota")
     args = parser.parse_args(argv)
 
     carregar_env()
-    args.modelo = args.modelo or os.getenv("GROQ_MODEL") or MODELO_PADRAO
+    args.modelo = args.modelo or (os.getenv("GEMINI_MODEL") or MODELO_GEMINI_PADRAO
+                                 if args.provedor == "gemini" else os.getenv("GROQ_MODEL") or MODELO_PADRAO)
+    if not args.dry_run and args.provedor == "gemini" and not os.getenv("GEMINI_API_KEY"):
+        print("Configure GEMINI_API_KEY no .env antes de chamar a API do Gemini.")
+        return 1
     dominio = carregar_dominio()
     prompt = construir_prompt(dominio)
     artigos = escolher_artigos(args)
+    if args.somente_pendentes:
+        artigos = [a for a in artigos if not (SAIDA / f"{a}.json").exists()]
+        if not artigos:
+            print("Nenhum artigo pendente: todos já possuem arquivo extraído.")
+            return 0
 
     faltando = [a for a in artigos if not (CHUNKS / f"{a}.json").exists()]
     if faltando:
@@ -469,22 +479,26 @@ def main(argv=None) -> int:
             dados = json.loads((CHUNKS / f"{artigo}.json").read_text(encoding="utf-8"))
             selecionados = dados["chunks"][: args.max_chunks] if args.max_chunks else dados["chunks"]
             for lote in montar_lotes(selecionados, args.lote):
-                if (CACHE / f"{chave_do_cache(args.modelo, dados['documento']['title'], lote, args.esforco)}.json").exists():
+                chave_modelo = args.modelo if args.provedor == "groq" else f"gemini:{args.modelo}"
+                if (CACHE / f"{chave_do_cache(chave_modelo, dados['documento']['title'], lote, args.esforco)}.json").exists():
                     continue
                 chamadas += 1
                 tokens += (len(prompt) + len(mensagem_do_lote("x" * 20, lote))) // 3 + 700
-        minutos = max(chamadas / REQUISICOES_POR_MINUTO, tokens / TOKENS_POR_MINUTO)
+        minutos = (max(chamadas / REQUISICOES_POR_MINUTO, tokens / TOKENS_POR_MINUTO)
+                   if args.provedor == "groq" else chamadas / max(1, int(os.getenv("GEMINI_RPM", "5"))))
         print(f"{len(artigos)} artigos, modelo {args.modelo}: {chamadas} chamadas novas, "
               f"~{tokens:,} tokens, ~{minutos:.0f} min no ritmo permitido (estimativa grosseira).".replace(",", "."))
         return 0
 
-    ritmo, estat, falhas = Ritmo(), Counter(), []
+    ritmo = (Ritmo() if args.provedor == "groq" else
+             Ritmo(requisicoes=max(1, int(os.getenv("GEMINI_RPM", "5"))), tokens=10**9))
+    estat, falhas = Counter(), []
     inicio = time.time()
     for i, artigo in enumerate(artigos, start=1):
         print(f"[{i}/{len(artigos)}] {artigo} ... ", end="", flush=True)
         try:
             r = processar_artigo(artigo, args, dominio, prompt, ritmo, estat)
-        except (ErroGroq, RuntimeError) as erro:
+        except (ErroGroq, ErroGemini, RuntimeError) as erro:
             print("ERRO")
             falhas.append((artigo, str(erro)))
             continue

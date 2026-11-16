@@ -1,0 +1,517 @@
+{
+  "documento": {
+    "id": "netscape",
+    "title": "Netscape",
+    "source": "https://pt.wikipedia.org/wiki/Netscape"
+  },
+  "chunks": [
+    {
+      "id": "netscape#0",
+      "index": 0,
+      "text": "Netscape Communications ou simplesmente Netscape (antes conhecida como Netscape Communications Corporation) foi uma empresa de serviços de computadores nos EUA, mais conhecida pelo seu navegador web Netscape Navigator. Quando era uma empresa independente, a sua sede foi em Mountain View, Califórnia. O nome do Netscape foi uma marca registrada da Cisco Systems, que foi concedido à empresa."
+    },
+    {
+      "id": "netscape#1",
+      "index": 1,
+      "text": "O nome do Netscape foi uma marca registrada da Cisco Systems, que foi concedido à empresa. O navegador Netscape já foi dominante em termos de quantidade de uso, mas perdeu a maioria para o Internet Explorer durante a primeira guerra dos navegadores. Em meados de 1990, a quantidade de utilização de browsers Netscape era de mais de 90% porém caiu para menos de 1% até o final de 2006."
+    },
+    {
+      "id": "netscape#2",
+      "index": 2,
+      "text": "Em meados de 1990, a quantidade de utilização de browsers Netscape era de mais de 90% porém caiu para menos de 1% até o final de 2006. Em janeiro de 2013, o navegador fechou com menos de 0,4% dos usuários mundiais. A Netscape desenvolveu o protocolo Secure Sockets Layer (SSL) para garantir a comunicação on-line, que ainda é amplamente utilizada, bem como JavaScript, a linguagem mais utilizada para client-side scripts de páginas web."
+    },
+    {
+      "id": "netscape#3",
+      "index": 3,
+      "text": "As ações da Netscape foram comercializados entre 1995 e 2003 e, subsequentemente, era uma subsidiária da AOL. No entanto, tornou-se um só holding após a compra pela AOL, da Netscape em 1998. A marca Netscape ainda é largamente utilizada pela AOL. Alguns serviços atualmente oferecidos sob a marca Netscape, além do navegador web, incluem um desconto de provedor de internet e um site de notícias sociais populares."
+    },
+    {
+      "id": "netscape#4",
+      "index": 4,
+      "text": "Em dezembro de 2007 a AOL anunciou que deixaria de lançar novas versões do navegador Netscape. Tom Drapeau, diretor das marcas Netscape e AOL, anunciou que a empresa deixaria de apoiar os produtos de software Netscape a partir de 1 de março de 2008. A decisão reuniu reações diversas comunidades, com muitos afirmando que o encerramento do suporte ao produto é bastante tardia."
+    },
+    {
+      "id": "netscape#5",
+      "index": 5,
+      "text": "A decisão reuniu reações diversas comunidades, com muitos afirmando que o encerramento do suporte ao produto é bastante tardia. O site de segurança na web, Security Watch, afirmou que a tendência de atualizações de segurança são raras para o Netscape da AOL fazer com que o navegador se torne uma \"responsabilidade de segurança\", especificamente as versões de 2005 a 2007, o Netscape Browser 8."
+    },
+    {
+      "id": "netscape#6",
+      "index": 6,
+      "text": "Asa Dotzler, um dos programadores originais do Firefox, recebeu a notícia com \"boa viagem\" em seu blog, mas elogiou os diversos membros da equipe do Netscape ao longo dos anos para permitir a criação do Mozilla, em 1998. Outros protestaram e pediram a AOL para continuar a fornecer correções de segurança vital desconhecimento ou leais usuários de seu software, bem como a protecção de uma marca bem conhecida."
+    },
+    {
+      "id": "netscape#7",
+      "index": 7,
+      "text": "História\nEm 23 de janeiro de 1993, Marc Andreessen, pesquisador do Centro Nacional de Supercomputação Aplicada (NCSA) da Universidade de Illinois, anunciou em um grupo de discussão da Usenet que estava disponibilizando para download o navegador X Mosaic. Na época, a Internet ainda era uma ferramenta restrita ao universo acadêmico e o X Mosaic não era o primeiro navegador — havia, por exemplo, os navegadores Midas, Cello, ViolaWWW e WorldWideWeb."
+    },
+    {
+      "id": "netscape#8",
+      "index": 8,
+      "text": "A grande inovação do X Mosaic a disponibilidade em várias plataformas, facilidade de instalação e de uso além de vários recursos multimídia. Com isso, surgia a estrutura básica para que a Internet viesse a se desenvolver fora das Universidades. Um ano depois, Jim Clark, fundador da Silicon Graphics, procurou Andreesen. Seu objetivo era formar uma nova companhia."
+    },
+    {
+      "id": "netscape#9",
+      "index": 9,
+      "text": "Seu objetivo era formar uma nova companhia. Do encontro entre ambos, surgia a Mosaic Communications, logo rebatizada para Netscape Communications. O sucesso foi imediato e a empresa recém fundada passou a dominar o mercado de navegadores. Em 1995, a Netscape Communications aparecia cotada em Wall Street — o que demonstrava não apenas sua própria vitalidade mas também a vitalidade da nova economia mundial."
+    },
+    {
+      "id": "netscape#10",
+      "index": 10,
+      "text": "Preocupada com a forte presença da Netscape no emergente mercado da Internet, a Microsoft deflagrou a \"guerra dos browsers\", passando a distribuir gratuitamente seu navegador, o Internet Explorer. Essa tática conquistou muitos usuários já que o software da Netscape era pago. Além disso, o navegador da Microsoft passou a ser distribuído em conjunto com o Windows 95 até que, com o Windows 98, o navegador se fundiu ao próprio sistema operacional."
+    },
+    {
+      "id": "netscape#11",
+      "index": 11,
+      "text": "Vendo sua presença na Internet cair rapidamente, a Netscape recorreu à justiça e processou a Microsoft por práticas comerciais ilegais, entre elas, a estratégia de que quando o usuário resolvesse instalar o Internet Explorer, automaticamente este ficava habilitado como padrão e o Netscape Navigator não funcionava mais, por mais que estivesse instalado, não era possível abrir páginas online."
+    },
+    {
+      "id": "netscape#12",
+      "index": 12,
+      "text": "Ao mesmo tempo, numa tentativa de reconquistar o espaço perdido, a Netscape também passou a oferecer seu software gratuitamente. Mas já era tarde e a empresa jamais se recuperou do golpe. Numa última cartada, a Netscape Communications decide abrir o código de seu software e dá início ao projeto Mozilla — nome do primeiro beta do Navigator."
+    },
+    {
+      "id": "netscape#13",
+      "index": 13,
+      "text": "Pouco depois, a empresa é comprada pela AOL/Time Warner —  Por quatro bilhões de dólares — que decide, ao invés de continuar o desenvolvimento do navegador, apoiar a iniciativa da construção de um navegador de código livre. Hoje em dia, o Mozilla Firefox é considerado o sucessor do Netscape. Com mais de 50 milhões de usuários em todo mundo, e mais de 5,1% do mercado."
+    },
+    {
+      "id": "netscape#14",
+      "index": 14,
+      "text": "Com mais de 50 milhões de usuários em todo mundo, e mais de 5,1% do mercado. Serviços\nNetscape Internet Service\nNetscape ISP é um serviço dial-up oferecido à 9,95 dólares por mês. A empresa atende a páginas da web em um formato comprimido para aumentar a velocidade efetiva de até 1 300 kbit/s (média de 500 kbit/s). O prestador de serviços de Internet é executado pela AOL sob a marca Netscape."
+    },
+    {
+      "id": "netscape#15",
+      "index": 15,
+      "text": "O prestador de serviços de Internet é executado pela AOL sob a marca Netscape. O baixo custo ISP foi lançado oficialmente em 8 de janeiro de 2004. Netscape.com\nNetscape sempre levou grande quantidade de tráfego de vários links incluídas nos menus do navegador para as suas propriedades web. Alguns dizem que era muito tarde para aproveitar este tráfego para o que seria o início das grandes guerras online do portal."
+    },
+    {
+      "id": "netscape#16",
+      "index": 16,
+      "text": "Alguns dizem que era muito tarde para aproveitar este tráfego para o que seria o início das grandes guerras online do portal. Quando isso acontecia, Netcenter, o novo nome para o seu site (http://home.netscape.com/) notório entrou na corrida com o Yahoo!, Infoseek, e MSN, que o Google só juntou anos mais tarde."
+    },
+    {
+      "id": "netscape#17",
+      "index": 17,
+      "text": "Netscape.com passou a ser um espelho com a marca Netscape do portal AOL.com com a URL, que substitui o antigo website em setembro de 2007. Possui conteúdos, tais como notícias, esportes, horóscopo, namoro, cinema, música e muito mais. A mudança chegou a muitas críticas entre os usuários do site muitos, porque o site se tornou efetivamente um clone da AOL, e simplesmente redireciona para portais regionais AOL em algumas áreas ao redor do mundo."
+    },
+    {
+      "id": "netscape#18",
+      "index": 18,
+      "text": "Recursos exclusivos da Netscape, como o Blog do Netscape, NewsQuake Netscape, o Netscape Navigator, Netscape meu e páginas Netscape comunitário, são menos acessíveis a partir do Netscape AOL projetado portal ou, em alguns países acessíveis a todos, sem fornecer um URL completo ou concluir uma pesquisa na Internet. O novo site da AOL Netscape foi originalmente visualizado em agosto de 2007 antes de mover o site existente em setembro de 2007."
+    },
+    {
+      "id": "netscape#19",
+      "index": 19,
+      "text": "O novo site da AOL Netscape foi originalmente visualizado em agosto de 2007 antes de mover o site existente em setembro de 2007. Propeller\nNetscape também operava o site Propeller, que era um agregador de notícias sociais similar ao Digg."
+    }
+  ],
+  "entidades": [
+    {
+      "id": "organizacao:aol",
+      "name": "AOL",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa que comprou e teve a Netscape como subsidiária.",
+      "chunk_ids": [
+        "netscape#14",
+        "netscape#15",
+        "netscape#18",
+        "netscape#19",
+        "netscape#3",
+        "netscape#4",
+        "netscape#5",
+        "netscape#6"
+      ]
+    },
+    {
+      "id": "organizacao:aol_time_warner",
+      "name": "AOL/Time Warner",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa que comprou a Netscape.",
+      "chunk_ids": [
+        "netscape#13"
+      ]
+    },
+    {
+      "id": "organizacao:centro_nacional_de_supercomputacao_aplicada",
+      "name": "Centro Nacional de Supercomputação Aplicada",
+      "type": "Organizacao",
+      "aliases": [
+        "NCSA"
+      ],
+      "description": "Centro de pesquisa da Universidade de Illinois.",
+      "chunk_ids": [
+        "netscape#7"
+      ]
+    },
+    {
+      "id": "organizacao:cisco_systems",
+      "name": "Cisco Systems",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa detentora da marca registrada Netscape.",
+      "chunk_ids": [
+        "netscape#0"
+      ]
+    },
+    {
+      "id": "organizacao:microsoft",
+      "name": "Microsoft",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa desenvolvedora do Internet Explorer e do Windows.",
+      "chunk_ids": [
+        "netscape#10",
+        "netscape#11"
+      ]
+    },
+    {
+      "id": "organizacao:mosaic_communications",
+      "name": "Mosaic Communications",
+      "type": "Organizacao",
+      "aliases": [
+        "Netscape",
+        "Netscape Communications"
+      ],
+      "description": "Nova companhia formada por Jim Clark e Andreesen.",
+      "chunk_ids": [
+        "netscape#8",
+        "netscape#9"
+      ]
+    },
+    {
+      "id": "organizacao:netscape",
+      "name": "Netscape",
+      "type": "Organizacao",
+      "aliases": [
+        "Netscape Communications",
+        "Netscape Communications Corporation"
+      ],
+      "description": "Empresa de serviços de computadores conhecida pelo navegador Netscape Navigator.",
+      "chunk_ids": [
+        "netscape#0",
+        "netscape#10",
+        "netscape#11",
+        "netscape#12",
+        "netscape#13",
+        "netscape#18",
+        "netscape#19",
+        "netscape#2",
+        "netscape#3",
+        "netscape#6"
+      ]
+    },
+    {
+      "id": "organizacao:silicon_graphics",
+      "name": "Silicon Graphics",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa fundada por Jim Clark.",
+      "chunk_ids": [
+        "netscape#8"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_de_illinois",
+      "name": "Universidade de Illinois",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Universidade à qual o NCSA era ligado.",
+      "chunk_ids": [
+        "netscape#7"
+      ]
+    },
+    {
+      "id": "pessoa:andreesen",
+      "name": "Andreesen",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Profissional procurado por Jim Clark.",
+      "chunk_ids": [
+        "netscape#8"
+      ]
+    },
+    {
+      "id": "pessoa:asa_dotzler",
+      "name": "Asa Dotzler",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Programador original do Firefox.",
+      "chunk_ids": [
+        "netscape#6"
+      ]
+    },
+    {
+      "id": "pessoa:jim_clark",
+      "name": "Jim Clark",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Fundador da Silicon Graphics.",
+      "chunk_ids": [
+        "netscape#8"
+      ]
+    },
+    {
+      "id": "pessoa:marc_andreessen",
+      "name": "Marc Andreessen",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Pesquisador que anunciou o navegador X Mosaic.",
+      "chunk_ids": [
+        "netscape#7"
+      ]
+    },
+    {
+      "id": "pessoa:tom_drapeau",
+      "name": "Tom Drapeau",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Diretor das marcas Netscape e AOL.",
+      "chunk_ids": [
+        "netscape#4"
+      ]
+    },
+    {
+      "id": "tecnologia:cello",
+      "name": "Cello",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Navegador da época.",
+      "chunk_ids": [
+        "netscape#7"
+      ]
+    },
+    {
+      "id": "tecnologia:firefox",
+      "name": "Firefox",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Software de navegação.",
+      "chunk_ids": [
+        "netscape#6"
+      ]
+    },
+    {
+      "id": "tecnologia:internet_explorer",
+      "name": "Internet Explorer",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Navegador web concorrente do Netscape.",
+      "chunk_ids": [
+        "netscape#1",
+        "netscape#10",
+        "netscape#11"
+      ]
+    },
+    {
+      "id": "tecnologia:javascript",
+      "name": "JavaScript",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem utilizada para client-side scripts de páginas web.",
+      "chunk_ids": [
+        "netscape#2"
+      ]
+    },
+    {
+      "id": "tecnologia:midas",
+      "name": "Midas",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Navegador da época.",
+      "chunk_ids": [
+        "netscape#7"
+      ]
+    },
+    {
+      "id": "tecnologia:mozilla",
+      "name": "Mozilla",
+      "type": "Tecnologia",
+      "aliases": [
+        "projeto Mozilla"
+      ],
+      "description": "Criado em 1998.",
+      "chunk_ids": [
+        "netscape#12",
+        "netscape#6"
+      ]
+    },
+    {
+      "id": "tecnologia:mozilla_firefox",
+      "name": "Mozilla Firefox",
+      "type": "Tecnologia",
+      "aliases": [
+        "Firefox"
+      ],
+      "description": "Navegador considerado o sucessor do Netscape.",
+      "chunk_ids": [
+        "netscape#13"
+      ]
+    },
+    {
+      "id": "tecnologia:navigator",
+      "name": "Navigator",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Navegador da Netscape.",
+      "chunk_ids": [
+        "netscape#12"
+      ]
+    },
+    {
+      "id": "tecnologia:netscape",
+      "name": "Netscape",
+      "type": "Tecnologia",
+      "aliases": [
+        "Netscape Browser 8"
+      ],
+      "description": "Navegador de internet.",
+      "chunk_ids": [
+        "netscape#4",
+        "netscape#5"
+      ]
+    },
+    {
+      "id": "tecnologia:netscape_isp",
+      "name": "Netscape ISP",
+      "type": "Tecnologia",
+      "aliases": [
+        "Netscape Internet Service"
+      ],
+      "description": "Serviço dial-up oferecido sob a marca Netscape.",
+      "chunk_ids": [
+        "netscape#14"
+      ]
+    },
+    {
+      "id": "tecnologia:netscape_navigator",
+      "name": "Netscape Navigator",
+      "type": "Tecnologia",
+      "aliases": [
+        "Netscape"
+      ],
+      "description": "Navegador web desenvolvido pela Netscape.",
+      "chunk_ids": [
+        "netscape#0",
+        "netscape#1",
+        "netscape#11",
+        "netscape#18"
+      ]
+    },
+    {
+      "id": "tecnologia:secure_sockets_layer",
+      "name": "Secure Sockets Layer (SSL)",
+      "type": "Tecnologia",
+      "aliases": [
+        "SSL"
+      ],
+      "description": "Protocolo para garantir a comunicação on-line.",
+      "chunk_ids": [
+        "netscape#2"
+      ]
+    },
+    {
+      "id": "tecnologia:violawww",
+      "name": "ViolaWWW",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Navegador da época.",
+      "chunk_ids": [
+        "netscape#7"
+      ]
+    },
+    {
+      "id": "tecnologia:windows_95",
+      "name": "Windows 95",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Sistema operacional da Microsoft.",
+      "chunk_ids": [
+        "netscape#10"
+      ]
+    },
+    {
+      "id": "tecnologia:windows_98",
+      "name": "Windows 98",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Sistema operacional da Microsoft.",
+      "chunk_ids": [
+        "netscape#10"
+      ]
+    },
+    {
+      "id": "tecnologia:worldwideweb",
+      "name": "WorldWideWeb",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Navegador da época.",
+      "chunk_ids": [
+        "netscape#7"
+      ]
+    },
+    {
+      "id": "tecnologia:x_mosaic",
+      "name": "X Mosaic",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Navegador disponibilizado para download por Marc Andreessen.",
+      "chunk_ids": [
+        "netscape#7",
+        "netscape#8"
+      ]
+    }
+  ],
+  "relacoes": [
+    {
+      "origem": "pessoa:asa_dotzler",
+      "destino": "tecnologia:firefox",
+      "tipo": "CRIOU",
+      "chunk_id": "netscape#6"
+    },
+    {
+      "origem": "pessoa:jim_clark",
+      "destino": "organizacao:silicon_graphics",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "netscape#8"
+    },
+    {
+      "origem": "pessoa:marc_andreessen",
+      "destino": "tecnologia:x_mosaic",
+      "tipo": "CRIOU",
+      "chunk_id": "netscape#7"
+    },
+    {
+      "origem": "pessoa:marc_andreessen",
+      "destino": "organizacao:centro_nacional_de_supercomputacao_aplicada",
+      "tipo": "TRABALHOU_EM",
+      "chunk_id": "netscape#7"
+    },
+    {
+      "origem": "tecnologia:javascript",
+      "destino": "organizacao:netscape",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "netscape#2"
+    },
+    {
+      "origem": "tecnologia:netscape_navigator",
+      "destino": "organizacao:netscape",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "netscape#0"
+    },
+    {
+      "origem": "tecnologia:netscape_navigator",
+      "destino": "organizacao:netscape",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "netscape#18"
+    },
+    {
+      "origem": "tecnologia:secure_sockets_layer",
+      "destino": "organizacao:netscape",
+      "tipo": "DESENVOLVIDA_EM",
+      "chunk_id": "netscape#2"
+    }
+  ]
+}

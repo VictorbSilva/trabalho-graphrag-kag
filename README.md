@@ -55,7 +55,7 @@ neo4j/
   manutencao/          recriação dos índices
 src/
   contrato.py          contrato da resposta (Pydantic)
-  pipeline/            Text-to-Graph: download, chunking, extração com o Groq e resolução de entidades
+  pipeline/            Text-to-Graph: download, chunking, extração com o Groq ou o Gemini e resolução de entidades
   banco/               ingestor e relatório do grafo
   recuperacao/         embeddings, busca vetorial, Text-to-Cypher, multi-hop, confiança e responder()
   api/                 API FastAPI (/saude e /perguntar)
@@ -143,7 +143,7 @@ Escolha **uma** das duas fontes:
 | Fonte | Comando | Para quê | Contagem no fim (banco vazio antes) |
 |---|---|---|---|
 | Semente: 4 artigos anotados à mão | `python -m src.recuperacao.carregar_semente` | avaliação, demo e a pergunta de teste do passo 8 | 4 documentos, 12 trechos, 13 entidades, 19 relações |
-| Processados: 17 artigos do pipeline | `python -m src.banco.ingestor` | o grafo completo, de `data/processado/extraido` | 17 documentos, 567 trechos, 467 entidades, 259 relações |
+| Processados: 31 artigos do pipeline | `python -m src.banco.ingestor` | o grafo completo, de `data/processado/extraido` | as que o comando imprimir no fim (o relatório em [docs/relatorio-grafo.md](docs/relatorio-grafo.md) é da carga com 17 artigos) |
 
 Na primeira execução o comando baixa o modelo de embeddings (cerca de 470 MB). No fim, os dois comandos imprimem as contagens do banco (a semente, em JSON: `{"documentos": 4, "trechos": 12, ...}`).
 
@@ -303,6 +303,7 @@ O artigo técnico (template da SBC) está em [docs/artigo/artigo.pdf](docs/artig
 | [Driver Python do Neo4j](https://github.com/neo4j/neo4j-python-driver) | Acesso ao banco |
 | [sentence-transformers](https://www.sbert.net) e o modelo [paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2), sobre o [PyTorch](https://pytorch.org) | Embeddings de 384 dimensões |
 | [Groq](https://groq.com), modelo `openai/gpt-oss-120b` | Extração de entidades e relações |
+| [Gemini API](https://ai.google.dev), modelo `gemini-3.5-flash-lite` | Extração de entidades e relações de parte dos artigos |
 | [Abacus RouteLLM](https://abacus.ai) | Geração das respostas e das consultas Cypher |
 | [FastAPI](https://fastapi.tiangolo.com), [Uvicorn](https://www.uvicorn.org) e [Pydantic](https://docs.pydantic.dev) | API e contrato da resposta |
 | [Streamlit](https://streamlit.io) e [streamlit-agraph](https://github.com/ChrisDelClea/streamlit-agraph) (vis-network) | Interface e visualização do subgrafo |

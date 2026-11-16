@@ -2,8 +2,6 @@
 
 from copy import deepcopy
 
-import pytest
-
 from src.pipeline.integrar_pa4 import integrar
 
 
@@ -23,13 +21,24 @@ def amostra():
             ],
         }
     }
-    equivalencias = {"equivalencias": [{"de": "pessoa:apelido", "para": "pessoa:a", "justificativa": "Mesmo indivíduo"}]}
+    equivalencias = {
+        "equivalencias": [
+            {"de": "pessoa:apelido", "para": "pessoa:a", "justificativa": "Mesmo indivíduo"}
+        ]
+    }
     return artigos, equivalencias
 
 
 def decisao(origem, status):
-    return {"artigo": "art", "origem": origem, "tipo": "CRIOU", "destino": "tecnologia:x",
-            "chunk_id": "art#0", "status": status, "justificativa": "Trecho revisado"}
+    return {
+        "artigo": "art",
+        "origem": origem,
+        "tipo": "CRIOU",
+        "destino": "tecnologia:x",
+        "chunk_id": "art#0",
+        "status": status,
+        "justificativa": "Trecho revisado",
+    }
 
 
 def test_sem_revisao_nunca_aprova():
@@ -41,8 +50,11 @@ def test_sem_revisao_nunca_aprova():
 
 def test_mapeia_ids_antes_de_agrupar():
     artigos, equivalencias = amostra()
-    r = integrar(artigos, {"decisoes": [decisao("pessoa:a", "aceita"),
-                                           decisao("pessoa:apelido", "aceita")]}, equivalencias)
+    r = integrar(
+        artigos,
+        {"decisoes": [decisao("pessoa:a", "aceita"), decisao("pessoa:apelido", "aceita")]},
+        equivalencias,
+    )
     assert r["resumo"]["relacoes_originais"] == 2
     assert r["resumo"]["relacoes_canonicas"] == 1
     assert r["relacoes"][0]["relacao"]["origem"] == "pessoa:a"
@@ -52,8 +64,11 @@ def test_mapeia_ids_antes_de_agrupar():
 
 def test_status_divergentes_ficam_pendentes():
     artigos, equivalencias = amostra()
-    r = integrar(artigos, {"decisoes": [decisao("pessoa:a", "aceita"),
-                                           decisao("pessoa:apelido", "rejeitada")]}, equivalencias)
+    r = integrar(
+        artigos,
+        {"decisoes": [decisao("pessoa:a", "aceita"), decisao("pessoa:apelido", "rejeitada")]},
+        equivalencias,
+    )
     assert r["resumo"]["conflitos_apos_resolucao"] == 1
     assert r["resumo"]["pendente"] == 1
     assert r["resumo"]["aceita"] == 0
@@ -69,14 +84,20 @@ def test_sem_mutacao_dos_originais():
 
 def test_rejeitada_permanece_rejeitada():
     artigos, equivalencias = amostra()
-    r = integrar(artigos, {"decisoes": [decisao("pessoa:a", "rejeitada"),
-                                           decisao("pessoa:apelido", "rejeitada")]}, equivalencias)
+    r = integrar(
+        artigos,
+        {"decisoes": [decisao("pessoa:a", "rejeitada"), decisao("pessoa:apelido", "rejeitada")]},
+        equivalencias,
+    )
     assert r["resumo"]["rejeitada"] == 1
     assert r["resumo"]["pendente"] == 0
 
 
-def test_revisao_para_aresta_inexistente_gera_erro():
+def test_revisao_para_aresta_inexistente_nao_aprova():
+    """Decisão antiga sem relação correspondente não aprova a aresta atual."""
     artigos, equivalencias = amostra()
     d = decisao("pessoa:inventada", "aceita")
-    with pytest.raises(ValueError):
-        integrar(artigos, {"decisoes": [d]}, equivalencias)
+    r = integrar(artigos, {"decisoes": [d]}, equivalencias)
+    assert r["resumo"]["aceita"] == 0
+    assert r["resumo"]["pendente"] == 1
+    assert r["resumo"]["relacoes_canonicas"] == 1

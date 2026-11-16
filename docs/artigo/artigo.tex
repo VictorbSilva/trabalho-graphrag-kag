@@ -33,6 +33,7 @@
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{booktabs}
+\usepackage{array}
 \usepackage{tikz}
 \usetikzlibrary{positioning,arrows.meta,fit}
 
@@ -41,11 +42,11 @@
 \title{GraphRAG e KAG sobre a história da computação:\\
 perguntas multi-hop com um grafo de conhecimento no Neo4j}
 
-\author{Victor Basilio\inst{1}, Nicolas Brito\inst{1}, Patrick Sardenberg\inst{1},\\
+\author{Victor Basilio\inst{1}, Nicolas Brito Fernandes da Costa\inst{1}, Patrick Sardenberg\inst{1},\\
 Gabriel Xavier\inst{1}, Pedro Jorge Fernandes Medeiros de Oliveira\inst{1}}
 
-\address{\inst{1}[Nome da instituição] -- Tendências em Ciência da Computação\\
-Prof. Ricardo Roberto de Lima -- 2026}
+\address{\inst{1}Centro Universitário de João Pessoa (UNIPÊ) -- João Pessoa, PB -- Brasil\\
+Tendências em Ciência da Computação -- Prof. Ricardo Roberto de Lima -- 2026}
 
 \begin{document}
 
@@ -215,11 +216,11 @@ camadas ligadas entre si (Figura~\ref{fig:schema}).
   rel/.style={-{Stealth[length=1.8mm]}, thick},
   rot/.style={font=\scriptsize, fill=white, inner sep=1pt}]
   \node[lex] (doc) {:Document\\id, title, source};
-  \node[lex, right=1.6cm of doc] (c1) {:Chunk\\id, index, text,\\embedding};
-  \node[lex, right=1.6cm of c1] (c2) {:Chunk};
+  \node[lex, right=2.4cm of doc] (c1) {:Chunk\\id, index, text,\\embedding};
+  \node[lex, right=2.4cm of c1] (c2) {:Chunk};
   \node[dom, below=1.5cm of doc] (pes) {:Entity:Pessoa\\Dennis Ritchie};
-  \node[dom, right=1.6cm of pes] (tec) {:Entity:Tecnologia\\C};
-  \node[dom, right=1.6cm of tec] (org) {:Entity:Organizacao\\Bell Labs};
+  \node[dom, right=2.4cm of pes] (tec) {:Entity:Tecnologia\\C};
+  \node[dom, right=2.4cm of tec] (org) {:Entity:Organizacao\\Bell Labs};
   \node[dom, below=1.3cm of pes] (pre) {:Entity:Premio\\Prêmio Turing};
   \node[dom, below=1.3cm of tec] (cpp) {:Entity:Tecnologia\\C++};
   \draw[rel] (c1) -- node[rot, above] {PART\_OF} (doc);
@@ -227,7 +228,7 @@ camadas ligadas entre si (Figura~\ref{fig:schema}).
   \draw[rel] (c1) -- node[rot, pos=0.4] {MENTIONS} (pes);
   \draw[rel] (c1) -- node[rot, pos=0.5] {MENTIONS} (tec);
   \draw[rel] (pes) -- node[rot, above] {CRIOU} (tec);
-  \draw[rel] (tec) -- node[rot, above] {DESENVOLVIDA\_EM} (org);
+  \draw[rel] (tec) -- node[rot, above, font=\tiny] {DESENVOLVIDA\_EM} (org);
   \draw[rel] (pes) -- node[rot, left] {RECEBEU} (pre);
   \draw[rel] (cpp) -- node[rot, right] {INFLUENCIADA\_POR} (tec);
 \end{tikzpicture}
@@ -258,7 +259,7 @@ consultas Cypher geradas na recuperação.
 \centering
 \caption{Rótulos e relações do domínio.}
 \label{tab:dominio}
-\small
+\footnotesize
 \begin{tabular}{lll}
 \toprule
 \textbf{Relação} & \textbf{De $\rightarrow$ Para} & \textbf{Exemplo} \\
@@ -292,8 +293,8 @@ similaridade de cosseno, com busca aproximada por HNSW \cite{malkov2020hnsw}.
 \centering
 \caption{Restrições e índices do banco.}
 \label{tab:indices}
-\small
-\begin{tabular}{llp{5.2cm}}
+\footnotesize
+\begin{tabular}{ll>{\raggedright\arraybackslash}p{4.8cm}}
 \toprule
 \textbf{Tipo} & \textbf{Nome} & \textbf{Alvo} \\
 \midrule
@@ -332,23 +333,44 @@ PageRank, que convergiu em 88 iterações, é gravado em cada entidade e usado p
 recuperação para desempatar caminhos; as comunidades do Louvain são gravadas para
 enriquecer a análise e a visualização.
 
-A Tabela~\ref{tab:grafo} resume o grafo carregado com os cinco artigos já processados
-pelo pipeline até a escrita deste texto. As entidades de maior PageRank foram, em ordem,
-Brian Kernighan, C++, Dennis Ritchie, Ken Thompson e Bell Labs. Nenhuma relação ficou sem
-trecho de origem. O relatório de validação também apontou pontos a melhorar na extração:
-4 pares de possíveis duplicatas (por exemplo, ``AT\&T Bell Labs'' e ``Bell Labs''), 11
-entidades sem nenhuma relação e 217 dos 247 trechos sem nenhuma entidade mencionada.
+A Tabela~\ref{tab:grafo} resume o grafo carregado com os 17 artigos já processados pelo
+pipeline até a escrita deste texto, e a Tabela~\ref{tab:pagerank} lista as entidades de
+maior PageRank. Das 265 comunidades encontradas pelo Louvain, 27 têm mais de uma entidade,
+e as maiores correspondem a temas reconhecíveis: Tim Berners-Lee, o CERN e a Web; a família
+C, C++, Java e Simula; a Sun Microsystems; e Dennis Ritchie, Ken Thompson, o Bell Labs e o
+Unix. Nenhuma relação ficou sem trecho de origem. O relatório de validação também apontou
+pontos a melhorar na extração: 9 pares de prováveis duplicatas (por exemplo, ``MIT'' e
+``Instituto de Tecnologia de Massachusetts''), 238 das 467 entidades sem nenhuma relação
+de domínio e 228 dos 567 trechos sem nenhuma entidade mencionada.
 
 \begin{table}[ht]
 \centering
-\caption{Grafo carregado com os cinco artigos processados.}
+\caption{Grafo carregado com os 17 artigos processados.}
 \label{tab:grafo}
 \small
 \begin{tabular}{ccccc}
 \toprule
 \textbf{Documentos} & \textbf{Trechos} & \textbf{Entidades} & \textbf{Relações} & \textbf{Comunidades} \\
 \midrule
-5 & 247 & 49 & 52 & 16 \\
+17 & 567 & 467 & 259 & 265 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{As cinco entidades de maior PageRank.}
+\label{tab:pagerank}
+\small
+\begin{tabular}{clll}
+\toprule
+\textbf{\#} & \textbf{Entidade} & \textbf{Rótulo} & \textbf{PageRank} \\
+\midrule
+1 & Tim Berners-Lee & Pessoa & 11,24 \\
+2 & Sun Microsystems & Organizacao & 10,51 \\
+3 & Linus Torvalds & Pessoa & 5,99 \\
+4 & Alan Kay & Pessoa & 5,95 \\
+5 & James Gosling & Pessoa & 5,59 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -371,15 +393,16 @@ frase que sozinha passa do limite é quebrada, entre palavras. Com essa regra, 1
 
 \textbf{Extração.} As entidades e relações são extraídas por um LLM, o modelo
 \texttt{openai/gpt-oss-120b}, acessado pela API do Groq. Os trechos de cada artigo são
-enviados em lotes de até três, e o prompt traz o schema do domínio. A resposta do modelo é
+enviados em lotes de até cinco, e o prompt traz o schema do domínio. A resposta do modelo é
 validada contra o domínio, e o que não respeita os tipos ou as direções é descartado. As
-respostas ficam em cache, para que uma nova execução não repita chamadas já feitas.
+respostas ficam em cache, para que uma nova execução não repita chamadas já feitas, e os
+limites de uso da API são tratados com novas tentativas espaçadas.
 
 \textbf{Resolução de entidades.} A resolução atribui o identificador canônico e une
 entidades equivalentes a partir de mapeamentos explícitos. Uma triagem semântica
 conservadora sinaliza relações suspeitas para revisão manual, sem removê-las nem
-invertê-las automaticamente. Até a escrita deste texto, cinco artigos tinham passado pela
-extração: Brian Kernighan, C, C++, Dennis Ritchie e Ken Thompson.
+invertê-las automaticamente. Até a escrita deste texto, 17 dos 32 artigos tinham passado
+pela extração e pela resolução, e todos os 17 arquivos passaram na validação do ingestor.
 
 % =====================================================================
 \section{Recuperação}
@@ -438,21 +461,25 @@ conferir. O valor é zero quando não há contexto ou quando o modelo recusa. A 
 \textbf{Exemplo.} Para a pergunta ``Que prêmio recebeu quem criou a linguagem que
 influenciou o C++?'', o Text-to-Cypher gerou e executou a consulta:
 
+{\small
 \begin{verbatim}
 MATCH p = (:Tecnologia {id: 'tecnologia:c_mais_mais'})
-          -[:INFLUENCIADA_POR]->(:Tecnologia)<-[:CRIOU]-(:Pessoa)
-          -[:RECEBEU]->(:Premio)
+    -[:INFLUENCIADA_POR]->(:Tecnologia)<-[:CRIOU]-(:Pessoa)
+    -[:RECEBEU]->(:Premio)
 RETURN p LIMIT 25
 \end{verbatim}
+}
 
 A resposta citou dois caminhos, como o LLM os recebeu no contexto:
 
+{\small
 \begin{verbatim}
 [C1] C++ -[INFLUENCIADA_POR]-> C <-[CRIOU]- Dennis Ritchie
      -[RECEBEU]-> Prêmio Turing
 [C4] C++ -[INFLUENCIADA_POR]-> C <-[CRIOU]- Dennis Ritchie
      -[RECEBEU]-> Medalha Nacional de Tecnologia e Inovação
 \end{verbatim}
+}
 
 O texto gerado afirma que o C++ foi influenciado pelo C, criado por Dennis Ritchie no
 AT\&T Bell Labs, e que Ritchie recebeu o Prêmio Turing em 1983. O trecho que sustenta o
@@ -547,13 +574,13 @@ a trechos que a busca vetorial não encontraria e que cada afirmação da respos
 seguida até o texto original. Na avaliação, o GraphRAG superou o RAG vetorial nas
 perguntas multi-hop, e nenhum dos modos produziu resposta alucinada.
 
-As principais limitações são o dataset ainda parcial, com 5 dos 32 artigos processados
+As principais limitações são o dataset ainda parcial, com 17 dos 32 artigos processados
 pela extração, as duplicatas e lacunas apontadas pelo relatório de validação, a checagem
 de citações, que confere se o identificador existe, mas não se o trecho sustenta a
 afirmação, e a dependência do LLM na geração das consultas Cypher. Como trabalhos futuros,
 ficam o processamento de todo o dataset, uma resolução de entidades mais ampla, o uso de
 embeddings das entidades na recuperação, a verificação de que cada citação sustenta a
-afirmação e uma avaliação com mais perguntas.
+afirmação e a repetição da avaliação com os 17 artigos já carregados e com mais perguntas.
 
 % =====================================================================
 \section*{Créditos}

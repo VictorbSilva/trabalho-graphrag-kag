@@ -6,8 +6,8 @@
 // (DROP INDEX chunk_embedding e DROP INDEX entity_embedding), ajuste aqui
 // e rode o schema de novo (ver neo4j/README.md).
 //
-// entity_embedding fica criado, mas vazio nesta entrega: por enquanto só
-// os trechos (Chunk) recebem embedding.
+// entity_embedding: preenchido pelo ingestor a partir do nome e da descrição
+// da entidade (src/banco/ingestor.py, texto_da_entidade).
 
 CREATE VECTOR INDEX chunk_embedding IF NOT EXISTS
 FOR (c:Chunk) ON (c.embedding)

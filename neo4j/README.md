@@ -53,7 +53,7 @@ python -m src.banco.ingestor data/semente     # grafo semente anotado à mão
 O ingestor ([src/banco/ingestor.py](../src/banco/ingestor.py)) lê todos os JSON da pasta, no formato `arquivo_por_artigo` de `dominio.json`, e para cada artigo:
 
 1. **Valida** contra o schema do domínio: chaves obrigatórias, tipos de entidade e de relação, direção das relações, prefixo dos ids e se cada `chunk_id` existe no arquivo.
-2. **Calcula o embedding** de cada trecho com o módulo único `src/recuperacao/embeddings.py` (384 dimensões).
+2. **Calcula o embedding** de cada trecho e de cada entidade com o módulo único `src/recuperacao/embeddings.py` (384 dimensões). O texto da entidade é o nome, seguido de ". " e da descrição quando houver. Os trechos vão para o índice `chunk_embedding` e as entidades para o `entity_embedding`.
 3. **Grava** com `consultas/ingestao_modelo.cypher` numa única transação: ou o artigo entra inteiro, ou nada dele entra.
 
 No final, imprime quantos documentos, trechos, entidades e relações entre entidades existem no banco.

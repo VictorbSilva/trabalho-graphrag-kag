@@ -41,10 +41,36 @@ Na issue #3 os índices mudaram: os vetoriais passaram de 1536 para **384 dimens
 
 Para conferir, `SHOW VECTOR INDEXES` no Browser deve mostrar 384 nos dois índices, e `python -m pytest` deve passar.
 
+## Carregar os dados (ingestor)
+
+Com o ambiente virtual ativo e o banco no ar:
+
+```bash
+python -m src.banco.ingestor                  # artigos processados: data/processado/extraido
+python -m src.banco.ingestor data/semente     # grafo semente anotado à mão
+```
+
+O ingestor ([src/banco/ingestor.py](../src/banco/ingestor.py)) lê todos os JSON da pasta, no formato `arquivo_por_artigo` de `dominio.json`, e para cada artigo:
+
+1. **Valida** contra o schema do domínio: chaves obrigatórias, tipos de entidade e de relação, direção das relações, prefixo dos ids e se cada `chunk_id` existe no arquivo.
+2. **Calcula o embedding** de cada trecho com o módulo único `src/recuperacao/embeddings.py` (384 dimensões).
+3. **Grava** com `consultas/ingestao_modelo.cypher` numa única transação: ou o artigo entra inteiro, ou nada dele entra.
+
+No final, imprime quantos documentos, trechos, entidades e relações entre entidades existem no banco.
+
+- **Idempotente:** tudo é `MERGE` pelo id, então rodar de novo com a mesma pasta não muda as contagens.
+- **Extração refeita:** o ingestor só acrescenta e atualiza, nunca apaga. Se um artigo for extraído de novo e perder trechos, entidades ou relações, os antigos continuam no banco. Nesse caso, recrie o banco com `docker compose down -v && docker compose up -d` e carregue a pasta de novo.
+- **Arquivo inválido:** aparece como `INVÁLIDO`, com o nome e os problemas encontrados, e nada dele é gravado. Os outros artigos entram normalmente, e o comando termina com código 1.
+- **`manifesto*.json`:** é ignorado, porque não é artigo.
+- **Não misture a semente com `data/processado/`:** as duas usam os mesmos ids de documento e de trecho. Para trocar uma pela outra, apague o banco antes com `docker compose down -v && docker compose up -d`.
+- **Primeira execução:** baixa o modelo de embeddings (cerca de 470 MB).
+
 ## Comandos do dia a dia
 
 | O que | Comando |
 |---|---|
+| Carregar os artigos processados | `python -m src.banco.ingestor` |
+| Carregar o grafo semente | `python -m src.banco.ingestor data/semente` |
 | Reaplicar o schema (é idempotente) | `docker compose up neo4j-schema` |
 | Recriar índices fulltext e vetoriais | `docker compose run --rm neo4j-recriar-indices` |
 | Rodar PageRank e Louvain depois da ingestão | `docker compose run --rm neo4j-gds` |
@@ -73,7 +99,7 @@ Os testes conferem constraints, índices, plugins, o modelo de ingestão (idempo
 | `manutencao/` | Scripts de manutenção, como a recriação de índices |
 | `gds/` | Projeção, PageRank, Louvain e limpeza, rodados com `docker compose run --rm neo4j-gds` |
 | `consultas/exemplos.cypher` | Consultas de referência: fulltext, vetorial, híbrida multi-hop, caminho mais curto, procedência, comunidades |
-| `consultas/ingestao_modelo.cypher` | Modelo de ingestão com `MERGE` que respeita as constraints (contrato com o pipeline Text-to-Graph) |
+| `consultas/ingestao_modelo.cypher` | Modelo de ingestão com `MERGE` que respeita as constraints (contrato com o pipeline Text-to-Graph). Quem executa é o ingestor, `src/banco/ingestor.py` |
 
 ## Problemas comuns
 

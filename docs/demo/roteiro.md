@@ -2,7 +2,7 @@
 
 Issue #33 (PE7). Demo ao vivo da defesa, com cerca de 5 minutos: três perguntas multi-hop, uma em que o RAG vetorial falha e o GraphRAG acerta, e uma pergunta fora do dataset. Os slides e a divisão de falas estão na G7 (#34).
 
-A demo usa o **grafo semente**: 4 artigos (C, C++, Dennis Ritchie e Ken Thompson) **anotados à mão** pelo Nicolas (ver [data/semente/README.md](../../data/semente/README.md)). Na fala, deixe claro que esse grafo é a anotação manual e que o grafo extraído pelo pipeline (17 artigos) é o do passo 5 do README, com os números em [docs/relatorio-grafo.md](../relatorio-grafo.md).
+A demo usa o **grafo semente**: 4 artigos (C, C++, Dennis Ritchie e Ken Thompson) **anotados à mão** pelo Nicolas (ver [data/semente/README.md](../../data/semente/README.md)). Na fala, deixe claro que esse grafo é a anotação manual e que o grafo extraído pelo pipeline (31 dos 32 artigos extraídos; o relatório em [docs/relatorio-grafo.md](../relatorio-grafo.md) é da carga com 17) é o do passo 5 do README, com os números em [docs/relatorio-grafo.md](../relatorio-grafo.md).
 
 ## 1. Antes da defesa (30 minutos antes)
 
@@ -93,6 +93,7 @@ O modo `gravado` responde só às 15 perguntas de avaliação (nos dois modos) e
 - **O que gravar:** a seção 2 inteira, na interface, com o modo `recuperacao` (sistema real), em cerca de 4 minutos. Comece mostrando a barra lateral com a fonte API e o `/saude` com `"fonte":"recuperacao"`, para provar que é o sistema real.
 - **Como gravar no Windows:** Win+Alt+R (Xbox Game Bar) grava a janela do navegador; para a tela inteira, use o OBS Studio.
 - **Onde guardar:** no Google Drive do grupo, com o link no README da entrega. O vídeo não vai para o Git, porque o arquivo é grande.
+- **Vídeo gravado em 16/11:** [https://youtu.be/F4irO4cUqcs](https://youtu.be/F4irO4cUqcs), com o sistema real (modo `recuperacao` e o LLM da Abacus).
 
 ## 5. Registro dos testes
 
@@ -101,5 +102,5 @@ Executar o roteiro inteiro (seções 1 e 2) **duas vezes seguidas sem intervenç
 | Data | Máquina | Execução | Pergunta 1 | Pergunta 2 (vetorial / graphrag) | Pergunta 3 | Pergunta 4 | Plano B gravado testado | Observações |
 |---|---|---|---|---|---|---|---|---|
 | 16/11 | Windows 11, notebook do Pedro | ensaio sem chave da Abacus | caminho C1 certo (C++, C, Dennis Ritchie, Prêmio Turing); texto do LLM não gerado | vetorial: só trechos do C e do C++, sem caminho; graphrag: caminho C, B, Ken Thompson, Prêmio Turing, 8 fontes | não testada | não testada | sim: as 4 perguntas, com as respostas e as confianças da seção 2 | Passos 1 a 6 da seção 1 conferidos. Sem `ABACUS_API_KEY`, a API devolve caminhos, fontes e confiança, e o texto vira "Não foi possível gerar a resposta agora". Falta a execução com a chave. |
-| 17/11 | Windows 11, notebook do Pedro | 1 (com a chave da Abacus) | ok: C, Dennis Ritchie, Prêmio Turing; confiança média 0,59 | ok: vetorial "Não encontrei" (baixa 0,00); graphrag B, Ken Thompson, Prêmio Turing (média 0,63) | ok: Dennis Ritchie e Ken Thompson, com a ressalva do Stroustrup; média 0,65 | ok: recusa; baixa 0,00 | sim, em 16/11 | Mesmas entidades, caminhos e confianças da seção 2. Os 7 testes com o LLM (`pytest -m llm`) passaram. |
-| 17/11 | Windows 11, notebook do Pedro | 2 (com a chave da Abacus) | ok: C, Dennis Ritchie, Prêmio Turing; confiança média 0,59 | ok: vetorial "Não encontrei" (baixa 0,00); graphrag B, Ken Thompson, Prêmio Turing (média 0,63) | ok: Dennis Ritchie e Ken Thompson, com a ressalva do Stroustrup; média 0,65 | ok: recusa; baixa 0,00 | sim, em 16/11 | Logo depois da execução 1, sem intervenção: resultado igual. |
+| 16/11 | Windows 11, notebook do Pedro | 1 (com a chave da Abacus) | ok: C, Dennis Ritchie, Prêmio Turing; confiança média 0,59 | ok: vetorial "Não encontrei" (baixa 0,00); graphrag B, Ken Thompson, Prêmio Turing (média 0,63) | ok: Dennis Ritchie e Ken Thompson, com a ressalva do Stroustrup; média 0,65 | ok: recusa; baixa 0,00 | sim, em 16/11 | Mesmas entidades, caminhos e confianças da seção 2. Os 7 testes com o LLM (`pytest -m llm`) passaram. |
+| 16/11 | Windows 11, notebook do Pedro | 2 (com a chave da Abacus) | ok: C, Dennis Ritchie, Prêmio Turing; confiança média 0,59 | ok: vetorial "Não encontrei" (baixa 0,00); graphrag B, Ken Thompson, Prêmio Turing (média 0,63) | ok: Dennis Ritchie e Ken Thompson, com a ressalva do Stroustrup; média 0,65 | ok: recusa; baixa 0,00 | sim, em 16/11 | Logo depois da execução 1, sem intervenção: resultado igual. |

@@ -64,8 +64,8 @@ graph in Neo4j, where each relation points to the passage that supports it. Retr
 combines vector search, multi-hop expansion over the graph and LLM-generated Cypher
 queries, and the answer cites the paths and passages it used, with a confidence level
 computed from retrieval signals. In an evaluation with 15 questions, GraphRAG correctly
-answered 2 of 7 multi-hop questions, against 1 for vector RAG, and neither mode
-produced a hallucinated answer.
+answered 2 of 7 multi-hop questions, against 1 for vector RAG, with the database
+limited to four hand-annotated articles, and neither mode produced a hallucinated answer.
 \end{abstract}
 
 \begin{resumo}
@@ -80,7 +80,8 @@ aponta para o trecho que a sustenta. A recuperação combina busca vetorial, exp
 multi-hop pelo grafo e consultas Cypher geradas por LLM, e a resposta cita os caminhos e
 trechos usados, com um nível de confiança calculado a partir de sinais da recuperação.
 Numa avaliação com 15 perguntas, o GraphRAG respondeu corretamente 2 de 7 perguntas
-multi-hop, contra 1 do RAG vetorial, e nenhum dos modos produziu resposta alucinada.
+multi-hop, contra 1 do RAG vetorial, com o banco limitado a quatro artigos anotados à
+mão, e nenhum dos modos produziu resposta alucinada.
 \end{resumo}
 
 % =====================================================================
@@ -278,7 +279,9 @@ Cada entidade tem um identificador canônico no formato \texttt{prefixo:nome}, e
 nome é normalizado: sem a desambiguação entre parênteses, com ``+'' trocado por ``mais'',
 sem acentos, em minúsculas e com os demais caracteres trocados por sublinhado. Assim,
 ``C++'' vira \texttt{tecnologia:c\_mais\_mais}. É esse identificador que faz a mesma
-entidade, citada em artigos diferentes, virar um único nó.
+entidade, citada em artigos diferentes, virar um único nó quando os nomes coincidem depois
+da normalização; variantes como siglas dependem da resolução de entidades
+(Seção~\ref{sec:pipeline}).
 
 \subsection{Restrições e índices}
 
@@ -327,17 +330,19 @@ cada trecho com o mesmo módulo usado depois para as perguntas e grava o artigo 
 contagens.
 
 \subsection{Algoritmos de grafo e o grafo carregado}
+\label{sec:grafo-carregado}
 
 Depois da ingestão, o GDS projeta em memória apenas as entidades e as relações entre elas
 e executa o PageRank \cite{page1999pagerank} e o Louvain \cite{blondel2008louvain}. O
 PageRank, que convergiu dentro do limite de 100 iterações, é gravado em cada entidade e usado pela
-recuperação para desempatar caminhos; as comunidades do Louvain são gravadas para
-enriquecer a análise e a visualização.
+recuperação para desempatar caminhos; as comunidades do Louvain são gravadas para a
+análise do grafo.
 
 A Tabela~\ref{tab:grafo} resume o grafo carregado com 31 dos
-32 artigos previstos. A ingestão resultou em 1.440 trechos,
-1.298 entidades e 745 relações distintas entre entidades.
-Nenhuma relação ficou sem referência aos trechos de origem.
+32 artigos previstos, a partir da extração, antes da curadoria.
+A ingestão resultou em 1.440 trechos, 1.298 entidades e 745
+relações distintas entre entidades. Nenhuma relação ficou sem
+referência aos trechos de origem.
 
 O PageRank convergiu após 90 iterações, e o algoritmo Louvain
 identificou 719 comunidades, com modularidade aproximada de
@@ -345,7 +350,7 @@ identificou 719 comunidades, com modularidade aproximada de
 
 A resolução de entidades e a curadoria semântica identificaram
 47 relações aceitas, 10 rejeitadas e 907 pendentes de revisão.
-O banco utilizado na demonstração mantém as relações da
+O banco carregado com os 31 artigos mantém as relações da
 extração completa, uma vez que a curadoria ainda é parcial.
 
 \begin{table}[ht]
@@ -380,9 +385,8 @@ frase que sozinha passa do limite é quebrada, entre palavras. Com essa regra, 1
 
 \textbf{Extração.} As entidades e relações foram extraídas
 com modelos de linguagem de grande porte (LLMs), utilizando
-dois provedores: Groq, com o modelo
-\texttt{openai/gpt-oss-120b}, e Google Gemini, com o modelo
-\texttt{gemini-3.5-flash-lite}. A adoção do segundo provedor
+dois provedores: Groq (\texttt{openai/gpt-oss-120b}) e
+Google Gemini (\texttt{gemini-3.5-flash-lite}). A adoção do segundo provedor
 permitiu continuar o processamento após o esgotamento da
 cota de requisições do Groq.
 
@@ -392,8 +396,9 @@ permitidas, suas direções e as regras de extração de fatos
 sustentados pelo texto.
 
 As respostas foram validadas contra o schema do domínio.
-Entidades malformadas e relações incompatíveis foram
-descartadas. As respostas foram armazenadas em cache,
+Entidades malformadas e relações com tipos incompatíveis
+foram descartadas, e relações com a direção invertida foram
+corrigidas. As respostas foram armazenadas em cache,
 preservando o progresso entre execuções e evitando
 requisições repetidas.
 
@@ -543,8 +548,10 @@ trechos que a sustentam e, nas multi-hop, o caminho esperado no grafo. Foram med
 \textit{evidência recuperada}, quando todos os trechos do gabarito estão nas fontes; o
 \textit{caminho completo}, quando todas as relações do gabarito estão no subgrafo; e a
 \textit{recusa correta}, nas perguntas sem resposta. Cada resposta foi ainda classificada
-manualmente como correta, incompleta ou alucinada. A Tabela~\ref{tab:avaliacao} resume os
-resultados.
+manualmente como correta, incompleta ou alucinada. As perguntas foram executadas com o
+banco limitado ao grafo semente, quatro artigos anotados à mão, e com o modelo
+\texttt{claude-opus-5-5-fast}, pela Abacus RouteLLM, com temperatura 0. A
+Tabela~\ref{tab:avaliacao} resume os resultados.
 
 \begin{table}[ht]
 \centering
@@ -601,7 +608,10 @@ processamento, com 31 dos 32 artigos previstos, e a
 necessidade de ampliar a curadoria semântica. Das 964
 ocorrências de relações extraídas, 907 permanecem
 pendentes de revisão, o que impede considerar todo o
-grafo semanticamente validado.
+grafo semanticamente validado. Também são limitações a
+checagem de citações, que confere se o identificador
+existe, mas não se o trecho sustenta a afirmação, e a
+dependência do LLM na geração das consultas Cypher.
 
 A avaliação inicial da recuperação também foi limitada
 pela quantidade de documentos disponíveis no momento
@@ -611,20 +621,22 @@ precisa ser repetida com os 31 artigos carregados.
 
 Como trabalhos futuros, destacam-se a conclusão do
 artigo restante, a ampliação da resolução de entidades,
-a revisão das relações pendentes, a verificação semântica
-das citações e uma nova avaliação com o grafo ampliado.
+a revisão das relações pendentes, o uso de embeddings das
+entidades na recuperação, a verificação semântica das
+citações e uma nova avaliação com o grafo ampliado e com
+mais perguntas.
 
 % =====================================================================
 \section{Créditos}
 
-O código está no repositório do projeto, com instruções de reprodução. O sistema usa o
-Neo4j 5.26 Community com os plugins APOC e Graph Data Science; o driver Python do Neo4j;
-a biblioteca sentence-transformers e o modelo
-\texttt{paraphrase-multilingual-MiniLM-L12-v2}, sobre o
-PyTorch; as APIs do Groq e Google Gemini, com os modelos
-\texttt{openai/gpt-oss-120b} e
-\texttt{gemini-3.5-flash-lite}, respectivamente, na
-extração; a API da Abacus RouteLLM na geração das
+O código está no repositório do projeto,
+\url{https://github.com/VictorbSilva/trabalho-graphrag-kag}, com instruções de reprodução.
+
+O sistema usa o Neo4j 5.26 Community com os plugins APOC e Graph Data Science; o driver
+Python do Neo4j; a biblioteca sentence-transformers e o modelo
+\texttt{paraphrase-multilingual-MiniLM-L12-v2}, sobre o PyTorch; a API do Groq, com o
+modelo \texttt{openai/gpt-oss-120b}, e a API do Gemini, com o modelo
+\texttt{gemini-3.5-flash-lite}, na extração; a API da Abacus RouteLLM na geração das
 respostas e das consultas Cypher; FastAPI, Uvicorn e Pydantic na API; Streamlit e
 streamlit-agraph na interface; pytest nos testes; e Docker no ambiente do banco.
 

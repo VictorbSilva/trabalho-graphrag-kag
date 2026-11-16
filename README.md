@@ -285,6 +285,12 @@ Problemas específicos do banco (falha no download do GDS, troca do modelo de em
 
 O artigo técnico (template da SBC) está em [docs/artigo/artigo.pdf](docs/artigo/artigo.pdf), gerado a partir de [docs/artigo/artigo.tex](docs/artigo/artigo.tex). Como gerar o PDF: [docs/artigo/README.md](docs/artigo/README.md).
 
+## Vídeo da demo
+
+Demonstração do sistema funcionando, com o grafo semente e o LLM: [https://youtu.be/F4irO4cUqcs](https://youtu.be/F4irO4cUqcs).
+
+O vídeo segue o [roteiro da demo](docs/demo/roteiro.md): três perguntas multi-hop, uma em que o RAG vetorial não acha a resposta e o GraphRAG acerta, e uma pergunta fora do dataset, que o sistema recusa.
+
 ## Fluxo de trabalho
 
 - Uma branch por tarefa e pull request revisado por pelo menos um colega antes do merge.

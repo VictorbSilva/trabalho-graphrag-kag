@@ -2,7 +2,7 @@
 
 Issue #33 (PE7). Demo ao vivo da defesa, com cerca de 5 minutos: três perguntas multi-hop, uma em que o RAG vetorial falha e o GraphRAG acerta, e uma pergunta fora do dataset. Os slides e a divisão de falas estão na G7 (#34).
 
-A demo usa o **grafo semente**: 4 artigos (C, C++, Dennis Ritchie e Ken Thompson) **anotados à mão** pelo Nicolas (ver [data/semente/README.md](../../data/semente/README.md)). Na fala, deixe claro que esse grafo é a anotação manual e que o grafo extraído pelo pipeline (31 dos 32 artigos extraídos; o relatório em [docs/relatorio-grafo.md](../relatorio-grafo.md) é da carga com 17) é o do passo 5 do README, com os números em [docs/relatorio-grafo.md](../relatorio-grafo.md).
+A demo usa o **grafo semente**: 4 artigos (C, C++, Dennis Ritchie e Ken Thompson) **anotados à mão** pelo Nicolas (ver [data/semente/README.md](../../data/semente/README.md)). Na fala, deixe claro que esse grafo é a anotação manual e que o grafo extraído pelo pipeline (31 dos 32 artigos extraídos; o relatório em [docs/relatorio-grafo.md](../relatorio-grafo.md) descreve o grafo carregado com os 31 artigos curados) é o do passo 5 do README, com os números em [docs/relatorio-grafo.md](../relatorio-grafo.md).
 
 ## 1. Antes da defesa (30 minutos antes)
 

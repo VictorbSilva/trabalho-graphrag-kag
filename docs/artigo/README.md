@@ -21,7 +21,7 @@ O `artigo.pdf` desta pasta foi gerado assim, com o [Tectonic](https://tectonic-t
 ## Antes da versão final
 
 - [x] Nome da instituição no `\address` (UNIPÊ)
-- [ ] Nomes completos dos autores conferidos (o do Nicolas já está completo)
+- [ ] Nomes completos dos autores conferidos (Victor, Nicolas, Patrick e Gabriel já completos; falta confirmar o do Pedro)
 - [ ] Revisão das seções de cada um: pipeline (Patrick), recuperação e avaliação (Victor), trabalhos relacionados e interface (Gabriel)
 - [ ] Números do grafo atualizados se o dataset completo for carregado (`python -m src.banco.relatorio`)
 - [ ] PDF revisado por pelo menos mais um integrante

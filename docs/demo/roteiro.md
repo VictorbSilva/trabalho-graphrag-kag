@@ -100,5 +100,6 @@ Executar o roteiro inteiro (seções 1 e 2) **duas vezes seguidas sem intervenç
 
 | Data | Máquina | Execução | Pergunta 1 | Pergunta 2 (vetorial / graphrag) | Pergunta 3 | Pergunta 4 | Plano B gravado testado | Observações |
 |---|---|---|---|---|---|---|---|---|
+| 16/11 | Windows 11, notebook do Pedro | ensaio sem chave da Abacus | caminho C1 certo (C++, C, Dennis Ritchie, Prêmio Turing); texto do LLM não gerado | vetorial: só trechos do C e do C++, sem caminho; graphrag: caminho C, B, Ken Thompson, Prêmio Turing, 8 fontes | não testada | não testada | sim: as 4 perguntas, com as respostas e as confianças da seção 2 | Passos 1 a 6 da seção 1 conferidos. Sem `ABACUS_API_KEY`, a API devolve caminhos, fontes e confiança, e o texto vira "Não foi possível gerar a resposta agora". Falta a execução com a chave. |
 | | | 1 | | | | | | |
 | | | 2 | | | | | | |

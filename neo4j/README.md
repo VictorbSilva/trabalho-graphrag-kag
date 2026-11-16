@@ -59,6 +59,7 @@ O ingestor ([src/banco/ingestor.py](../src/banco/ingestor.py)) lê todos os JSON
 No final, imprime quantos documentos, trechos, entidades e relações entre entidades existem no banco.
 
 - **Idempotente:** tudo é `MERGE` pelo id, então rodar de novo com a mesma pasta não muda as contagens.
+- **Extração refeita:** o ingestor só acrescenta e atualiza, nunca apaga. Se um artigo for extraído de novo e perder trechos, entidades ou relações, os antigos continuam no banco. Nesse caso, recrie o banco com `docker compose down -v && docker compose up -d` e carregue a pasta de novo.
 - **Arquivo inválido:** aparece como `INVÁLIDO`, com o nome e os problemas encontrados, e nada dele é gravado. Os outros artigos entram normalmente, e o comando termina com código 1.
 - **`manifesto*.json`:** é ignorado, porque não é artigo.
 - **Não misture a semente com `data/processado/`:** as duas usam os mesmos ids de documento e de trecho. Para trocar uma pela outra, apague o banco antes com `docker compose down -v && docker compose up -d`.

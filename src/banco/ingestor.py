@@ -6,6 +6,8 @@ módulo único (src/recuperacao/embeddings.py) e grava no Neo4j com a ingestão 
 (neo4j/consultas/ingestao_modelo.cypher), um artigo por transação.
 
 - Rodar duas vezes com a mesma pasta não muda as contagens: tudo é MERGE pelo id.
+- Não apaga nada: o que saiu de um artigo extraído de novo continua no banco. Para trocar
+  os dados, recrie o banco antes (ver neo4j/README.md).
 - Arquivo inválido gera erro com o nome do arquivo e nada dele vai para o banco.
   Os outros artigos da pasta continuam sendo ingeridos.
 - Arquivos manifesto*.json são ignorados (não são artigos).

@@ -44,7 +44,7 @@ perguntas multi-hop com um grafo de conhecimento no Neo4j}
 \author{Victor Basilio\inst{1}, Nicolas Brito\inst{1}, Patrick Sardenberg\inst{1},\\
 Gabriel Xavier\inst{1}, Pedro Jorge Fernandes Medeiros de Oliveira\inst{1}}
 
-\address{\inst{1}[Nome da instituição] -- Tendências em Ciência da Computação\\
+\address{\inst{1}Centro Universitário de João Pessoa (UNIPÊ) -- Tendências em Ciência da Computação\\
 Prof. Ricardo Roberto de Lima -- 2026}
 
 \begin{document}
@@ -259,7 +259,7 @@ consultas Cypher geradas na recuperação.
 \caption{Rótulos e relações do domínio.}
 \label{tab:dominio}
 \small
-\begin{tabular}{lll}
+\begin{tabular}{lp{4.2cm}p{4.4cm}}
 \toprule
 \textbf{Relação} & \textbf{De $\rightarrow$ Para} & \textbf{Exemplo} \\
 \midrule
@@ -293,11 +293,11 @@ similaridade de cosseno, com busca aproximada por HNSW \cite{malkov2020hnsw}.
 \caption{Restrições e índices do banco.}
 \label{tab:indices}
 \small
-\begin{tabular}{llp{5.2cm}}
+\begin{tabular}{lp{5.4cm}p{4.2cm}}
 \toprule
 \textbf{Tipo} & \textbf{Nome} & \textbf{Alvo} \\
 \midrule
-Unicidade & \texttt{document/chunk/entity\_id\_unique} & \texttt{id} de Document, Chunk e Entity \\
+Unicidade & \texttt{document\_id\_unique}, \texttt{chunk\_id\_unique}, \texttt{entity\_id\_unique} & \texttt{id} de Document, Chunk e Entity \\
 Range & \texttt{entity\_name}, \texttt{entity\_type} & \texttt{name} e \texttt{type} de Entity \\
 Range & \texttt{entity\_pagerank}, \texttt{entity\_community} & resultados do GDS \\
 Range & \texttt{document\_source} & URL do documento \\
@@ -440,8 +440,8 @@ influenciou o C++?'', o Text-to-Cypher gerou e executou a consulta:
 
 \begin{verbatim}
 MATCH p = (:Tecnologia {id: 'tecnologia:c_mais_mais'})
-          -[:INFLUENCIADA_POR]->(:Tecnologia)<-[:CRIOU]-(:Pessoa)
-          -[:RECEBEU]->(:Premio)
+          -[:INFLUENCIADA_POR]->(:Tecnologia)
+          <-[:CRIOU]-(:Pessoa)-[:RECEBEU]->(:Premio)
 RETURN p LIMIT 25
 \end{verbatim}
 
@@ -544,8 +544,9 @@ história da computação. O grafo no Neo4j combina uma camada léxica, com os t
 embeddings, e uma camada de domínio, com entidades e relações restritas a um schema
 pré-definido, ligadas por indexação mútua. Essa ligação permitiu que a recuperação chegasse
 a trechos que a busca vetorial não encontraria e que cada afirmação da resposta fosse
-seguida até o texto original. Na avaliação, o GraphRAG superou o RAG vetorial nas
-perguntas multi-hop, e nenhum dos modos produziu resposta alucinada.
+seguida até o texto original. Na avaliação, o GraphRAG respondeu corretamente uma pergunta
+multi-hop a mais que o RAG vetorial, um indício que precisa ser confirmado com o corpus
+completo, e nenhum dos modos produziu resposta alucinada.
 
 As principais limitações são o dataset ainda parcial, com 5 dos 32 artigos processados
 pela extração, as duplicatas e lacunas apontadas pelo relatório de validação, a checagem

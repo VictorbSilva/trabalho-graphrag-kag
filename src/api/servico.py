@@ -37,3 +37,15 @@ def carregar_responder(fonte: str = config.FONTE, alvo: str = config.RESPONDER) 
         modulo, funcao = alvo.split(":", 1)
         return getattr(importlib.import_module(modulo), funcao)
     raise ValueError("API_FONTE inválida. Use 'exemplo' ou 'recuperacao'.")
+
+
+def verificar_neo4j() -> None:
+    """Lança exceção se o Neo4j do .env não responder. Usada pela rota /saude.
+
+    Usa o mesmo driver da recuperação (src.recuperacao.conexao), que lê NEO4J_URI e
+    NEO4J_PASSWORD do .env. O import fica aqui dentro para o modo exemplo não precisar
+    do driver do Neo4j instalado.
+    """
+    from src.recuperacao.conexao import obter_driver
+
+    obter_driver().verify_connectivity()

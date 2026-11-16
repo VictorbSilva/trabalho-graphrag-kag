@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 
 from src.api import config
 from src.api.app import criar_app
-from src.api.servico import carregar_responder, responder_exemplo
+from src.api.servico import carregar_responder, responder_exemplo, verificar_neo4j
 
 CAMPOS_DO_CONTRATO = {
     "pergunta", "modo", "resposta", "confianca", "cypher",
@@ -18,7 +18,7 @@ CAMPOS_DO_CONTRATO = {
 
 @pytest.fixture
 def cliente():
-    return TestClient(criar_app(responder=responder_exemplo))
+    return TestClient(criar_app(responder=responder_exemplo, verificar_banco=None))
 
 
 # --- sucesso -----------------------------------------------------------------
@@ -155,3 +155,62 @@ def test_fonte_recuperacao_importa_a_funcao_configurada():
 def test_configuracao_invalida_falha_com_mensagem(fonte, alvo):
     with pytest.raises(ValueError, match="API_"):
         carregar_responder(fonte, alvo)
+
+
+# --- saúde do Neo4j e codificação (PE2, #25) --------------------------------
+
+def _falha():
+    raise ConnectionError("recusado")
+
+
+def test_saude_com_banco_no_ar():
+    cliente = TestClient(criar_app(responder=responder_exemplo, verificar_banco=lambda: None))
+    resposta = cliente.get("/saude")
+    assert resposta.status_code == 200
+    assert resposta.json()["status"] == "ok"
+    assert resposta.json()["neo4j"] == "ok"
+
+
+def test_saude_acusa_neo4j_fora_do_ar():
+    cliente = TestClient(criar_app(responder=responder_exemplo, verificar_banco=_falha))
+    resposta = cliente.get("/saude")
+    assert resposta.status_code == 503
+    corpo = resposta.json()
+    assert corpo["status"] == "erro"
+    assert corpo["neo4j"] == "fora do ar"
+    assert "docker compose up -d" in corpo["erro"]
+    assert "recusado" not in resposta.text
+
+
+def test_saude_acusa_neo4j_que_nao_responde(monkeypatch):
+    monkeypatch.setattr("src.api.app.TIMEOUT_SAUDE_NEO4J_S", 0.05)
+    cliente = TestClient(
+        criar_app(responder=responder_exemplo, verificar_banco=lambda: time.sleep(1))
+    )
+    assert cliente.get("/saude").status_code == 503
+
+
+def test_saude_no_modo_exemplo_nao_consulta_o_banco(monkeypatch):
+    monkeypatch.setattr(config, "FONTE", "exemplo")
+    resposta = TestClient(criar_app(responder=responder_exemplo)).get("/saude")
+    assert resposta.status_code == 200
+    assert resposta.json()["neo4j"] == "não usado"
+
+
+def test_fonte_recuperacao_verifica_o_neo4j_por_padrao(monkeypatch):
+    monkeypatch.setattr(config, "FONTE", "recuperacao")
+    app = criar_app(responder=responder_exemplo)
+    assert app.state.verificar_banco is verificar_neo4j
+
+
+@pytest.mark.parametrize(
+    "metodo, rota, corpo",
+    [
+        ("get", "/saude", None),
+        ("post", "/perguntar", {"pergunta": "Quem criou o C?", "modo": "graphrag"}),
+        ("post", "/perguntar", {"pergunta": "", "modo": "graphrag"}),
+    ],
+)
+def test_respostas_declaram_utf8(cliente, metodo, rota, corpo):
+    resposta = getattr(cliente, metodo)(rota, **({"json": corpo} if corpo is not None else {}))
+    assert resposta.headers["content-type"] == "application/json; charset=utf-8"

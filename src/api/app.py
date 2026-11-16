@@ -4,14 +4,14 @@ Rodar na raiz do repositório:
     uvicorn src.api.app:app --reload --port 8000
 
 Rotas:
-    GET  /saude      verifica se a API está no ar
+    GET  /saude      verifica se a API está no ar e, com API_FONTE=recuperacao, o Neo4j
     POST /perguntar  recebe {"pergunta": "...", "modo": "graphrag" | "vetorial"}
                      e devolve o objeto do contrato da resposta
 """
 
 import asyncio
 import logging
-from typing import Literal
+from typing import Callable, Literal
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -20,12 +20,14 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
 
 from src.api import config
-from src.api.servico import Responder, carregar_responder
+from src.api.servico import Responder, carregar_responder, verificar_neo4j
 
 log = logging.getLogger("api")
 
 MODOS = ("graphrag", "vetorial")
 TAMANHO_MAXIMO_PERGUNTA = 1000
+# Quanto a rota /saude espera o Neo4j responder antes de declarar que ele está fora do ar.
+TIMEOUT_SAUDE_NEO4J_S = 5
 
 
 class PedidoPergunta(BaseModel):
@@ -66,15 +68,38 @@ def _mensagem_de_validacao(erro: dict) -> str:
     return f"Valor inválido no campo '{campo}'."
 
 
-def criar_app(responder: Responder | None = None, timeout_s: float | None = None) -> FastAPI:
-    """Monta a aplicação. Os parâmetros permitem trocar a recuperação nos testes."""
+class RespostaJSON(JSONResponse):
+    """JSON com charset declarado, para os acentos chegarem certos em qualquer cliente
+    (o Invoke-RestMethod do PowerShell 5.1 assume outra codificação sem ele)."""
+
+    media_type = "application/json; charset=utf-8"
+
+
+SEM_VERIFICACAO = object()
+
+
+def criar_app(
+    responder: Responder | None = None,
+    timeout_s: float | None = None,
+    verificar_banco: Callable[[], None] | None | object = SEM_VERIFICACAO,
+) -> FastAPI:
+    """Monta a aplicação. Os parâmetros permitem trocar a recuperação nos testes.
+
+    verificar_banco é chamado pela rota /saude e deve lançar exceção se o banco estiver
+    fora do ar. Por padrão, só é usado com API_FONTE=recuperacao (o modo exemplo não
+    precisa de banco). None desliga a verificação.
+    """
     app = FastAPI(
         title="GraphRAG e KAG",
         description="Perguntas e respostas sobre o grafo de conhecimento no Neo4j.",
         version="0.1.0",
+        default_response_class=RespostaJSON,
     )
     app.state.responder = responder or carregar_responder()
     app.state.timeout_s = timeout_s if timeout_s is not None else config.TIMEOUT_S
+    if verificar_banco is SEM_VERIFICACAO:
+        verificar_banco = verificar_neo4j if config.FONTE == "recuperacao" else None
+    app.state.verificar_banco = verificar_banco
 
     app.add_middleware(
         CORSMiddleware,
@@ -86,11 +111,30 @@ def criar_app(responder: Responder | None = None, timeout_s: float | None = None
     @app.exception_handler(RequestValidationError)
     async def erro_de_validacao(_: Request, exc: RequestValidationError) -> JSONResponse:
         mensagens = list(dict.fromkeys(_mensagem_de_validacao(e) for e in exc.errors()))
-        return JSONResponse(status_code=422, content={"erro": " ".join(mensagens)})
+        return RespostaJSON(status_code=422, content={"erro": " ".join(mensagens)})
 
     @app.get("/saude")
-    async def saude() -> dict:
-        return {"status": "ok", "fonte": config.FONTE}
+    async def saude(request: Request):
+        verificar = request.app.state.verificar_banco
+        if verificar is None:
+            return {"status": "ok", "fonte": config.FONTE, "neo4j": "não usado"}
+        try:
+            await asyncio.wait_for(
+                asyncio.to_thread(verificar), timeout=TIMEOUT_SAUDE_NEO4J_S
+            )
+        except Exception as erro:
+            log.warning("Neo4j inacessível na rota /saude: %s", type(erro).__name__)
+            return RespostaJSON(
+                status_code=503,
+                content={
+                    "status": "erro",
+                    "fonte": config.FONTE,
+                    "neo4j": "fora do ar",
+                    "erro": "Não foi possível conectar ao Neo4j. Suba o banco com "
+                    "'docker compose up -d' e confira NEO4J_URI e NEO4J_PASSWORD no .env.",
+                },
+            )
+        return {"status": "ok", "fonte": config.FONTE, "neo4j": "ok"}
 
     @app.post("/perguntar")
     async def perguntar(pedido: PedidoPergunta, request: Request):
@@ -101,7 +145,7 @@ def criar_app(responder: Responder | None = None, timeout_s: float | None = None
                 timeout=estado.timeout_s,
             )
         except asyncio.TimeoutError:
-            return JSONResponse(
+            return RespostaJSON(
                 status_code=504,
                 content={
                     "erro": f"A recuperação não respondeu em {estado.timeout_s:g} segundos. "
@@ -111,7 +155,7 @@ def criar_app(responder: Responder | None = None, timeout_s: float | None = None
         except Exception:
             # O detalhe vai para o log do servidor, nunca para o cliente.
             log.exception("Falha ao responder a pergunta: %r", pedido.pergunta)
-            return JSONResponse(
+            return RespostaJSON(
                 status_code=500,
                 content={"erro": "Erro interno ao processar a pergunta. Consulte o log da API."},
             )

@@ -1,9 +1,11 @@
 // R20 - PageRank: mede a importância de cada entidade no grafo.
 // Grava em e.pagerank. A recuperação (Victor) usa esse valor para
 // ranquear entidades quando há mais candidatos do que cabe no contexto do LLM.
+// maxIterations 100: com os dados reais, 20 iterações (o padrão do GDS) não
+// bastavam para convergir na tolerância padrão (1e-7).
 CALL gds.pageRank.write('entidades', {
   writeProperty: 'pagerank',
-  maxIterations: 20,
+  maxIterations: 100,
   dampingFactor: 0.85
 })
 YIELD nodePropertiesWritten, ranIterations, didConverge

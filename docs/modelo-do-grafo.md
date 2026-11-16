@@ -67,7 +67,7 @@ Exemplo de caminho de 3 saltos: C++ `INFLUENCIADA_POR` C, que Dennis Ritchie `CR
 | `entity_search` | Fulltext (analyzer `brazilian`) | `Entity.name`, `aliases`, `description` | R07 |
 | `chunk_text` | Fulltext (analyzer `brazilian`) | `Chunk.text` | R07 |
 | `chunk_embedding` | Vector (384 dimensões, cosseno) | `Chunk.embedding` | R08 |
-| `entity_embedding` | Vector (384 dimensões, cosseno) | `Entity.embedding` (vazio nesta entrega) | R08 |
+| `entity_embedding` | Vector (384 dimensões, cosseno) | `Entity.embedding` (calculado pelo ingestor a partir do nome e da descrição) | R08 |
 
 Para conferir no banco (evidência para o artigo):
 

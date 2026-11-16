@@ -5,7 +5,8 @@
 // Parâmetros esperados (um documento por vez):
 //   $documento  {id, title, source}
 //   $chunks     [{id, index, text, embedding}]
-//   $entidades  [{id, name, type, aliases, description, chunk_ids}]
+//   $entidades  [{id, name, type, aliases, description, chunk_ids, embedding}]
+//               (embedding é opcional: sem ele, a entidade mantém o que já tinha)
 //   $relacoes   [{origem, destino, tipo, chunk_id}]
 // type e tipo viram rótulo e tipo de relação: use PascalCase para type
 // (ex.: Pessoa) e MAIUSCULAS_COM_UNDERSCORE para tipo (ex.: TRABALHA_EM).
@@ -33,7 +34,8 @@ MERGE (e:Entity {id: ent.id})
 ON CREATE SET e.name = ent.name, e.type = ent.type
 SET e:$(ent.type),
     e.aliases = apoc.coll.toSet(coalesce(e.aliases, []) + coalesce(ent.aliases, [])),
-    e.description = coalesce(ent.description, e.description)
+    e.description = coalesce(ent.description, e.description),
+    e.embedding = coalesce(ent.embedding, e.embedding)
 WITH e, ent
 UNWIND ent.chunk_ids AS chunk_id
 MATCH (c:Chunk {id: chunk_id})

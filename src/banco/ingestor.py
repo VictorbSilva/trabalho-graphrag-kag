@@ -1,10 +1,13 @@
 """Ingestor de comando único e idempotente (issue #12, N3).
 
 Lê os JSON de artigo de uma pasta (formato `arquivo_por_artigo` de neo4j/dominio.json),
-valida cada um contra o schema do domínio, calcula o embedding de cada trecho com o
-módulo único (src/recuperacao/embeddings.py) e grava no Neo4j com a ingestão oficial
-(neo4j/consultas/ingestao_modelo.cypher), um artigo por transação.
+valida cada um contra o schema do domínio, calcula o embedding de cada trecho e de cada
+entidade com o módulo único (src/recuperacao/embeddings.py) e grava no Neo4j com a
+ingestão oficial (neo4j/consultas/ingestao_modelo.cypher), um artigo por transação.
 
+- Embedding da entidade: calculado sobre texto_da_entidade() (o nome, mais ". " e a
+  descrição quando houver). A mesma entidade aparece em vários artigos; como os arquivos
+  são lidos em ordem alfabética, vale o embedding do último artigo que a cita.
 - Rodar duas vezes com a mesma pasta não muda as contagens: tudo é MERGE pelo id.
 - Não apaga nada: o que saiu de um artigo extraído de novo continua no banco. Para trocar
   os dados, recrie o banco antes (ver neo4j/README.md).
@@ -67,6 +70,14 @@ def comandos_cypher(caminho: Path = INGESTAO) -> list[str]:
 
 def _texto(valor) -> bool:
     return isinstance(valor, str) and valor.strip() != ""
+
+
+def texto_da_entidade(entidade: dict) -> str:
+    """Texto do embedding da entidade: o nome, seguido de ". " e da descrição quando houver."""
+    descricao = entidade.get("description")
+    if _texto(descricao):
+        return f"{entidade['name']}. {descricao}"
+    return entidade["name"]
 
 
 def validar_artigo(artigo, dominio: dict) -> list[str]:
@@ -241,8 +252,19 @@ def ingerir_pasta(driver, pasta: Path, prefixo: str = "", gerar_vetores=None) ->
         if len(vetores) != len(artigo["chunks"]) or any(len(v) != dimensoes for v in vetores):
             raise ValueError(f"O gerador de embeddings não devolveu um vetor de {dimensoes} posições por trecho.")
         chunks = [{**c, "embedding": list(v)} for c, v in zip(artigo["chunks"], vetores)]
+
+        entidades = artigo["entidades"]
+        if entidades:
+            vetores = gerar_vetores([texto_da_entidade(e) for e in entidades])
+            if len(vetores) != len(entidades) or any(len(v) != dimensoes for v in vetores):
+                raise ValueError(
+                    f"O gerador de embeddings não devolveu um vetor de {dimensoes} posições por entidade."
+                )
+            entidades = [{**e, "embedding": list(v)} for e, v in zip(entidades, vetores)]
         try:
-            ingerir_artigo(driver, com_prefixo({**artigo, "chunks": chunks}, prefixo), comandos)
+            ingerir_artigo(
+                driver, com_prefixo({**artigo, "chunks": chunks, "entidades": entidades}, prefixo), comandos
+            )
         except Neo4jError as erro:
             resultado.invalidos[caminho.name] = [f"o Neo4j recusou o artigo: {erro.message}"]
             continue

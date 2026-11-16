@@ -332,7 +332,8 @@ executando-as em transação de leitura, em que o banco recusa qualquer escrita.
 O ingestor lê um arquivo JSON por artigo e valida cada um contra o schema do domínio:
 chaves obrigatórias, tipos de entidade e de relação, direção das relações, prefixo dos
 identificadores e existência dos trechos referenciados. Em seguida, calcula o embedding de
-cada trecho com o mesmo módulo usado depois para as perguntas e grava o artigo numa
+cada trecho com o mesmo módulo usado depois para as perguntas e o de cada entidade, a
+partir do nome e da descrição, e grava o artigo numa
 única transação: ou o artigo entra inteiro, ou nada dele entra. Toda escrita usa
 \texttt{MERGE} pelo identificador, de modo que reprocessar a mesma pasta não altera as
 contagens.
@@ -370,7 +371,7 @@ extração completa, uma vez que a curadoria ainda é parcial.
 \toprule
 \textbf{Documentos} & \textbf{Trechos} & \textbf{Entidades} & \textbf{Relações} & \textbf{Comunidades} \\
 \midrule
-31 & 1440 & 1298 & 745 & 719 \\
+31 & 1440 & 1295 & 736 & 719 \\
 \bottomrule
 \end{tabular}
 \end{table}

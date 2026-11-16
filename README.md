@@ -143,7 +143,7 @@ Escolha **uma** das duas fontes:
 | Fonte | Comando | Para quê | Contagem no fim (banco vazio antes) |
 |---|---|---|---|
 | Semente: 4 artigos anotados à mão | `python -m src.recuperacao.carregar_semente` | avaliação, demo e a pergunta de teste do passo 8 | 4 documentos, 12 trechos, 13 entidades, 19 relações |
-| Processados: 31 artigos do pipeline | `python -m src.banco.ingestor` | o grafo completo, de `data/processado/curado` | as que o comando imprimir no fim (o relatório em [docs/relatorio-grafo.md](docs/relatorio-grafo.md) é da carga com 17 artigos) |
+| Processados: 31 artigos do pipeline | `python -m src.banco.ingestor` | o grafo completo, de `data/processado/curado` | 31 documentos, 1440 trechos, 1295 entidades, 736 relações (detalhes em [docs/relatorio-grafo.md](docs/relatorio-grafo.md)) |
 
 Na primeira execução o comando baixa o modelo de embeddings (cerca de 470 MB). No fim, os dois comandos imprimem as contagens do banco (a semente, em JSON: `{"documentos": 4, "trechos": 12, ...}`).
 

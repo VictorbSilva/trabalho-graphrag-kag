@@ -172,7 +172,7 @@ uvicorn src.api.app:app --port 8000
 
 Deixe este terminal aberto. Para conferir, no navegador:
 
-- http://localhost:8000/saude responde `{"status":"ok","fonte":"recuperacao"}`. Se aparecer `"fonte":"exemplo"`, a API não está usando a recuperação real: confira `API_FONTE` no `.env` e reinicie a API.
+- http://localhost:8000/saude responde `{"status":"ok","fonte":"recuperacao","neo4j":"ok"}`. Se aparecer `"fonte":"exemplo"`, a API não está usando a recuperação real: confira `API_FONTE` no `.env` e reinicie a API. Se aparecer `"neo4j":"fora do ar"` (HTTP 503), o banco não está respondendo: confira o passo 4 e a senha do `.env`.
 - http://localhost:8000/docs abre a documentação interativa, onde dá para testar o `POST /perguntar`.
 
 Pela linha de comando, num segundo terminal:
@@ -180,8 +180,6 @@ Pela linha de comando, num segundo terminal:
 ```powershell
 Invoke-RestMethod -Method Post -Uri http://localhost:8000/perguntar -ContentType "application/json; charset=utf-8" -Body '{"pergunta": "Quem criou o C?", "modo": "graphrag"}'
 ```
-
-No Windows PowerShell 5.1, os acentos da resposta podem aparecer trocados nesse comando (`caracterÃ­sticas` no lugar de `características`). É só a exibição no terminal: em http://localhost:8000/docs e na interface eles aparecem certos.
 
 Linux/Mac (ou o Git Bash no Windows):
 

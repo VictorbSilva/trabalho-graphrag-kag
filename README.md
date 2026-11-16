@@ -250,6 +250,8 @@ git restore docs/avaliacao-resultados.md
 
 **Cuidado:** sem a flag, `python -m src.avaliacao.comparar` refaz as 15 perguntas nos dois modos e **sobrescreve** `data/avaliacao/resultados/respostas.json`, o relatório e a planilha. Ele precisa do banco com a semente, do GDS e da chave da Abacus, e o resultado depende do que estiver no banco *(não testado)*.
 
+As perguntas e as 60 respostas classificadas das duas rodadas (semente e completo) estão publicadas no Hugging Face Datasets: [VictorbSilva/graphrag-kag-historia-computacao-avaliacao](https://huggingface.co/datasets/VictorbSilva/graphrag-kag-historia-computacao-avaliacao). Os arquivos são gerados por `python -m src.avaliacao.exportar_hf`, que grava `perguntas.jsonl`, `respostas.jsonl` e o dataset card em `hf_dataset/` (fora do Git). O card versionado fica em [data/avaliacao/hf/README.md](data/avaliacao/hf/README.md).
+
 ### Refazer o dataset (opcional)
 
 Não é preciso para rodar o projeto. Os scripts rodam na raiz do repositório, com o ambiente virtual ativo, nesta ordem *(não testados; no teste do zero só foi conferido que os comandos existem, com `--help`)*:

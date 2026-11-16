@@ -94,6 +94,8 @@ uvicorn src.api.app:app --reload --port 8000
 curl -X POST http://localhost:8000/perguntar -H "Content-Type: application/json" -d "{\"pergunta\": \"Quem criou o C?\", \"modo\": \"graphrag\"}"
 ```
 
+Agente Mentor: `python -m src.mentor.chat`, ver [docs/mentor.md](docs/mentor.md).
+
 Detalhes do banco em [neo4j/README.md](neo4j/README.md) e do modelo do grafo em [docs/modelo-do-grafo.md](docs/modelo-do-grafo.md).
 
 ## Artigo

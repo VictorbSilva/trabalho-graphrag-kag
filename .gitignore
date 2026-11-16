@@ -4,3 +4,5 @@ __pycache__/
 .pytest_cache/
 *.zip
 .cache/
+# Exportação para o Hugging Face (python -m src.avaliacao.exportar_hf)
+hf_dataset/

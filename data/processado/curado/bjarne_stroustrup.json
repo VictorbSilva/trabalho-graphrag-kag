@@ -1,0 +1,381 @@
+{
+  "documento": {
+    "id": "bjarne_stroustrup",
+    "title": "Bjarne Stroustrup",
+    "source": "https://pt.wikipedia.org/wiki/Bjarne_Stroustrup"
+  },
+  "chunks": [
+    {
+      "id": "bjarne_stroustrup#0",
+      "index": 0,
+      "text": "Bjarne Stroustrup (Århus, 30 de dezembro de 1950) é um cientista da computação dinamarquês e professor catedrático da Universidade do Texas A&M. É conhecido como o pai da linguagem de programação C++."
+    },
+    {
+      "id": "bjarne_stroustrup#1",
+      "index": 1,
+      "text": "Stroustrup, nas suas próprias palavras, \"inventou a C++, escreveu as suas definições iniciais e produziu a sua primeira implementação, (…) escolheu e formulou os critérios de projeção da linguagem C++, desenhou todas as suas facilidades principais e foi responsável pelo processo de propostas de extensão no comité de padrões de C++.\" Stroustrup também escreveu o que muitos consideram a obra padrão  de introdução à linguagem, \"A linguagem de"
+    },
+    {
+      "id": "bjarne_stroustrup#2",
+      "index": 2,
+      "text": "programação C++\", que se encontra na quarta edição. A obra possui revista para refletir a evolução da linguagem e o trabalho do comité de padrões de C++. Educação\nStroustrup é cand. scient. (o equivalente dinamarquês do grau de mestre) em matemática e ciência da computação (1975) pela Universidade de Aarhus, Dinamarca, e doutor em ciência da computação (1979) pela Universidade de Cambridge, Inglaterra."
+    },
+    {
+      "id": "bjarne_stroustrup#3",
+      "index": 3,
+      "text": "Carreira\nEle desempenhou o cargo de diretor do Departamento de Investigação de Programação em Grande Escala dos Laboratórios Bell da AT&T, desde a sua criação até aos finais de 2002. Stroustrup foi eleito membro da Academia Nacional de Engenharia em 2004. Ele foi eleito membro da Association for Computing Machinery (ACM) em 1994 e no Instituto de Engenheiros Eletricistas e Eletrônicos (IEEE)."
+    },
+    {
+      "id": "bjarne_stroustrup#4",
+      "index": 4,
+      "text": "Ele foi eleito membro da Association for Computing Machinery (ACM) em 1994 e no Instituto de Engenheiros Eletricistas e Eletrônicos (IEEE). De 2002 a 2014, Stroustrup foi o Presidente da Faculdade de Engenharia e Professor de Ciência da Computação da Texas A&M University."
+    },
+    {
+      "id": "bjarne_stroustrup#5",
+      "index": 5,
+      "text": "De 2002 a 2014, Stroustrup foi o Presidente da Faculdade de Engenharia e Professor de Ciência da Computação da Texas A&M University. Desde janeiro de 2014, Stroustrup é diretor administrativo da divisão de tecnologia do Morgan Stanley na cidade de Nova York e professor visitante em ciência da computação na Columbia University."
+    },
+    {
+      "id": "bjarne_stroustrup#6",
+      "index": 6,
+      "text": "Prémios e realizações\n1990 - Nomeado um dos \"American's twelve top young scientists\" pela revista Fortune.\n1993 - Prêmio Grace Murray Hopper da Association for Computing Machinery (ACM) pelo seu trabalho na linguagem C++\n1995 - A revista Byte nomeou-o uma das 20 pessoas mais influentes na indústria de informática\n1996 - Foi nomeado \"Fellow\" da AT&T \"pelas contribuições fundamentais para o desenvolvimento de linguagens de programação e programação"
+    },
+    {
+      "id": "bjarne_stroustrup#7",
+      "index": 7,
+      "text": "orientada à objetos, culminando na linguagem de programação C++\"\n1998 - Foi nomeado \"Fellow\" da ACM: pelo seu trabalho inicial que formaram as fundações da linguagem de programação C++. Apoiado nas fundações e no esforço contínuo do Dr."
+    },
+    {
+      "id": "bjarne_stroustrup#8",
+      "index": 8,
+      "text": "Apoiado nas fundações e no esforço contínuo do Dr. Stroustrup, a linguagem C++ tornou-se numa das linguagens de programação mais influentes na história da computação.\n2004 - National Academy of Engineering, 2004\n2004 - IEEE Computer Society 2004 Computer Entrepreneur Award. Publicações\nBjarne Stroustrup (2013). A Tour of C++ 1 ed. [S.l.]: Addison-Wesley Professional. 192 páginas. ISBN 0-321-95831-4\nBjarne Stroustrup (2008)."
+    },
+    {
+      "id": "bjarne_stroustrup#9",
+      "index": 9,
+      "text": "ISBN 0-321-95831-4\nBjarne Stroustrup (2008). Programming: Principles and Practice Using C++ 1 ed. [S.l.]: Addison-Wesley Professional. 1272 páginas. ISBN 0-321-54372-6\nBjarne Stroustrup (2013). The C++ Programming Language 4 ed. [S.l.]: Addison-Wesley Professional. 1368 páginas. ISBN 0-321-563840\nBjarne Stroustrup (1994). The Design and Evolution of C++ 1 ed. [S.l.]: Addison-Wesley Professional. 480 páginas. ISBN 0-201-54330-3\nMargaret A."
+    },
+    {
+      "id": "bjarne_stroustrup#10",
+      "index": 10,
+      "text": "ISBN 0-201-54330-3\nMargaret A. Ellis e Bjarne Stroustrup (1990). The Annotated C++ Reference Manual. [S.l.]: Addison-Wesley Professional. 480 páginas. ISBN 0-201-51459-1\nAndrei Alexandrescu, Andrew Koenig, Stanley B. Lippman, Bjarne Stroustrup, Herb Sutter e Barbara E. Moo (2001). C++ In-Depth Box Set. [S.l.]: Addison-Wesley Professional. 1568 páginas. ISBN 0201775816  !CS1 manut: Nomes múltiplos: lista de autores (link)"
+    },
+    {
+      "id": "bjarne_stroustrup#11",
+      "index": 11,
+      "text": "ISBN 0201775816  !CS1 manut: Nomes múltiplos: lista de autores (link) Citações\nC faz com que seja muito fácil atirar nos próprios pés. C++ faz com que isso se torne mais difícil, mas quando você consegue, destrói toda a perna.\"\n\"Sempre desejei que o meu computador fosse tão fácil de usar como o meu telefone. O meu desejo realizou-se. Já não sei usar o meu telefone.\"\n\"Nós podemos sobreviver com o necessário."
+    },
+    {
+      "id": "bjarne_stroustrup#12",
+      "index": 12,
+      "text": "Já não sei usar o meu telefone.\"\n\"Nós podemos sobreviver com o necessário. Mas não é proibido viver com mais que o necessário.\""
+    }
+  ],
+  "entidades": [
+    {
+      "id": "organizacao:academia_nacional_de_engenharia",
+      "name": "Academia Nacional de Engenharia",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Academia de engenharia.",
+      "chunk_ids": [
+        "bjarne_stroustrup#3"
+      ]
+    },
+    {
+      "id": "organizacao:association_for_computing_machinery",
+      "name": "Association for Computing Machinery",
+      "type": "Organizacao",
+      "aliases": [
+        "ACM"
+      ],
+      "description": "Associação para computação.",
+      "chunk_ids": [
+        "bjarne_stroustrup#3",
+        "bjarne_stroustrup#4",
+        "bjarne_stroustrup#6",
+        "bjarne_stroustrup#7"
+      ]
+    },
+    {
+      "id": "organizacao:at_t",
+      "name": "AT&T",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa ou organização.",
+      "chunk_ids": [
+        "bjarne_stroustrup#6"
+      ]
+    },
+    {
+      "id": "organizacao:columbia_university",
+      "name": "Columbia University",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Universidade onde Stroustrup foi professor visitante.",
+      "chunk_ids": [
+        "bjarne_stroustrup#5"
+      ]
+    },
+    {
+      "id": "organizacao:instituto_de_engenheiros_eletricistas_e_eletronicos",
+      "name": "Instituto de Engenheiros Eletricistas e Eletrônicos",
+      "type": "Organizacao",
+      "aliases": [
+        "IEEE"
+      ],
+      "description": "Instituto de engenheiros.",
+      "chunk_ids": [
+        "bjarne_stroustrup#3",
+        "bjarne_stroustrup#4"
+      ]
+    },
+    {
+      "id": "organizacao:laboratorios_bell_da_at_t",
+      "name": "Laboratórios Bell da AT&T",
+      "type": "Organizacao",
+      "aliases": [
+        "AT&T",
+        "Laboratórios Bell"
+      ],
+      "description": "Laboratórios de pesquisa.",
+      "chunk_ids": [
+        "bjarne_stroustrup#3"
+      ]
+    },
+    {
+      "id": "organizacao:morgan_stanley",
+      "name": "Morgan Stanley",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa do setor financeiro e tecnológico.",
+      "chunk_ids": [
+        "bjarne_stroustrup#5"
+      ]
+    },
+    {
+      "id": "organizacao:texas_a_m_university",
+      "name": "Texas A&M University",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Universidade onde Stroustrup foi professor.",
+      "chunk_ids": [
+        "bjarne_stroustrup#4",
+        "bjarne_stroustrup#5"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_de_aarhus",
+      "name": "Universidade de Aarhus",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Universidade dinamarquesa onde Stroustrup estudou.",
+      "chunk_ids": [
+        "bjarne_stroustrup#2"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_de_cambridge",
+      "name": "Universidade de Cambridge",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Universidade inglesa onde Stroustrup obteve o doutorado.",
+      "chunk_ids": [
+        "bjarne_stroustrup#2"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_do_texas_a_m",
+      "name": "Universidade do Texas A&M",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Universidade onde Stroustrup atua como professor catedrático.",
+      "chunk_ids": [
+        "bjarne_stroustrup#0"
+      ]
+    },
+    {
+      "id": "pessoa:andrei_alexandrescu",
+      "name": "Andrei Alexandrescu",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Autor de publicações sobre C++.",
+      "chunk_ids": [
+        "bjarne_stroustrup#10"
+      ]
+    },
+    {
+      "id": "pessoa:andrew_koenig",
+      "name": "Andrew Koenig",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Autor de publicações sobre C++.",
+      "chunk_ids": [
+        "bjarne_stroustrup#10"
+      ]
+    },
+    {
+      "id": "pessoa:barbara_e_moo",
+      "name": "Barbara E. Moo",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Autora de publicações sobre C++.",
+      "chunk_ids": [
+        "bjarne_stroustrup#10"
+      ]
+    },
+    {
+      "id": "pessoa:bjarne_stroustrup",
+      "name": "Bjarne Stroustrup",
+      "type": "Pessoa",
+      "aliases": [
+        "Dr.",
+        "Dr. Stroustrup",
+        "Ele",
+        "Stroustrup"
+      ],
+      "description": "Cientista da computação e criador da linguagem C++.",
+      "chunk_ids": [
+        "bjarne_stroustrup#0",
+        "bjarne_stroustrup#1",
+        "bjarne_stroustrup#10",
+        "bjarne_stroustrup#2",
+        "bjarne_stroustrup#3",
+        "bjarne_stroustrup#4",
+        "bjarne_stroustrup#5",
+        "bjarne_stroustrup#6",
+        "bjarne_stroustrup#7",
+        "bjarne_stroustrup#8"
+      ]
+    },
+    {
+      "id": "pessoa:herb_sutter",
+      "name": "Herb Sutter",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Autor de publicações sobre C++.",
+      "chunk_ids": [
+        "bjarne_stroustrup#10"
+      ]
+    },
+    {
+      "id": "pessoa:margaret_a_ellis",
+      "name": "Margaret A. Ellis",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Autora de publicações sobre C++.",
+      "chunk_ids": [
+        "bjarne_stroustrup#10"
+      ]
+    },
+    {
+      "id": "pessoa:stanley_b_lippman",
+      "name": "Stanley B. Lippman",
+      "type": "Pessoa",
+      "aliases": [
+        "Lippman"
+      ],
+      "description": "Autor de publicações sobre C++.",
+      "chunk_ids": [
+        "bjarne_stroustrup#10"
+      ]
+    },
+    {
+      "id": "premio:premio_grace_murray_hopper",
+      "name": "Prêmio Grace Murray Hopper",
+      "type": "Premio",
+      "aliases": [],
+      "description": "Prêmio concedido pela Association for Computing Machinery.",
+      "chunk_ids": [
+        "bjarne_stroustrup#6"
+      ]
+    },
+    {
+      "id": "tecnologia:c_mais_mais",
+      "name": "C++",
+      "type": "Tecnologia",
+      "aliases": [
+        "linguagem C++",
+        "programação C++",
+        "C with Classes"
+      ],
+      "description": "Linguagem de programação criada por Bjarne Stroustrup.",
+      "chunk_ids": [
+        "bjarne_stroustrup#0",
+        "bjarne_stroustrup#1",
+        "bjarne_stroustrup#2",
+        "bjarne_stroustrup#6",
+        "bjarne_stroustrup#7",
+        "bjarne_stroustrup#8"
+      ]
+    }
+  ],
+  "relacoes": [
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:c_mais_mais",
+      "chunk_id": "bjarne_stroustrup#1"
+    },
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:c_mais_mais",
+      "chunk_id": "bjarne_stroustrup#6"
+    },
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:c_mais_mais",
+      "chunk_id": "bjarne_stroustrup#8"
+    },
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "tipo": "RECEBEU",
+      "destino": "premio:premio_grace_murray_hopper",
+      "chunk_id": "bjarne_stroustrup#6"
+    },
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:at_t",
+      "chunk_id": "bjarne_stroustrup#6"
+    },
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:columbia_university",
+      "chunk_id": "bjarne_stroustrup#5"
+    },
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:laboratorios_bell_da_at_t",
+      "chunk_id": "bjarne_stroustrup#3"
+    },
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:morgan_stanley",
+      "chunk_id": "bjarne_stroustrup#5"
+    },
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:texas_a_m_university",
+      "chunk_id": "bjarne_stroustrup#4"
+    },
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:texas_a_m_university",
+      "chunk_id": "bjarne_stroustrup#5"
+    },
+    {
+      "origem": "pessoa:bjarne_stroustrup",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:universidade_do_texas_a_m",
+      "chunk_id": "bjarne_stroustrup#0"
+    }
+  ]
+}

@@ -13,8 +13,11 @@ módulo único (src/recuperacao/embeddings.py) e grava no Neo4j com a ingestão 
 - Arquivos manifesto*.json são ignorados (não são artigos).
 
 Uso:
-    python -m src.banco.ingestor                  # data/processado/extraido
+    python -m src.banco.ingestor                  # data/processado/curado
     python -m src.banco.ingestor data/semente
+
+data/processado/curado: saída da curadoria do PA4, gerada por
+src/pipeline/exportar_pa4.py --incluir-pendentes.
 """
 
 import argparse
@@ -26,7 +29,7 @@ from pathlib import Path
 from neo4j.exceptions import Neo4jError
 
 RAIZ = Path(__file__).resolve().parents[2]
-PASTA_PADRAO = RAIZ / "data" / "processado" / "extraido"
+PASTA_PADRAO = RAIZ / "data" / "processado" / "curado"
 INGESTAO = RAIZ / "neo4j" / "consultas" / "ingestao_modelo.cypher"
 DOMINIO = RAIZ / "neo4j" / "dominio.json"
 
@@ -255,7 +258,7 @@ def main(argv: list[str] | None = None, gerar_vetores=None) -> int:
         description="Ingere no Neo4j os JSON de artigo de uma pasta (idempotente).",
     )
     parser.add_argument("pasta", nargs="?", default=str(PASTA_PADRAO),
-                        help="pasta com um JSON por artigo (padrão: data/processado/extraido)")
+                        help="pasta com um JSON por artigo (padrão: data/processado/curado)")
     parser.add_argument("--prefixo", default="",
                         help="texto adicionado a todos os ids, para carregar uma cópia separada (ex.: testes)")
     args = parser.parse_args(argv)

@@ -1,13 +1,18 @@
-"""Exportação conservadora da curadoria PA4 para preparação do PA5.
+"""Exportação da curadoria do PA4.
 
 Uso na raiz do projeto:
     python src/pipeline/exportar_pa4.py
+        prévia só com as relações aceitas (modo padrão), em .cache/pa4_curado
+    python src/pipeline/exportar_pa4.py --incluir-pendentes --saida data/processado/curado
+        entrada do ingestor: aceitas e pendentes, sem as rejeitadas
 
-Preserva os JSONs do PA3. Gera um JSON por artigo com o contrato de
-neo4j/dominio.json, incluindo APENAS as relações com status 'aceita'.
-relações pendentes. A curadoria foi inicialmente assistida por IA e
-posteriormente conferida e ajustada manualmente. A exportação ainda
-depende de verificações finais antes da ingestão no Neo4j.
+Preserva os JSONs do PA3 (data/processado/extraido). Gera um JSON por artigo com o
+contrato de neo4j/dominio.json e os ids canônicos das equivalências. No modo padrão
+entram APENAS as relações com status 'aceita' e as entidades que elas usam. Com
+--incluir-pendentes entram também as pendentes (inclusive as dos artigos sem nenhuma
+decisão) e todas as entidades resolvidas; as rejeitadas ficam de fora. Correções de
+evidência nunca são aplicadas sozinhas: ficam só registradas na auditoria. A curadoria
+foi inicialmente assistida por IA e posteriormente conferida e ajustada manualmente.
 """
 
 import argparse
@@ -35,8 +40,15 @@ def chave(artigo: str, relacao: dict) -> tuple[str, str, str, str, str]:
     return (artigo, relacao["origem"], relacao["tipo"], relacao["destino"], relacao["chunk_id"])
 
 
-def exportar(artigos: dict, revisoes: dict, equivalencias: dict, correcoes: dict | None = None) -> tuple[dict, dict]:
-    """Retorna (artigos_curados, auditoria) sem modificar os dados de entrada."""
+def exportar(artigos: dict, revisoes: dict, equivalencias: dict, correcoes: dict | None = None,
+             incluir_pendentes: bool = False) -> tuple[dict, dict]:
+    """Retorna (artigos_curados, auditoria) sem modificar os dados de entrada.
+
+    Padrão: só as relações aceitas, com as entidades reduzidas às que elas usam.
+    Com incluir_pendentes=True: aceitas e pendentes, sem as rejeitadas, e todas as
+    entidades resolvidas (servem à recuperação pelas MENTIONS). Correções de evidência
+    continuam só registradas na auditoria; a relação sai com o chunk_id original.
+    """
     integrado = integrar(artigos, revisoes, equivalencias)
     resolvidos, _ = resolver(artigos, equivalencias)
     if integrado["colisoes"]:
@@ -67,6 +79,7 @@ def exportar(artigos: dict, revisoes: dict, equivalencias: dict, correcoes: dict
 
     aceitas_por_artigo = {nome: [] for nome in resolvidos}
     excluidas = []
+    pendentes_exportadas = []
     sugestoes_usadas = set()
     for registro in integrado["relacoes"]:
         nome, relacao = registro["artigo"], registro["relacao"]
@@ -82,7 +95,12 @@ def exportar(artigos: dict, revisoes: dict, equivalencias: dict, correcoes: dict
                     sugestoes_usadas.add(k)
             if aplicaveis:
                 item["sugestoes_correcao_evidencia"] = aplicaveis
-            excluidas.append(item)
+            if registro["status"] == "pendente" and incluir_pendentes:
+                # Vai com o chunk_id original; a sugestão fica só na auditoria.
+                aceitas_por_artigo[nome].append(deepcopy(relacao))
+                pendentes_exportadas.append(item)
+            else:
+                excluidas.append(item)
 
     if set(sugestoes) != sugestoes_usadas:
         raise ValueError("Correção de evidência aponta para relação já aceita; não aplicar automaticamente")
@@ -104,46 +122,56 @@ def exportar(artigos: dict, revisoes: dict, equivalencias: dict, correcoes: dict
             ids_usados.update((r["origem"], r["destino"]))
             aprovadas.append(r)
         copia["relacoes"] = aprovadas
-        # Reduz entidades ao subconjunto necessário para as relações aprovadas.
-        # Chunks/documento permanecem para preservar toda evidência textual.
-        copia["entidades"] = [e for e in copia["entidades"] if e["id"] in ids_usados]
+        if not incluir_pendentes:
+            # Reduz entidades ao subconjunto necessário para as relações aprovadas.
+            # Chunks/documento permanecem para preservar toda evidência textual.
+            copia["entidades"] = [e for e in copia["entidades"] if e["id"] in ids_usados]
         saidas[nome] = copia
 
+    pendentes = integrado["resumo"]["pendente"] if incluir_pendentes else 0
     total = sum(len(d["relacoes"]) for d in saidas.values())
-    if total != integrado["resumo"]["aceita"]:
+    if total != integrado["resumo"]["aceita"] + pendentes:
         raise ValueError("Contagem de relações exportadas diverge da revisão")
     auditoria = {
         "resumo": {
             "artigos": len(saidas),
-            "relacoes_aceitas_exportadas": total,
+            "relacoes_aceitas_exportadas": total - pendentes,
+            "relacoes_pendentes_exportadas": pendentes,
             "relacoes_rejeitadas_excluidas": integrado["resumo"]["rejeitada"],
-            "relacoes_pendentes_excluidas": integrado["resumo"]["pendente"],
+            "relacoes_pendentes_excluidas": integrado["resumo"]["pendente"] - pendentes,
             "sugestoes_de_correcao": len(sugestoes),
             "ids_canonicos_no_conjunto_original": integrado["resumo"]["ids_distintos"],
             "ids_utilizados_na_exportacao": len({e["id"] for d in saidas.values() for e in d["entidades"]}),
         },
         "unificacoes": integrado["unificacoes"],
         "excluidas": excluidas,
+        "pendentes_exportadas": pendentes_exportadas,
         "observacao": "Curadoria inicialmente assistida por IA, seguida de conferencia e ajustes manuais. Correcoes de evidencia sugeridas nao sao aprovadas automaticamente. A ingestao no Neo4j depende de verificacao final e testes de integracao.",
     }
     return saidas, auditoria
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description="PA4: exporta relações aceitas para prévia do PA5")
+    parser = argparse.ArgumentParser(
+        description="PA4: exporta a curadoria (padrão: prévia só com aceitas; "
+                    "com --incluir-pendentes: entrada do ingestor, sem as rejeitadas)")
     parser.add_argument("--entrada", type=Path, default=ENTRADA_PADRAO)
     parser.add_argument("--revisoes", type=Path, default=REVISOES_PADRAO)
     parser.add_argument("--equivalencias", type=Path, default=EQUIVALENCIAS_PADRAO)
     parser.add_argument("--correcoes", type=Path, default=CORRECOES_PADRAO)
     parser.add_argument("--saida", type=Path, default=SAIDA_PADRAO)
     parser.add_argument("--auditoria", type=Path, default=AUDITORIA_PADRAO)
+    parser.add_argument("--incluir-pendentes", action="store_true",
+                        help="exporta também as pendentes e todas as entidades resolvidas "
+                             "(use com --saida data/processado/curado)")
     args = parser.parse_args(argv)
     try:
         artigos = ler_artigos(args.entrada)
         revisoes = json.loads(args.revisoes.read_text(encoding="utf-8"))
         equivalencias = json.loads(args.equivalencias.read_text(encoding="utf-8"))
         correcoes = json.loads(args.correcoes.read_text(encoding="utf-8")) if args.correcoes.exists() else {}
-        saidas, auditoria = exportar(artigos, revisoes, equivalencias, correcoes)
+        saidas, auditoria = exportar(artigos, revisoes, equivalencias, correcoes,
+                                     incluir_pendentes=args.incluir_pendentes)
     except (OSError, ValueError, TypeError, KeyError) as exc:
         parser.error(str(exc))
     args.saida.mkdir(parents=True, exist_ok=True)
@@ -153,10 +181,17 @@ def main(argv=None) -> int:
     args.auditoria.parent.mkdir(parents=True, exist_ok=True)
     args.auditoria.write_text(json.dumps(auditoria, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     r = auditoria["resumo"]
-    print(f"{r['artigos']} artigos; {r['relacoes_aceitas_exportadas']} relações aceitas exportadas.")
-    print(f"Excluídas: {r['relacoes_rejeitadas_excluidas']} rejeitadas; {r['relacoes_pendentes_excluidas']} pendentes.")
+    print(f"{r['artigos']} artigos. Entraram: {r['relacoes_aceitas_exportadas']} aceitas e "
+          f"{r['relacoes_pendentes_exportadas']} pendentes.")
+    print(f"Ficaram de fora: {r['relacoes_rejeitadas_excluidas']} rejeitadas e "
+          f"{r['relacoes_pendentes_excluidas']} pendentes.")
+    print(f"Entidades exportadas: {r['ids_utilizados_na_exportacao']} ids, de "
+          f"{r['ids_canonicos_no_conjunto_original']} canônicos.")
     print(f"Sugestões de correção de evidência: {r['sugestoes_de_correcao']} (sem aprovação automática).")
-    print(f"Prévia para PA5: {args.saida}")
+    if args.incluir_pendentes:
+        print(f"Entrada do ingestor (aceitas e pendentes, sem as rejeitadas): {args.saida}")
+    else:
+        print(f"Prévia só com as aceitas: {args.saida}")
     print(f"Auditoria: {args.auditoria}")
     print("ATENÇÃO: curadoria revisada manualmente; verificar dados e integração antes da ingestão no Neo4j.")
     return 0

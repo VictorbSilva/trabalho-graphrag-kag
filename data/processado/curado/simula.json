@@ -1,0 +1,517 @@
+{
+  "documento": {
+    "id": "simula",
+    "title": "Simula",
+    "source": "https://pt.wikipedia.org/wiki/Simula"
+  },
+  "chunks": [
+    {
+      "id": "simula#0",
+      "index": 0,
+      "text": "Simula é uma família de linguagens de programação, projetadas para apoiar a simulação de eventos discretos, criada entre 1962 e 1968 por Kristen Nygaard e Ole-Johan Dahl no Centro Norueguês de Computação em Oslo. Simula I, criada em 1962, baseada em ALGOL 60\nSimula 67, cuja primeira versão foi apresentada em 1966 foi a 1ª linguagem orientada a objetos e introduziu os conceitos de classes e herança."
+    },
+    {
+      "id": "simula#1",
+      "index": 1,
+      "text": "Simula 87\nSintaticamente, Simula é um super-conjunto de ALGOL 60. Cientistas da computação como Bjarne Stroustrup, criador de C++, e James Gosling, criador de Java, reconheceram Simula como uma influência importante. Objetos tipo Simula são reimplementados em C++, Object Pascal, Java, C# e muitas outras linguagens. História\nKristen Nygaard começou a escrever programas de simulação computacional em 1957."
+    },
+    {
+      "id": "simula#2",
+      "index": 2,
+      "text": "História\nKristen Nygaard começou a escrever programas de simulação computacional em 1957. Nygaard viu a necessidade de uma melhor forma de descrever a heterogeneidade e o funcionamento de um sistema. Para ir mais longe com suas idéias em linguagem de computador formal para descrever um sistema, Nygaard percebeu que ele precisava de alguém com mais habilidades do que ele tinha em programação."
+    },
+    {
+      "id": "simula#3",
+      "index": 3,
+      "text": "Ole-Johan Dahl juntou-se ao seu trabalho em janeiro de 1962. A decisão de estabelecer uma relação entre a línguagem e o Algol 60 foi feita um pouco depois. Por Maio de 1962 os principais conceitos para uma linguagem simulação foram definidos. \"Simula I\" nasceu. Kristen Nygaard foi convidado a Univac por Maio de 1962 em conexão com o marketing do seu novo computador UNIVAC 1107."
+    },
+    {
+      "id": "simula#4",
+      "index": 4,
+      "text": "Kristen Nygaard foi convidado a Univac por Maio de 1962 em conexão com o marketing do seu novo computador UNIVAC 1107. Na visita que Nygaard apresentou as idéias do Simula para Robert Bemer, o diretor de sistemas de programação da Univac. Bemer era fã de Algol e achou o Projeto Simula atraente. Bemer também estava presidindo uma sessão na segunda conferência internacional sobre o tratamento de informações hospedado pelo IFIP."
+    },
+    {
+      "id": "simula#5",
+      "index": 5,
+      "text": "Bemer também estava presidindo uma sessão na segunda conferência internacional sobre o tratamento de informações hospedado pelo IFIP. Ele convidou Nygaard, que apresentou o documento \"SIMULA - An Extension of ALGOL to the Description of Discrete-Event Networks\". O Centro Norueguês de Computação obteve um UNIVAC 1107 em Agosto de 1963 a um desconto considerável, e Dahl implementou Simula I sob contrato com a Univac."
+    },
+    {
+      "id": "simula#6",
+      "index": 6,
+      "text": "A implementação foi baseada no compilador UNIVAC Algol 60. Simula I estava totalmente operacional no UNIVAC 1107 em janeiro de 1965. Nos dois anos seguintes Dahl e Nygaard gastaram muito tempo ensinando Simula. Simula foi ensinado a vários países espalhados por todo o mundo e Simula I foi posteriormente executado em computadores Burroughs B5500 e do computador russo URAL-16. Em 1966 C. A. R."
+    },
+    {
+      "id": "simula#7",
+      "index": 7,
+      "text": "R. Hoare introduziu o conceito de registro classe construir, que Dahl e Nygaard estenderam com o conceito de prefixo e outros recursos para satisfazer as suas exigências de um processo generalizado conceito. Dahl e Nygaard apresentaram seus artigos em Declarações de classe e subclasses na Conferência IFIP Simulação de Linguagens em Oslo, em maio de 1967. Este trabalho se tornou a primeira definição formal de Simula 67."
+    },
+    {
+      "id": "simula#8",
+      "index": 8,
+      "text": "Este trabalho se tornou a primeira definição formal de Simula 67. Em junho de 1967 uma conferência foi realizada para uniformizar a linguagem e iniciar uma série de implementações. Dahl fez a proposta de unificar o Tipo e concepção da classe. Isto levou a sérias discussões, e a proposta foi rejeitada pelo conselho de administração."
+    },
+    {
+      "id": "simula#9",
+      "index": 9,
+      "text": "Isto levou a sérias discussões, e a proposta foi rejeitada pelo conselho de administração. Simula 67  foi formalmente padronizado sobre a primeira reunião de Simula Standards Group (SSG) em fevereiro de 1968. Simula foi influente no desenvolvimento de Smalltalk e, mais tarde na programação orientada a objetos. Ele também ajudou a inspirar o modelo de computação concorrente, embora Simula apenas suporta co-rotinas e não verdadeiros concorrentes."
+    },
+    {
+      "id": "simula#10",
+      "index": 10,
+      "text": "Ele também ajudou a inspirar o modelo de computação concorrente, embora Simula apenas suporta co-rotinas e não verdadeiros concorrentes. No fim da década de sessenta e início da década de setenta, houve quatro principais implementações do Simula:"
+    },
+    {
+      "id": "simula#11",
+      "index": 11,
+      "text": "No fim da década de sessenta e início da década de setenta, houve quatro principais implementações do Simula: UNIVAC 1100 feito pelo Centro Norueguês de Computação\nSystem/360 e System/370, pelo Instituto suéco de pesquisa de defesa nacional (FOA)\nCDC 3000 pela Universidade de Oslo\nTOPS-10 pelo ENEA AB\nEstas implementações foram portadas para uma série de plataformas."
+    },
+    {
+      "id": "simula#12",
+      "index": 12,
+      "text": "O TOPS-10 implementou o conceito de variáveis e métodos públicos, protegidos e privados, que mais tarde foram integrados no Simula-87. Simula 87 é o último padrão e foi portado para diversas plataformas. As três principais implementações são:"
+    },
+    {
+      "id": "simula#13",
+      "index": 13,
+      "text": "As três principais implementações são: Simula AS\nLund Simula\n«GNU Cim»\nEm novembro de 2001, Dahl e Nyggard foram premiados com a medalha IEEE John von Neumann do Instituto de Engenheiros Eletricistas e Eletrônicos (IEEE), pela introdução dos conceitos fundamentais da programação orientada a objetos através do desenho e implementação do SIMULA 67."
+    },
+    {
+      "id": "simula#14",
+      "index": 14,
+      "text": "Em fevereiro de 2002, eles receberam o premio 2001 Turing A.M. pela Associação para Maquinaria da Computação. Infelizmente tanto Dahl como Nygaard não puderam presenciar a homenagem que foi agendada na conferência OOPSLA 2002 em Seattle, pois ambos faleceram respectivamente em Junho e Agosto daquele ano. Exemplos de código\nHello world\nBEGIN\n  WHILE 1=1 DO\n    BEGIN\n      outtext(\"Hello World!\");\n      outimage;\n    END;\nEND; Ou também:"
+    },
+    {
+      "id": "simula#15",
+      "index": 15,
+      "text": "Ou também: Begin\n   OutText(\"Hello World!\");\n   OutImage;\n End do programa; Classes, subclasses e métodos virtuais\nUm exemplo com uso de classes, subclasses e métodos virtuais: Begin\n   Class Glyph;\n      Virtual: Procedure print Is Procedure print;;\n   Begin\n   End; Glyph Class Char (c);\n      Character c;\n   Begin\n      Procedure print;\n        OutChar(c);\n   End;"
+    },
+    {
+      "id": "simula#16",
+      "index": 16,
+      "text": "Glyph Class Char (c);\n      Character c;\n   Begin\n      Procedure print;\n        OutChar(c);\n   End; Glyph Class Line (elements);\n      Ref (Glyph) Array elements;\n   Begin\n      Procedure print;\n      Begin\n         Integer i;\n         For i:= 1 Step 1 Until UpperBound (elements, 1) Do\n            elements (i).print;\n         OutImage;\n      End;\n   End; Ref (Glyph) rg;\n   Ref (Glyph) Array rgs (1 : 4); !"
+    },
+    {
+      "id": "simula#17",
+      "index": 17,
+      "text": "! Main program;\n   rgs (1):- New Char ('A');\n   rgs (2):- New Char ('b');\n   rgs (3):- New Char ('b');\n   rgs (4):- New Char ('a');\n   rg:- New Line (rgs);\n   rg.print;\nEnd; O exemplo acima tem uma superclasse (Glyph) com duas subclasses (Char e Line). Há um método virtual com duas implementações. A execução se inicia no bloco Main program."
+    },
+    {
+      "id": "simula#18",
+      "index": 18,
+      "text": "A execução se inicia no bloco Main program. Simula não tem o conceito de classes abstratas, já que classes com métodos virtuais puros podem ser instanciadas. Isto significa que no exemplo acima, todas as classes podem ser instanciadas. No entanto, a chamada de um método virtual puro produzirá um erro em Run time."
+    },
+    {
+      "id": "simula#19",
+      "index": 19,
+      "text": "No entanto, a chamada de um método virtual puro produzirá um erro em Run time. Passagem de parâmetros por nome\nSimula suporta passagem de parâmetros por nome, portando a técnica Aparelho de Jensen pode ser facilmente implementada. No entanto, a passagem de parâmetros padrão é por valor, diferentemente de ALGOL que usa por padrão a passagem de parâmetros por nome."
+    }
+  ],
+  "entidades": [
+    {
+      "id": "organizacao:centro_noruegues_de_computacao",
+      "name": "Centro Norueguês de Computação",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Instituição onde Simula foi desenvolvida.",
+      "chunk_ids": [
+        "simula#0",
+        "simula#11",
+        "simula#5"
+      ]
+    },
+    {
+      "id": "organizacao:enea_ab",
+      "name": "ENEA AB",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa que implementou o TOPS-10.",
+      "chunk_ids": [
+        "simula#11"
+      ]
+    },
+    {
+      "id": "organizacao:ifip",
+      "name": "IFIP",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Federação Internacional de Processamento de Informação, anfitriã de conferências sobre Simula.",
+      "chunk_ids": [
+        "simula#5"
+      ]
+    },
+    {
+      "id": "organizacao:instituto_sueco_de_pesquisa_de_defesa_nacional",
+      "name": "Instituto sueco de pesquisa de defesa nacional (FOA)",
+      "type": "Organizacao",
+      "aliases": [
+        "FOA"
+      ],
+      "description": "Instituto sueco que desenvolveu System/360 e System/370.",
+      "chunk_ids": [
+        "simula#11"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_de_oslo",
+      "name": "Universidade de Oslo",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Universidade norueguesa responsável pela implementação do CDC 3000.",
+      "chunk_ids": [
+        "simula#11"
+      ]
+    },
+    {
+      "id": "pessoa:kristen_nygaard",
+      "name": "Kristen Nygaard",
+      "type": "Pessoa",
+      "aliases": [
+        "Nygaard"
+      ],
+      "description": "Cientista da computação norueguês, co-criador da linguagem Simula.",
+      "chunk_ids": [
+        "simula#0",
+        "simula#13",
+        "simula#14",
+        "simula#5",
+        "simula#7"
+      ]
+    },
+    {
+      "id": "pessoa:ole_johan_dahl",
+      "name": "Ole-Johan Dahl",
+      "type": "Pessoa",
+      "aliases": [
+        "Dahl"
+      ],
+      "description": "Cientista da computação norueguês, co-criador da linguagem Simula.",
+      "chunk_ids": [
+        "simula#0",
+        "simula#13",
+        "simula#14",
+        "simula#5",
+        "simula#7"
+      ]
+    },
+    {
+      "id": "pessoa:r_hoare",
+      "name": "R. Hoare",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Cientista da computação que introduziu o conceito de registro classe que foi estendido por Dahl e Nygaard.",
+      "chunk_ids": [
+        "simula#7"
+      ]
+    },
+    {
+      "id": "premio:medalha_ieee_john_von_neumann",
+      "name": "Medalha IEEE John von Neumann",
+      "type": "Premio",
+      "aliases": [],
+      "description": "Prêmio concedido pelo IEEE por contribuições à computação.",
+      "chunk_ids": [
+        "simula#13"
+      ]
+    },
+    {
+      "id": "premio:premio_turing",
+      "name": "Prêmio Turing",
+      "type": "Premio",
+      "aliases": [
+        "Prêmio Turing 2001 A.M."
+      ],
+      "description": "Prêmio Turing concedido em 2001 pela ACM.",
+      "chunk_ids": [
+        "simula#14"
+      ]
+    },
+    {
+      "id": "tecnologia:algol_60",
+      "name": "ALGOL 60",
+      "type": "Tecnologia",
+      "aliases": [
+        "Relatório ALGOL 60"
+      ],
+      "description": "Linguagem de programação que influenciou Simula I.",
+      "chunk_ids": [
+        "simula#0"
+      ]
+    },
+    {
+      "id": "tecnologia:c_mais_mais",
+      "name": "C++",
+      "type": "Tecnologia",
+      "aliases": [
+        "linguagem C++",
+        "programação C++",
+        "C with Classes"
+      ],
+      "description": "Linguagem de programação criada por Bjarne Stroustrup, influenciada por Simula.",
+      "chunk_ids": [
+        "simula#1"
+      ]
+    },
+    {
+      "id": "tecnologia:cdc_3000",
+      "name": "CDC 3000",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Computador da série CDC.",
+      "chunk_ids": [
+        "simula#11"
+      ]
+    },
+    {
+      "id": "tecnologia:java",
+      "name": "Java",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação criada por James Gosling, influenciada por Simula.",
+      "chunk_ids": [
+        "simula#1"
+      ]
+    },
+    {
+      "id": "tecnologia:simula",
+      "name": "Simula",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Família de linguagens de programação para simulação, criada entre 1962 e 1968.",
+      "chunk_ids": [
+        "simula#0",
+        "simula#1"
+      ]
+    },
+    {
+      "id": "tecnologia:simula_67",
+      "name": "Simula 67",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Versão de Simula apresentada em 1966, primeira linguagem orientada a objetos.",
+      "chunk_ids": [
+        "simula#0",
+        "simula#13",
+        "simula#7",
+        "simula#8",
+        "simula#9"
+      ]
+    },
+    {
+      "id": "tecnologia:simula_87",
+      "name": "Simula-87",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Versão padrão posterior do Simula.",
+      "chunk_ids": [
+        "simula#12"
+      ]
+    },
+    {
+      "id": "tecnologia:simula_i",
+      "name": "Simula I",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Primeira linguagem da família Simula, baseada em ALGOL 60.",
+      "chunk_ids": [
+        "simula#0",
+        "simula#5",
+        "simula#6"
+      ]
+    },
+    {
+      "id": "tecnologia:smalltalk",
+      "name": "Smalltalk",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação influenciada por Simula.",
+      "chunk_ids": [
+        "simula#9"
+      ]
+    },
+    {
+      "id": "tecnologia:system_360",
+      "name": "System/360",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Família de mainframes da IBM.",
+      "chunk_ids": [
+        "simula#11"
+      ]
+    },
+    {
+      "id": "tecnologia:system_370",
+      "name": "System/370",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Família de mainframes da IBM sucessora do System/360.",
+      "chunk_ids": [
+        "simula#11"
+      ]
+    },
+    {
+      "id": "tecnologia:tops_10",
+      "name": "TOPS-10",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Sistema operacional da DEC que implementou variáveis e métodos públicos.",
+      "chunk_ids": [
+        "simula#11",
+        "simula#12"
+      ]
+    },
+    {
+      "id": "tecnologia:univac_1100",
+      "name": "UNIVAC 1100",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Computador da série UNIVAC.",
+      "chunk_ids": [
+        "simula#11"
+      ]
+    },
+    {
+      "id": "tecnologia:univac_1107",
+      "name": "UNIVAC 1107",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Computador que executou Simula I em 1965.",
+      "chunk_ids": [
+        "simula#5"
+      ]
+    }
+  ],
+  "relacoes": [
+    {
+      "origem": "pessoa:kristen_nygaard",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:simula",
+      "chunk_id": "simula#0"
+    },
+    {
+      "origem": "pessoa:kristen_nygaard",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:simula_67",
+      "chunk_id": "simula#13"
+    },
+    {
+      "origem": "pessoa:kristen_nygaard",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:simula_67",
+      "chunk_id": "simula#7"
+    },
+    {
+      "origem": "pessoa:kristen_nygaard",
+      "tipo": "RECEBEU",
+      "destino": "premio:medalha_ieee_john_von_neumann",
+      "chunk_id": "simula#13"
+    },
+    {
+      "origem": "pessoa:kristen_nygaard",
+      "tipo": "RECEBEU",
+      "destino": "premio:premio_turing",
+      "chunk_id": "simula#14"
+    },
+    {
+      "origem": "pessoa:ole_johan_dahl",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:simula",
+      "chunk_id": "simula#0"
+    },
+    {
+      "origem": "pessoa:ole_johan_dahl",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:simula_67",
+      "chunk_id": "simula#13"
+    },
+    {
+      "origem": "pessoa:ole_johan_dahl",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:simula_67",
+      "chunk_id": "simula#7"
+    },
+    {
+      "origem": "pessoa:ole_johan_dahl",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:simula_i",
+      "chunk_id": "simula#5"
+    },
+    {
+      "origem": "pessoa:ole_johan_dahl",
+      "tipo": "RECEBEU",
+      "destino": "premio:medalha_ieee_john_von_neumann",
+      "chunk_id": "simula#13"
+    },
+    {
+      "origem": "pessoa:ole_johan_dahl",
+      "tipo": "RECEBEU",
+      "destino": "premio:premio_turing",
+      "chunk_id": "simula#14"
+    },
+    {
+      "origem": "tecnologia:c_mais_mais",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:simula",
+      "chunk_id": "simula#1"
+    },
+    {
+      "origem": "tecnologia:cdc_3000",
+      "tipo": "DESENVOLVIDA_EM",
+      "destino": "organizacao:universidade_de_oslo",
+      "chunk_id": "simula#11"
+    },
+    {
+      "origem": "tecnologia:java",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:simula",
+      "chunk_id": "simula#1"
+    },
+    {
+      "origem": "tecnologia:simula",
+      "tipo": "DESENVOLVIDA_EM",
+      "destino": "organizacao:centro_noruegues_de_computacao",
+      "chunk_id": "simula#0"
+    },
+    {
+      "origem": "tecnologia:simula_87",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:tops_10",
+      "chunk_id": "simula#12"
+    },
+    {
+      "origem": "tecnologia:simula_i",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:algol_60",
+      "chunk_id": "simula#0"
+    },
+    {
+      "origem": "tecnologia:smalltalk",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:simula_67",
+      "chunk_id": "simula#9"
+    },
+    {
+      "origem": "tecnologia:system_360",
+      "tipo": "DESENVOLVIDA_EM",
+      "destino": "organizacao:instituto_sueco_de_pesquisa_de_defesa_nacional",
+      "chunk_id": "simula#11"
+    },
+    {
+      "origem": "tecnologia:system_370",
+      "tipo": "DESENVOLVIDA_EM",
+      "destino": "organizacao:instituto_sueco_de_pesquisa_de_defesa_nacional",
+      "chunk_id": "simula#11"
+    },
+    {
+      "origem": "tecnologia:tops_10",
+      "tipo": "DESENVOLVIDA_EM",
+      "destino": "organizacao:enea_ab",
+      "chunk_id": "simula#11"
+    },
+    {
+      "origem": "tecnologia:univac_1100",
+      "tipo": "DESENVOLVIDA_EM",
+      "destino": "organizacao:centro_noruegues_de_computacao",
+      "chunk_id": "simula#11"
+    }
+  ]
+}

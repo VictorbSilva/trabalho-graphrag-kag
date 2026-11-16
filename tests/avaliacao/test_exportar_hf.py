@@ -146,6 +146,17 @@ def test_jsonl_mantem_os_acentos(tmp_path):
     assert "linguagem de programação" in texto
 
 
+def test_arquivos_gravados_com_lf_mesmo_com_card_em_crlf(tmp_path, monkeypatch):
+    # No Windows, com core.autocrlf, o card sai do checkout com CRLF.
+    card_crlf = tmp_path / "card.md"
+    card_crlf.write_bytes(exportar_hf.ARQUIVO_CARD.read_bytes().replace(b"\r\n", b"\n").replace(b"\n", b"\r\n"))
+    monkeypatch.setattr(exportar_hf, "ARQUIVO_CARD", card_crlf)
+    saida = tmp_path / "saida"
+    exportar(saida)
+    for nome in ("perguntas.jsonl", "respostas.jsonl", "README.md"):
+        assert b"\r" not in (saida / nome).read_bytes(), nome
+
+
 def test_nenhum_caminho_local_vai_para_o_dataset(tmp_path):
     exportar(tmp_path)
     for nome in ("perguntas.jsonl", "respostas.jsonl", "README.md"):

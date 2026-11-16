@@ -18,7 +18,6 @@ os nós consultados e os avisos.
 
 import argparse
 import json
-import shutil
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[2]
@@ -123,10 +122,16 @@ def exportar_respostas(
     return linhas
 
 
+# newline="\n": sempre LF, mesmo no Windows (o write_text troca \n por \r\n lá).
 def _gravar_jsonl(registros: list[dict], caminho: Path) -> None:
     caminho.write_text(
-        "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in registros), encoding="utf-8"
+        "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in registros), encoding="utf-8", newline="\n"
     )
+
+
+def _copiar_card(origem: Path, destino: Path) -> None:
+    """Copia o card com LF: no Windows, com core.autocrlf, o checkout dele vem com CRLF."""
+    destino.write_text(Path(origem).read_text(encoding="utf-8"), encoding="utf-8", newline="\n")
 
 
 def exportar(pasta: Path = PASTA_SAIDA) -> dict:
@@ -140,7 +145,7 @@ def exportar(pasta: Path = PASTA_SAIDA) -> dict:
     }
     _gravar_jsonl(exportar_perguntas(), arquivos["perguntas"])
     _gravar_jsonl(exportar_respostas(), arquivos["respostas"])
-    shutil.copyfile(ARQUIVO_CARD, arquivos["card"])
+    _copiar_card(ARQUIVO_CARD, arquivos["card"])
     return arquivos
 
 

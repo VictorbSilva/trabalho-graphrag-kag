@@ -1,6 +1,6 @@
 # Avaliação: RAG vetorial vs GraphRAG
 
-Gerado por `python -m src.avaliacao.comparar` em 2026-11-16 05:51, com as 15 perguntas de [data/avaliacao/perguntas.json](../data/avaliacao/perguntas.json) nos modos `vetorial` e `graphrag`. As respostas completas ficam em [data/avaliacao/resultados/completo/respostas.json](../data/avaliacao/resultados/completo/respostas.json). Os números dependem do que estava carregado no Neo4j quando o executor rodou.
+Gerado por `python -m src.avaliacao.comparar` em 2026-11-16 05:58, com as 15 perguntas de [data/avaliacao/perguntas.json](../data/avaliacao/perguntas.json) nos modos `vetorial` e `graphrag`. As respostas completas ficam em [data/avaliacao/resultados/completo/respostas.json](../data/avaliacao/resultados/completo/respostas.json). Os números dependem do que estava carregado no Neo4j quando o executor rodou.
 
 A classificação manual fica em [data/avaliacao/resultados/completo/classificacao.json](../data/avaliacao/resultados/completo/classificacao.json) e sobrevive a novas execuções do executor. A planilha para preenchê-la está em [docs/avaliacao-planilha-completo.md](avaliacao-planilha-completo.md).
 

@@ -66,6 +66,10 @@ queries, and the answer cites the paths and passages it used, with a confidence 
 computed from retrieval signals. In an evaluation with 15 questions, GraphRAG correctly
 answered 2 of 7 multi-hop questions, against 1 for vector RAG, with the database
 limited to four hand-annotated articles, and neither mode produced a hallucinated answer.
+With the 31 curated articles loaded, GraphRAG correctly answered all 5 single-hop
+questions and 2 of 7 multi-hop questions, against 3 and none for vector RAG, and produced
+one hallucinated answer from a wrongly extracted relation; with 15 questions, these
+results indicate a trend, not a statistically significant difference.
 \end{abstract}
 
 \begin{resumo}
@@ -81,7 +85,11 @@ multi-hop pelo grafo e consultas Cypher geradas por LLM, e a resposta cita os ca
 trechos usados, com um nível de confiança calculado a partir de sinais da recuperação.
 Numa avaliação com 15 perguntas, o GraphRAG respondeu corretamente 2 de 7 perguntas
 multi-hop, contra 1 do RAG vetorial, com o banco limitado a quatro artigos anotados à
-mão, e nenhum dos modos produziu resposta alucinada.
+mão, e nenhum dos modos produziu resposta alucinada. Com os 31 artigos curados
+carregados, o GraphRAG acertou as 5 perguntas de um salto e 2 das 7 multi-hop, contra 3 e
+nenhuma do RAG vetorial, e produziu uma resposta alucinada a partir de uma relação
+extraída errada; com 15 perguntas, os resultados indicam uma tendência, não uma diferença
+estatisticamente significativa.
 \end{resumo}
 
 % =====================================================================
@@ -590,6 +598,51 @@ expansão parou antes do último salto, por falta de uma relação extraída, e 
 a consulta Cypher filtrou uma entidade pelo nome em vez do identificador e não encontrou
 caminho.
 
+\subsection{Avaliação com o banco completo}
+\label{sec:avaliacao-completo}
+
+As mesmas 15 perguntas, com as mesmas métricas e a mesma classificação manual, foram
+executadas de novo com o banco carregado com os 31 artigos curados e com o modelo
+\texttt{claude-haiku-5-5}, pela Abacus RouteLLM, com temperatura 0. A
+Tabela~\ref{tab:avaliacao-completo} resume os resultados.
+
+\begin{table}[ht]
+\centering
+\caption{RAG vetorial e GraphRAG nas 15 perguntas de avaliação, com o banco completo.}
+\label{tab:avaliacao-completo}
+\small
+\begin{tabular}{llcccccc}
+\toprule
+\textbf{Modo} & \textbf{Tipo} & \textbf{N} & \textbf{Evid.} & \textbf{Caminho} & \textbf{Correta} & \textbf{Incompl.} & \textbf{Alucin.} \\
+\midrule
+Vetorial & Um salto & 5 & 40\% & 0\% & 3 & 2 & 0 \\
+Vetorial & Multi-hop & 7 & 0\% & 0\% & 0 & 7 & 0 \\
+Vetorial & Sem resposta & 3 & -- & -- & 3 & 0 & 0 \\
+GraphRAG & Um salto & 5 & 80\% & 80\% & 5 & 0 & 0 \\
+GraphRAG & Multi-hop & 7 & 0\% & 14\% & 2 & 4 & 1 \\
+GraphRAG & Sem resposta & 3 & -- & -- & 3 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Em relação à Tabela~\ref{tab:avaliacao}, a maior mudança está nas perguntas de um salto,
+que na semente foram todas recusadas. Com os artigos carregados, o GraphRAG acertou as
+cinco, e a evidência e o caminho do gabarito apareceram, cada um, em quatro delas; o RAG
+vetorial acertou três e recusou as perguntas sobre o núcleo Linux e o prêmio de Niklaus
+Wirth. Nas multi-hop, o GraphRAG manteve duas respostas corretas em sete, agora nas
+perguntas sobre o prêmio do criador do Lisp e a organização em que trabalhava um dos
+inventores do Smalltalk, e o vetorial não acertou nenhuma. A pergunta sobre o prêmio de
+quem criou a linguagem que deu origem ao C, que o GraphRAG acertou na semente, foi
+recusada, embora o subgrafo tivesse o caminho completo do gabarito. As três perguntas
+sem resposta continuaram recusadas nos dois modos. Ao contrário da semente, houve uma
+resposta alucinada: perguntado em qual organização foi criada a linguagem de que o Python
+deriva parte da sintaxe, o GraphRAG respondeu que o C foi desenvolvido na Nokia. A
+resposta seguiu uma relação extraída errada e ainda pendente de revisão, tirada de um
+trecho que diz que o prédio de Murray Hill, hoje da Nokia, foi o local de desenvolvimento
+do C. Como o banco e o modelo mudaram ao mesmo tempo, as diferenças não podem ser
+atribuídas só ao banco, e com 15 perguntas os números continuam indicando uma tendência,
+não uma diferença estatisticamente significativa.
+
 % =====================================================================
 \section{Conclusão}
 \label{sec:conclusao}
@@ -601,7 +654,11 @@ pré-definido, ligadas por indexação mútua. Essa ligação permitiu que a rec
 a trechos que a busca vetorial não encontraria e que cada afirmação da resposta fosse
 seguida até o texto original. Na avaliação, o GraphRAG respondeu corretamente uma pergunta
 multi-hop a mais que o RAG vetorial, um indício que precisa ser confirmado com o corpus
-completo, e nenhum dos modos produziu resposta alucinada.
+completo, e nenhum dos modos produziu resposta alucinada. Com os 31 artigos carregados,
+o GraphRAG acertou as cinco perguntas de um salto e duas das sete multi-hop, contra três
+e nenhuma do RAG vetorial, mas produziu uma resposta alucinada a partir de uma relação
+extraída errada; com 15 perguntas, esse resultado também indica uma tendência, não uma
+diferença estatisticamente significativa.
 
 As principais limitações são a conclusão parcial do
 processamento, com 31 dos 32 artigos previstos, e a
@@ -615,16 +672,19 @@ dependência do LLM na geração das consultas Cypher.
 
 A avaliação inicial da recuperação também foi limitada
 pela quantidade de documentos disponíveis no momento
-de sua execução. Embora o banco tenha sido posteriormente
-ampliado, a comparação entre RAG vetorial e GraphRAG
-precisa ser repetida com os 31 artigos carregados.
+de sua execução. A comparação entre RAG vetorial e
+GraphRAG foi repetida com os 31 artigos carregados, mas
+também com outro modelo de linguagem, o que impede
+atribuir as diferenças só ao banco. Essa repetição
+mostrou ainda que uma relação extraída errada e pendente
+de revisão chega à resposta, o que reforça a necessidade
+de ampliar a curadoria.
 
 Como trabalhos futuros, destacam-se a conclusão do
 artigo restante, a ampliação da resolução de entidades,
 a revisão das relações pendentes, o uso de embeddings das
 entidades na recuperação, a verificação semântica das
-citações e uma nova avaliação com o grafo ampliado e com
-mais perguntas.
+citações e uma nova avaliação com mais perguntas.
 
 % =====================================================================
 \section{Créditos}

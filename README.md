@@ -96,8 +96,30 @@ curl -X POST http://localhost:8000/perguntar -H "Content-Type: application/json"
 
 Detalhes do banco em [neo4j/README.md](neo4j/README.md) e do modelo do grafo em [docs/modelo-do-grafo.md](docs/modelo-do-grafo.md).
 
+## Artigo
+
+O artigo técnico (template da SBC) está em [docs/artigo/artigo.tex](docs/artigo/artigo.tex). Como gerar o PDF: [docs/artigo/README.md](docs/artigo/README.md).
+
 ## Fluxo de trabalho
 
 - Uma branch por tarefa e pull request revisado por pelo menos um colega antes do merge.
 - Cada módulo vem com os próprios testes em `tests/<módulo>/`.
 - Todo código ou exemplo de terceiros é creditado.
+
+## Créditos
+
+**Dados.** Os textos do dataset são da [Wikipédia em português](https://pt.wikipedia.org), sob a licença [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br). Os autores de cada artigo estão no histórico da respectiva página. O título, a URL e a revisão exata de cada artigo estão em `data/bruto/manifesto.json`. Os arquivos derivados (trechos, extração e semente) seguem a mesma licença.
+
+**Software e serviços usados:**
+
+| O que | Para quê |
+|---|---|
+| [Neo4j](https://neo4j.com) 5.26 Community, com [APOC](https://neo4j.com/labs/apoc/) e [Graph Data Science](https://neo4j.com/docs/graph-data-science/) | Banco de grafos, índices e algoritmos (PageRank, Louvain) |
+| [Driver Python do Neo4j](https://github.com/neo4j/neo4j-python-driver) | Acesso ao banco |
+| [sentence-transformers](https://www.sbert.net) e o modelo [paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2), sobre o [PyTorch](https://pytorch.org) | Embeddings de 384 dimensões |
+| [Groq](https://groq.com), modelo `openai/gpt-oss-120b` | Extração de entidades e relações |
+| [Abacus RouteLLM](https://abacus.ai) | Geração das respostas e das consultas Cypher |
+| [FastAPI](https://fastapi.tiangolo.com), [Uvicorn](https://www.uvicorn.org) e [Pydantic](https://docs.pydantic.dev) | API e contrato da resposta |
+| [Streamlit](https://streamlit.io) e [streamlit-agraph](https://github.com/ChrisDelClea/streamlit-agraph) (vis-network) | Interface e visualização do subgrafo |
+| [pytest](https://pytest.org) | Testes |
+| [Docker](https://www.docker.com) | Ambiente do banco |

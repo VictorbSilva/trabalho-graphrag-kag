@@ -70,6 +70,7 @@ No final, imprime quantos documentos, trechos, entidades e relações entre enti
 |---|---|
 | Carregar os artigos processados | `python -m src.banco.ingestor` |
 | Carregar o grafo semente | `python -m src.banco.ingestor data/semente` |
+| Gerar o relatório do grafo (depois do GDS) | `python -m src.banco.relatorio` → [docs/relatorio-grafo.md](../docs/relatorio-grafo.md) |
 | Reaplicar o schema (é idempotente) | `docker compose up neo4j-schema` |
 | Recriar índices fulltext e vetoriais | `docker compose run --rm neo4j-recriar-indices` |
 | Rodar PageRank e Louvain depois da ingestão | `docker compose run --rm neo4j-gds` |

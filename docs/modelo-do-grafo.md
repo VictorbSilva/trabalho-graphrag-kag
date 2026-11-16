@@ -88,6 +88,8 @@ docker compose run --rm neo4j-gds
 - **Louvain** → `Entity.community`: comunidade (tema). Usado para enriquecer o contexto e colorir o subgrafo na interface.
 - **Caminho mais curto:** feito em Cypher na hora da pergunta (consulta 4 de `neo4j/consultas/exemplos.cypher`).
 
+Os números do grafo com os dados reais (contagens, qualidade da extração, top 5 do PageRank e comunidades) estão em [relatorio-grafo.md](relatorio-grafo.md), gerado por `python -m src.banco.relatorio`.
+
 ## Decisões de modelagem (para o artigo)
 
 1. **Rótulo genérico `Entity` + rótulo do domínio.** Uma única constraint em `Entity.id` impede duplicatas de qualquer tipo, e os índices fulltext e vetorial cobrem todas as entidades de uma vez. O rótulo do domínio (`Pessoa`, `Organizacao`...) continua disponível para as consultas Cypher geradas pelo LLM.

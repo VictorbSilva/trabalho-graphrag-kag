@@ -1,0 +1,985 @@
+{
+  "documento": {
+    "id": "pascal",
+    "title": "Pascal (linguagem de programação)",
+    "source": "https://pt.wikipedia.org/wiki/Pascal_(linguagem_de_programa%C3%A7%C3%A3o)"
+  },
+  "chunks": [
+    {
+      "id": "pascal#0",
+      "index": 0,
+      "text": "Pascal, é uma linguagem de programação orientada por objetos, que recebeu este nome em homenagem ao matemático e físico Blaise Pascal. Foi criada em 1970 pelo suíço Niklaus Wirth, tendo em mente encorajar o uso de código estruturado. O próprio, Niklaus Wirth, diz que a linguagem Pascal foi criada simultaneamente para ensinar programação estruturada e para ser utilizada na sua fábrica de software."
+    },
+    {
+      "id": "pascal#1",
+      "index": 1,
+      "text": "Simultaneamente, a linguagem reflete a libertação pessoal de Wirth das restrições impostas após seu envolvimento com a especificação de ALGOL 68, e sua sugestão para essa especificação, o ALGOL W. Pascal originou uma enorme gama de dialetos, podendo também ser considerada uma família de linguagens de programação."
+    },
+    {
+      "id": "pascal#2",
+      "index": 2,
+      "text": "Pascal originou uma enorme gama de dialetos, podendo também ser considerada uma família de linguagens de programação. Grande parte de seu sucesso se deve a criação, na década de 1980, da linguagem Turbo Pascal, inicialmente disponível para computadores baseados na arquitetura 8086 (com versões para 8080 no seu início). Pascal é normalmente uma das linguagens de escolha para ensinar programação, junto com Scheme, C e Fortran."
+    },
+    {
+      "id": "pascal#3",
+      "index": 3,
+      "text": "Pascal é normalmente uma das linguagens de escolha para ensinar programação, junto com Scheme, C e Fortran. Comercialmente, a linguagem foi sucedida pela criação da linguagem Object Pascal, atualmente utilizada nos IDEs Embarcadero Delphi (Object Pascal), Kylix e Lazarus. Academicamente, seus sucessores são as linguagens subsequentes de Niklaus Wirth: Modula-2 e Oberon."
+    },
+    {
+      "id": "pascal#4",
+      "index": 4,
+      "text": "Academicamente, seus sucessores são as linguagens subsequentes de Niklaus Wirth: Modula-2 e Oberon. A partir da versão 2005, o Delphi passou a se referir a sua linguagem de programação como Delphi Language. Assim como a linguagem C, que foi padronizado pela ANSI (ANSI C), o Pascal possui padrões pela ISO, como o Pascal Standard e o Advanced Pascal."
+    },
+    {
+      "id": "pascal#5",
+      "index": 5,
+      "text": "Assim como a linguagem C, que foi padronizado pela ANSI (ANSI C), o Pascal possui padrões pela ISO, como o Pascal Standard e o Advanced Pascal. Implementações\nO primeiro compilador Pascal foi desenvolvido em Zurique para a família de computadores CDC 6000, sendo lançado em 1970. Também em 1970 foi desenvolvido o primeiro compilador Pascal norte americano, na Universidade de Illinois por Donald B."
+    },
+    {
+      "id": "pascal#6",
+      "index": 6,
+      "text": "Também em 1970 foi desenvolvido o primeiro compilador Pascal norte americano, na Universidade de Illinois por Donald B. Gillies, que gerava código de máquina nativo para o mini-computador PDP-11. Pensando-se em propagar rapidamente o uso da linguagem, foi criado, em Zurique, um \"kit de conversão\" que incluia um compilador que gerava código intermediário, e um simulador para ele."
+    },
+    {
+      "id": "pascal#7",
+      "index": 7,
+      "text": "Esse kit foi batizado de p-System, e foi utilizado, entre outras coisas, para criar um sistema operacional para mini-computadores chamado UCSD p-System, desenvolvido pelo Instituto de Sistemas de Informação da Universidade da Califórnia em San Diego. Segundo o próprio Niklaus Wirth, o p-System e o UCSD foram instrumentais na popularização do Pascal."
+    },
+    {
+      "id": "pascal#8",
+      "index": 8,
+      "text": "Segundo o próprio Niklaus Wirth, o p-System e o UCSD foram instrumentais na popularização do Pascal. No padrão UCSD, as Strings passaram a ser tipos pré definidos (no Pascal padrão era utilizados packed-arrays). Nos anos 80, Anders Hejlsberg desenvolveu o compilador Blue Label Pascal o Nascom-2."
+    },
+    {
+      "id": "pascal#9",
+      "index": 9,
+      "text": "Nos anos 80, Anders Hejlsberg desenvolveu o compilador Blue Label Pascal o Nascom-2. Depois, ele foi trabalhar na Borland e reescreveu seu compilador transformando-o no Turbo Pascal para a plataforma IBM PC (e também CP/M 80), que era vendido a US$ 49,95, muito mais barato do que o Blue Label."
+    },
+    {
+      "id": "pascal#10",
+      "index": 10,
+      "text": "Uma característica muito importante é que o Turbo Pascal é uma linguagem compilada, que gera código de máquina real para a arquitetura Intel 8088, tornando-a muito mais rápida do que as linguagens interpretadas. Por ser mais barato, o Turbo Pascal passou a ter uma grande influência na comunidade Pascal, que começou a se concentrar na plataforma IBM PC no fim dos anos 80."
+    },
+    {
+      "id": "pascal#11",
+      "index": 11,
+      "text": "Muitos usuários de PC da época migraram para o Turbo Pascal, em busca de uma linguagem estruturada que não fosse interpretada, para substituir, por exemplo, o BASIC. Pode se afirmar que o sucesso comercial de Turbo Pascal foi definitivo para a ampla divulgação da linguagem Pascal. Outra variante era o Super Pascal, que adicionava labels não numéricas, o comando return e expressões como nomes de tipos."
+    },
+    {
+      "id": "pascal#12",
+      "index": 12,
+      "text": "Outra variante era o Super Pascal, que adicionava labels não numéricas, o comando return e expressões como nomes de tipos. Durante os anos 90, compiladores que podiam ser modificados para trabalhar com arquiteturas diferentes tiveram grande destaque, incluindo nessa lista o Pascal. O próximo grande passo para a linguagem, foi a implementação da orientação a objeto (OO ou OOP em inglês) na sua estrutura, começando com a versão 5.5 do Turbo Pascal."
+    },
+    {
+      "id": "pascal#13",
+      "index": 13,
+      "text": "Mais tarde, ao projetar o Delphi, querendo funcionalidades mais elaboradas da orientação a objeto, a Borland utilizou o conceito Object Pascal criado pela Apple Inc., utilizando-o como base para uma nova linguagem, que nas versões iniciais era chamado de Object Pascal mas foi rebatizado como Delphi Programming Language nas versões posteriores."
+    },
+    {
+      "id": "pascal#14",
+      "index": 14,
+      "text": "As maiores diferenças em relação às implementações OO das versões mais antigas foram a adição do conceito de objetos por referência, construtores, destrutores e propriedades, entre outros. Padrões/Normas\nEm 1983, a linguagem foi padronizada, na norma internacional ISO / IEC 7185, assim como vários padrões locais específicos de cada país, incluindo a norma americana ANSI/IEEE770X3.97-1983, e ISO 7185:1983."
+    },
+    {
+      "id": "pascal#15",
+      "index": 15,
+      "text": "A diferença entre as duas normas é que a padrão ISO possui o “nível 1”, extensão do arrays conformantes, enquanto a ANSI não permitiu esta extensão à linguagem original (versão Wirth). Em 1989, foi revista a ISO 7185 (ISO 7185:1990) para corrigir vários erros e ambiguidades encontradas no documento original\nEm 1990, foi criado uma norma ISO / IEC 10206 padronizando o Pascal."
+    },
+    {
+      "id": "pascal#16",
+      "index": 16,
+      "text": "Em 1993, o padrão ANSI foi substituído com um \"ponteiro\" para a norma ISO 7185:1990, que termina efetivamente o seu estatuto como um padrão diferente."
+    },
+    {
+      "id": "pascal#17",
+      "index": 17,
+      "text": "A norma ISO 7185 foi indicada para ser uma clarificação de Wirth da linguagem como detalhado em 1974 no Manual do Usuário/Utilizador e Relatório [Jensen e Wirth], mas também foi notável pela inclusão de \"Parâmetros de array conformantes\" como um nível 1 da norma, sendo nível 0 Pascal sem Conformantes Arrays."
+    },
+    {
+      "id": "pascal#18",
+      "index": 18,
+      "text": "Note que o próprio Niklaus Wirth se refere à linguagem 1974 como “o padrão”, por exemplo, para diferenciá-la das características específicas de implementação em nível de máquina do compilador CDC 6000. Esta linguagem foi documentada em \"The Pascal Report\", a segunda parte do \"Pascal users manual and report\". Nas grandes máquinas (mainframes e minicomputadores) eram seguidos padrões gerais. Na IBM-PC, não eram."
+    },
+    {
+      "id": "pascal#19",
+      "index": 19,
+      "text": "Na IBM-PC, não eram. No IBM-PC, o Turbo Pascal e Delphi, padrão Borland, tem o maior número de usuários. Assim, é de extrema importância entender se uma determinada aplicação corresponde à linguagem original Pascal, Borland ou um dialeto do mesmo. As versões da linguagem do IBM-PC começaram a divergir com a vinda da UCSD Pascal, uma aplicação que implementou várias prorrogações para a linguagem, juntamente com várias omissões e mudanças."
+    },
+    {
+      "id": "pascal#20",
+      "index": 20,
+      "text": "Muitas características da linguagem UCSD sobrevivem atualmente, inclusive em linguagens Borlands. Sintaxe\nA linguagem Pascal foi criada para incentivar a programação modular e estruturada, facilitando a criação de procedimentos com baixo acoplamento e alta coesão. Um programa em Pascal é composto de constantes e variáveis globais, procedimentos e funções re-entrantes e um programa principal. Procedimentos não retornam valores, funções sim."
+    },
+    {
+      "id": "pascal#21",
+      "index": 21,
+      "text": "Procedimentos não retornam valores, funções sim. Tanto em procedimentos quanto em funções os parâmetros podem ser passados por referência ou por valor. É possível passar vetores e matrizes com o tamanho, mas não a quantidade de dimensões, especificado no tempo de execução. Procedimentos e funções podem conter, dentro de seu escopo, novos procedimentos e funções."
+    },
+    {
+      "id": "pascal#22",
+      "index": 22,
+      "text": "Procedimentos e funções podem conter, dentro de seu escopo, novos procedimentos e funções. Dentro de qualquer parte do programa também podem ser criados blocos com os comandos BEGIN e END, que também possuem seu próprio escopo. Nas versões originais, as variáveis só podiam ser declaradas em posições específicas e não ao decorrer do programa, o que limitava a regra de escopo."
+    },
+    {
+      "id": "pascal#23",
+      "index": 23,
+      "text": "Nas versões originais, as variáveis só podiam ser declaradas em posições específicas e não ao decorrer do programa, o que limitava a regra de escopo. O conjunto de procedimentos e funções pré-definidos é fixo e inclui as funções read, readln, write e writeln, para realizar E/S. Exemplos de código\nNota importante: Os programas foram desenvolvidos com o Turbo Pascal (Borland)."
+    },
+    {
+      "id": "pascal#24",
+      "index": 24,
+      "text": "Exemplos de código\nNota importante: Os programas foram desenvolvidos com o Turbo Pascal (Borland). Para funcionarem com outros compiladores, devem ser feitas as seguintes alterações:"
+    },
+    {
+      "id": "pascal#25",
+      "index": 25,
+      "text": "Linha inicial passa de program name; para program name (input,output);\nA instrução readkey desaparece\nA directiva uses desaparece porque é própria do Turbo Pascal, bem como a biblioteca crt\nA instrução clrscr desaparece porque faz parte da biblioteca crt\nA declaração string passa para array [1..255] of char (supondo que iriam ser usados até 255 caracteres) já que o Pascal não suporta strings nativamente."
+    },
+    {
+      "id": "pascal#26",
+      "index": 26,
+      "text": "As instruções readln para ler cadeias de caracteres, têm de estar todas dentro de ciclos, para ler um caracter de cada vez. Programa Olá Mundo\nNúmeros perfeitos\nRepetição\nSoma dos números pares. Números pares entre dois valores inteiros\njogo simples\nnave contra fantasma. Teste lógico\nCompiladores Gratuitos\nHá vários compiladores Pascal gratuitos, como por exemplo:"
+    },
+    {
+      "id": "pascal#27",
+      "index": 27,
+      "text": "Teste lógico\nCompiladores Gratuitos\nHá vários compiladores Pascal gratuitos, como por exemplo: «Chrome». é a próxima geração do Object Pascal para as plataformas .NET e Mono, desenvolvida pela RemObjects Software\n«Free Pascal». é um poderoso compilador escrito em Pascal, distribuido sob a licença de uso GNU GPL."
+    },
+    {
+      "id": "pascal#28",
+      "index": 28,
+      "text": "Pode ser utilizado em conjunto com código escrito em Turbo Pascal ou Delphi, e pode ser usado em várias plataformas e sistemas operacionais\n«GNU Pascal Compiler (GPC)». é o compilador padrão da GNU Compiler Collection (GCC). O compilador foi escrito em C, mas a maior parte da biblioteca de funções da linguagem é escrita em Pascal. Ele segue os padrões ANSI/ISO e grande parte dos padrões Borland/Turbo Pascal."
+    },
+    {
+      "id": "pascal#29",
+      "index": 29,
+      "text": "Ele segue os padrões ANSI/ISO e grande parte dos padrões Borland/Turbo Pascal. O suporte ao Delphi ainda é limitado\n«Kylix». é uma versão do Delphi para o sistema operacional Linux, sendo que seu compilador e sua interface de desenvolvimento são gratuitas para uso não comercial, mas sua biblioteca de componentes não."
+    },
+    {
+      "id": "pascal#30",
+      "index": 30,
+      "text": "Espera-se que o código-fonte do compilador seja aberto em breve\n«P4 compiler». , utilizado para o desenvolvimento de vários compiladores Pascal escritos em Pascal, incluindo o UCSD p-System\nO Pascalzim é um compilador gratuito que foi desenvolvido na Universidade de Brasília e é utilizado em várias disciplinas de introdução a programação na UnB e outras universidades."
+    },
+    {
+      "id": "pascal#31",
+      "index": 31,
+      "text": "Turbo Pascal era o principal compilador Pascal para PCs durante os anos 80 e início dos anos 90, devendo sua popularidade ao seu grande poder e pequeno tempo de compilação. Hoje em dia, suas versões mais antigas (até a versão 5.5) podem ser baixadas gratuitamente no site da Borland (exige registro)\n«Virtual Pascal». foi criado por Vitaly Miryanov em 1995 como um compilador nativo para OS/2, compatível com a sintaxe do Pascal da Borland."
+    },
+    {
+      "id": "pascal#32",
+      "index": 32,
+      "text": "Mais tarde foi comercialmente lançado pela fPrint, adicionando a ele suporte para Win32, tornando-se um freeware em 2000. Atualmente, ele pode ser compilado para as plataformas Win32, OS/2 e Linux, sendo compatível em grande parte com o Pascal da Borland e o Delphi\nUma extensa lista de compiladores pode ser encontrada na Pascaland."
+    },
+    {
+      "id": "pascal#33",
+      "index": 33,
+      "text": "O site é escrito em francês, mas isso não faz muita diferença, já que é apenas uma lista de URLs para os compiladores."
+    }
+  ],
+  "entidades": [
+    {
+      "id": "organizacao:apple_inc",
+      "name": "Apple Inc.",
+      "type": "Organizacao",
+      "aliases": [
+        "Apple"
+      ],
+      "description": "Empresa que criou o conceito Object Pascal.",
+      "chunk_ids": [
+        "pascal#13"
+      ]
+    },
+    {
+      "id": "organizacao:borland",
+      "name": "Borland",
+      "type": "Organizacao",
+      "aliases": [
+        "padrão Borland"
+      ],
+      "description": "Empresa onde Anders Hejlsberg trabalhou.",
+      "chunk_ids": [
+        "pascal#13",
+        "pascal#19",
+        "pascal#23",
+        "pascal#24",
+        "pascal#31",
+        "pascal#32",
+        "pascal#9"
+      ]
+    },
+    {
+      "id": "organizacao:fprint",
+      "name": "fPrint",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa que comercializou o Pascal.",
+      "chunk_ids": [
+        "pascal#32"
+      ]
+    },
+    {
+      "id": "organizacao:instituto_de_sistemas_de_informacao_da_universidade_da_california_em_san_diego",
+      "name": "Instituto de Sistemas de Informação da Universidade da Califórnia em San Diego",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Instituto que desenvolveu o UCSD p-System.",
+      "chunk_ids": [
+        "pascal#7"
+      ]
+    },
+    {
+      "id": "organizacao:pascaland",
+      "name": "Pascaland",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Site que lista compiladores.",
+      "chunk_ids": [
+        "pascal#32"
+      ]
+    },
+    {
+      "id": "organizacao:remobjects_software",
+      "name": "RemObjects Software",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa que desenvolveu o Chrome",
+      "chunk_ids": [
+        "pascal#27"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_de_brasilia",
+      "name": "Universidade de Brasília",
+      "type": "Organizacao",
+      "aliases": [
+        "UnB"
+      ],
+      "description": "Universidade onde o Pascalzim foi desenvolvido.",
+      "chunk_ids": [
+        "pascal#30"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_de_illinois",
+      "name": "Universidade de Illinois",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Universidade onde foi desenvolvido um compilador Pascal.",
+      "chunk_ids": [
+        "pascal#5",
+        "pascal#6"
+      ]
+    },
+    {
+      "id": "pessoa:anders_hejlsberg",
+      "name": "Anders Hejlsberg",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Desenvolvedor de compiladores.",
+      "chunk_ids": [
+        "pascal#8",
+        "pascal#9"
+      ]
+    },
+    {
+      "id": "pessoa:blaise_pascal",
+      "name": "Blaise Pascal",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Matemático e físico que homenageia a linguagem Pascal.",
+      "chunk_ids": [
+        "pascal#0"
+      ]
+    },
+    {
+      "id": "pessoa:donald_b",
+      "name": "Donald B.",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Desenvolvedor de compilador Pascal.",
+      "chunk_ids": [
+        "pascal#5"
+      ]
+    },
+    {
+      "id": "pessoa:donald_b_gillies",
+      "name": "Donald B. Gillies",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Desenvolvedor do primeiro compilador Pascal norte americano.",
+      "chunk_ids": [
+        "pascal#6"
+      ]
+    },
+    {
+      "id": "pessoa:niklaus_wirth",
+      "name": "Niklaus Wirth",
+      "type": "Pessoa",
+      "aliases": [
+        "Wirth",
+        "Niklaus Emil Wirth"
+      ],
+      "description": "Criador da linguagem Pascal.",
+      "chunk_ids": [
+        "pascal#0",
+        "pascal#1",
+        "pascal#18",
+        "pascal#3",
+        "pascal#4",
+        "pascal#7",
+        "pascal#8"
+      ]
+    },
+    {
+      "id": "pessoa:vitaly_miryanov",
+      "name": "Vitaly Miryanov",
+      "type": "Pessoa",
+      "aliases": [],
+      "description": "Criador do Virtual Pascal.",
+      "chunk_ids": [
+        "pascal#31"
+      ]
+    },
+    {
+      "id": "tecnologia:algol_68",
+      "name": "ALGOL 68",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação com especificação ligada a Wirth.",
+      "chunk_ids": [
+        "pascal#1"
+      ]
+    },
+    {
+      "id": "tecnologia:algol_w",
+      "name": "Algol W",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Sugestão de especificação feita por Wirth.",
+      "chunk_ids": [
+        "pascal#1"
+      ]
+    },
+    {
+      "id": "tecnologia:ansi_ieee770x3_97_1983",
+      "name": "ANSI/IEEE770X3.97-1983",
+      "type": "Tecnologia",
+      "aliases": [
+        "norma americana ANSI/IEEE770X3.97-1983"
+      ],
+      "description": "Norma americana específica para a linguagem Pascal.",
+      "chunk_ids": [
+        "pascal#14"
+      ]
+    },
+    {
+      "id": "tecnologia:basic",
+      "name": "BASIC",
+      "type": "Tecnologia",
+      "aliases": [
+        "BBC BASIC for Windows"
+      ],
+      "description": "Linguagem de programação interpretada.",
+      "chunk_ids": [
+        "pascal#11"
+      ]
+    },
+    {
+      "id": "tecnologia:blue_label_pascal",
+      "name": "Blue Label Pascal",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Compilador desenvolvido por Anders Hejlsberg.",
+      "chunk_ids": [
+        "pascal#8",
+        "pascal#9"
+      ]
+    },
+    {
+      "id": "tecnologia:c",
+      "name": "C",
+      "type": "Tecnologia",
+      "aliases": [
+        "linguagem C",
+        "linguagem compilada C",
+        "linguagens C",
+        "linguagem de programação C",
+        "ANSI C"
+      ],
+      "description": "Linguagem de programação.",
+      "chunk_ids": [
+        "pascal#2",
+        "pascal#28",
+        "pascal#3",
+        "pascal#4",
+        "pascal#5"
+      ]
+    },
+    {
+      "id": "tecnologia:cdc_6000",
+      "name": "CDC 6000",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Compilador com características específicas de implementação em nível de máquina.",
+      "chunk_ids": [
+        "pascal#18"
+      ]
+    },
+    {
+      "id": "tecnologia:cp_m_80",
+      "name": "CP/M 80",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Plataforma de sistema.",
+      "chunk_ids": [
+        "pascal#9"
+      ]
+    },
+    {
+      "id": "tecnologia:delphi",
+      "name": "Delphi",
+      "type": "Tecnologia",
+      "aliases": [
+        "Delphi Language",
+        "Delphi Programming Language",
+        "Object Pascal"
+      ],
+      "description": "Linguagem de programação.",
+      "chunk_ids": [
+        "pascal#13",
+        "pascal#19",
+        "pascal#28",
+        "pascal#29",
+        "pascal#32",
+        "pascal#4"
+      ]
+    },
+    {
+      "id": "tecnologia:embarcadero_delphi",
+      "name": "Embarcadero Delphi",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "IDE que utiliza Object Pascal.",
+      "chunk_ids": [
+        "pascal#3"
+      ]
+    },
+    {
+      "id": "tecnologia:fortran",
+      "name": "Fortran",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação.",
+      "chunk_ids": [
+        "pascal#2",
+        "pascal#3"
+      ]
+    },
+    {
+      "id": "tecnologia:free_pascal",
+      "name": "Free Pascal",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Poderoso compilador escrito em Pascal",
+      "chunk_ids": [
+        "pascal#27"
+      ]
+    },
+    {
+      "id": "tecnologia:gnu_compiler_collection",
+      "name": "GNU Compiler Collection",
+      "type": "Tecnologia",
+      "aliases": [
+        "GCC"
+      ],
+      "description": "Coleção de compiladores da GNU.",
+      "chunk_ids": [
+        "pascal#28"
+      ]
+    },
+    {
+      "id": "tecnologia:gnu_pascal_compiler",
+      "name": "GNU Pascal Compiler",
+      "type": "Tecnologia",
+      "aliases": [
+        "GPC"
+      ],
+      "description": "Compilador padrão da GNU Compiler Collection.",
+      "chunk_ids": [
+        "pascal#28"
+      ]
+    },
+    {
+      "id": "tecnologia:ibm_pc",
+      "name": "IBM PC",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Plataforma de computação.",
+      "chunk_ids": [
+        "pascal#9"
+      ]
+    },
+    {
+      "id": "tecnologia:iso_iec_10206",
+      "name": "ISO / IEC 10206",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Norma ISO / IEC que padroniza o Pascal.",
+      "chunk_ids": [
+        "pascal#15"
+      ]
+    },
+    {
+      "id": "tecnologia:iso_iec_7185",
+      "name": "ISO / IEC 7185",
+      "type": "Tecnologia",
+      "aliases": [
+        "ISO 7185",
+        "ISO 7185:1983",
+        "norma internacional ISO / IEC 7185"
+      ],
+      "description": "Norma internacional que padronizou a linguagem Pascal.",
+      "chunk_ids": [
+        "pascal#14",
+        "pascal#15"
+      ]
+    },
+    {
+      "id": "tecnologia:kylix",
+      "name": "Kylix",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "IDE que utiliza Object Pascal.",
+      "chunk_ids": [
+        "pascal#29",
+        "pascal#3"
+      ]
+    },
+    {
+      "id": "tecnologia:lazarus",
+      "name": "Lazarus",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "IDE que utiliza Object Pascal.",
+      "chunk_ids": [
+        "pascal#3"
+      ]
+    },
+    {
+      "id": "tecnologia:linux",
+      "name": "Linux",
+      "type": "Tecnologia",
+      "aliases": [
+        "núcleo Linux",
+        "Freax",
+        "GNU/Linux",
+        "kernel"
+      ],
+      "description": "Plataforma de sistema operacional.",
+      "chunk_ids": [
+        "pascal#32"
+      ]
+    },
+    {
+      "id": "tecnologia:modula_2",
+      "name": "Modula-2",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação sucessora acadêmica do Pascal.",
+      "chunk_ids": [
+        "pascal#3",
+        "pascal#4"
+      ]
+    },
+    {
+      "id": "tecnologia:nascom_2",
+      "name": "Nascom-2",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Plataforma do compilador Blue Label Pascal.",
+      "chunk_ids": [
+        "pascal#8",
+        "pascal#9"
+      ]
+    },
+    {
+      "id": "tecnologia:oberon",
+      "name": "Oberon",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação sucessora acadêmica do Pascal.",
+      "chunk_ids": [
+        "pascal#3",
+        "pascal#4"
+      ]
+    },
+    {
+      "id": "tecnologia:object_pascal",
+      "name": "Object Pascal",
+      "type": "Tecnologia",
+      "aliases": [
+        "Chrome"
+      ],
+      "description": "Linguagem de programação sucessora comercial do Pascal.",
+      "chunk_ids": [
+        "pascal#27",
+        "pascal#3"
+      ]
+    },
+    {
+      "id": "tecnologia:os_2",
+      "name": "OS/2",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Plataforma de sistema operacional.",
+      "chunk_ids": [
+        "pascal#32"
+      ]
+    },
+    {
+      "id": "tecnologia:p_system",
+      "name": "p-System",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Kit de conversão com compilador e simulador.",
+      "chunk_ids": [
+        "pascal#6",
+        "pascal#7",
+        "pascal#8"
+      ]
+    },
+    {
+      "id": "tecnologia:pascal",
+      "name": "Pascal",
+      "type": "Tecnologia",
+      "aliases": [
+        "Advanced Pascal",
+        "Pascal Standard",
+        "Pascal padrão",
+        "linguagem 1974",
+        "linguagem Pascal",
+        "linguagem original"
+      ],
+      "description": "Linguagem de programação orientada por objetos criada por Niklaus Wirth.",
+      "chunk_ids": [
+        "pascal#0",
+        "pascal#1",
+        "pascal#10",
+        "pascal#11",
+        "pascal#12",
+        "pascal#14",
+        "pascal#15",
+        "pascal#18",
+        "pascal#19",
+        "pascal#2",
+        "pascal#20",
+        "pascal#21",
+        "pascal#25",
+        "pascal#28",
+        "pascal#3",
+        "pascal#4",
+        "pascal#5",
+        "pascal#6",
+        "pascal#7",
+        "pascal#8"
+      ]
+    },
+    {
+      "id": "tecnologia:pascalzim",
+      "name": "Pascalzim",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Compilador gratuito desenvolvido na Universidade de Brasília.",
+      "chunk_ids": [
+        "pascal#30"
+      ]
+    },
+    {
+      "id": "tecnologia:pdp_11",
+      "name": "PDP-11",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Mini-computador.",
+      "chunk_ids": [
+        "pascal#6"
+      ]
+    },
+    {
+      "id": "tecnologia:scheme",
+      "name": "Scheme",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação.",
+      "chunk_ids": [
+        "pascal#2",
+        "pascal#3"
+      ]
+    },
+    {
+      "id": "tecnologia:super_pascal",
+      "name": "Super Pascal",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Variante da linguagem Pascal.",
+      "chunk_ids": [
+        "pascal#11",
+        "pascal#12"
+      ]
+    },
+    {
+      "id": "tecnologia:turbo_pascal",
+      "name": "Turbo Pascal",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação derivada do Pascal.",
+      "chunk_ids": [
+        "pascal#10",
+        "pascal#11",
+        "pascal#12",
+        "pascal#19",
+        "pascal#2",
+        "pascal#23",
+        "pascal#24",
+        "pascal#28",
+        "pascal#29",
+        "pascal#31",
+        "pascal#9"
+      ]
+    },
+    {
+      "id": "tecnologia:ucsd",
+      "name": "UCSD",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Padrão instrumental na popularização do Pascal.",
+      "chunk_ids": [
+        "pascal#8"
+      ]
+    },
+    {
+      "id": "tecnologia:ucsd_p_system",
+      "name": "UCSD p-System",
+      "type": "Tecnologia",
+      "aliases": [
+        "UCSD"
+      ],
+      "description": "Sistema operacional para mini-computadores.",
+      "chunk_ids": [
+        "pascal#30",
+        "pascal#7"
+      ]
+    },
+    {
+      "id": "tecnologia:ucsd_pascal",
+      "name": "UCSD Pascal",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Aplicação que implementou prorrogações, omissões e mudanças na linguagem Pascal.",
+      "chunk_ids": [
+        "pascal#19"
+      ]
+    },
+    {
+      "id": "tecnologia:virtual_pascal",
+      "name": "Virtual Pascal",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Compilador nativo para OS/2 compatível com a sintaxe do Pascal da Borland.",
+      "chunk_ids": [
+        "pascal#31"
+      ]
+    },
+    {
+      "id": "tecnologia:win32",
+      "name": "Win32",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Plataforma de sistema operacional.",
+      "chunk_ids": [
+        "pascal#32"
+      ]
+    }
+  ],
+  "relacoes": [
+    {
+      "origem": "pessoa:anders_hejlsberg",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:blue_label_pascal",
+      "chunk_id": "pascal#8"
+    },
+    {
+      "origem": "pessoa:anders_hejlsberg",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:blue_label_pascal",
+      "chunk_id": "pascal#9"
+    },
+    {
+      "origem": "pessoa:anders_hejlsberg",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:turbo_pascal",
+      "chunk_id": "pascal#9"
+    },
+    {
+      "origem": "pessoa:anders_hejlsberg",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:borland",
+      "chunk_id": "pascal#9"
+    },
+    {
+      "origem": "pessoa:donald_b",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:universidade_de_illinois",
+      "chunk_id": "pascal#5"
+    },
+    {
+      "origem": "pessoa:donald_b_gillies",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:universidade_de_illinois",
+      "chunk_id": "pascal#6"
+    },
+    {
+      "origem": "pessoa:niklaus_wirth",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:modula_2",
+      "chunk_id": "pascal#3"
+    },
+    {
+      "origem": "pessoa:niklaus_wirth",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:modula_2",
+      "chunk_id": "pascal#4"
+    },
+    {
+      "origem": "pessoa:niklaus_wirth",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:oberon",
+      "chunk_id": "pascal#3"
+    },
+    {
+      "origem": "pessoa:niklaus_wirth",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:oberon",
+      "chunk_id": "pascal#4"
+    },
+    {
+      "origem": "pessoa:niklaus_wirth",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#0"
+    },
+    {
+      "origem": "pessoa:niklaus_wirth",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#18"
+    },
+    {
+      "origem": "pessoa:vitaly_miryanov",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:virtual_pascal",
+      "chunk_id": "pascal#31"
+    },
+    {
+      "origem": "tecnologia:ansi_ieee770x3_97_1983",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#14"
+    },
+    {
+      "origem": "tecnologia:delphi",
+      "tipo": "DESENVOLVIDA_EM",
+      "destino": "organizacao:borland",
+      "chunk_id": "pascal#13"
+    },
+    {
+      "origem": "tecnologia:iso_iec_10206",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#15"
+    },
+    {
+      "origem": "tecnologia:iso_iec_7185",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#14"
+    },
+    {
+      "origem": "tecnologia:modula_2",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#4"
+    },
+    {
+      "origem": "tecnologia:oberon",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#4"
+    },
+    {
+      "origem": "tecnologia:object_pascal",
+      "tipo": "DESENVOLVIDA_EM",
+      "destino": "organizacao:remobjects_software",
+      "chunk_id": "pascal#27"
+    },
+    {
+      "origem": "tecnologia:object_pascal",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#3"
+    },
+    {
+      "origem": "tecnologia:pascal",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:algol_w",
+      "chunk_id": "pascal#1"
+    },
+    {
+      "origem": "tecnologia:pascalzim",
+      "tipo": "DESENVOLVIDA_EM",
+      "destino": "organizacao:universidade_de_brasilia",
+      "chunk_id": "pascal#30"
+    },
+    {
+      "origem": "tecnologia:super_pascal",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#11"
+    },
+    {
+      "origem": "tecnologia:super_pascal",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#12"
+    },
+    {
+      "origem": "tecnologia:turbo_pascal",
+      "tipo": "DESENVOLVIDA_EM",
+      "destino": "organizacao:borland",
+      "chunk_id": "pascal#23"
+    },
+    {
+      "origem": "tecnologia:turbo_pascal",
+      "tipo": "DESENVOLVIDA_EM",
+      "destino": "organizacao:borland",
+      "chunk_id": "pascal#24"
+    },
+    {
+      "origem": "tecnologia:turbo_pascal",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#10"
+    },
+    {
+      "origem": "tecnologia:turbo_pascal",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#12"
+    },
+    {
+      "origem": "tecnologia:turbo_pascal",
+      "tipo": "INFLUENCIADA_POR",
+      "destino": "tecnologia:pascal",
+      "chunk_id": "pascal#2"
+    }
+  ]
+}

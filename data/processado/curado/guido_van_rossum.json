@@ -1,0 +1,290 @@
+{
+  "documento": {
+    "id": "guido_van_rossum",
+    "title": "Guido van Rossum",
+    "source": "https://pt.wikipedia.org/wiki/Guido_van_Rossum"
+  },
+  "chunks": [
+    {
+      "id": "guido_van_rossum#0",
+      "index": 0,
+      "text": "Guido van Rossum (Haarlem, 31 de janeiro de 1956 ) é um matemático e programador de computadores holandês, mais conhecido por ser o autor da linguagem de programação Python. Na comunidade Python, ele é conhecido como Benevolent Dictator for Life (BDFL), o que significa que ele continua a supervisionar o processo de desenvolvimento do Python, tomando  decisões quando necessário."
+    },
+    {
+      "id": "guido_van_rossum#1",
+      "index": 1,
+      "text": "Entretanto, em julho de 2018, ele anunciou que estaria se afastando deste função devido a desentendimentos com a equipe de desenvolvimento da linguagem Python. A discussão se deu por conta de discordâncias entre Rossum e a equipe de desenvolvedores, relacionada às novas propostas de atualização (PEP572) que romperia com os padrões de sintaxe da linguagem. A equipe alegava que \"a sintaxe não ficaria tão boa para os padrões de Python\"."
+    },
+    {
+      "id": "guido_van_rossum#2",
+      "index": 2,
+      "text": "A equipe alegava que \"a sintaxe não ficaria tão boa para os padrões de Python\". De acordo com equipe do Python no Brasil, Guido van Rossum se afasta somente desta função mas continua à frente do projeto. Biografia\nGuido van Rossum estudou matemática na Universidade de Amsterdã, naquela época conheceu as linguagens ALGOL 60 e Pascal. Ele lembra que toda a programação nos gigantescos mainframes eram feitos com cartões perfurados."
+    },
+    {
+      "id": "guido_van_rossum#3",
+      "index": 3,
+      "text": "Ele lembra que toda a programação nos gigantescos mainframes eram feitos com cartões perfurados. Havia um grupo de estudantes de física cuja linguagem favorita era Fortran, então havia uma séria discussão sobre ALGOL, Pascal e Fortran. Guido van Rossum obteve seu mestrado na Universidade de Amsterdã em 1982."
+    },
+    {
+      "id": "guido_van_rossum#4",
+      "index": 4,
+      "text": "Guido van Rossum obteve seu mestrado na Universidade de Amsterdã em 1982. Mais tarde, trabalhou em vários institutos de pesquisa, incluindo  o Centrum Wiskunde & Informatica (CWI), em Amsterdã; o National Institute of Standards and Technology (NIST), em Gaithersburg (Maryland), e a Corporation for National Research Initiatives  (CNRI), em Reston (Virgínia)."
+    },
+    {
+      "id": "guido_van_rossum#5",
+      "index": 5,
+      "text": "Trabalhou no desenvolvimento da linguagem de programação ABC,  descendente da linguagem Simula. Sobre a origem do Python, Van Rossum escreveu em 1996: Em 1999, Van Rossum submeteu uma proposta de financiamento a DARPA chamada de Computer Programming for Everybody (Programação de computadores Para Todos), na qual ele definiu seus objetivos para a linguagem Python:"
+    },
+    {
+      "id": "guido_van_rossum#6",
+      "index": 6,
+      "text": "uma linguagem fácil e intuitiva enquanto que ainda sendo tão poderosa quanto as maiores competidoras\nCódigo aberto, para que qualquer um possa contribuir para o desenvolvimento\ncódigo que fosse tão inteligível quanto inglês\nadequada para tarefas diárias, permitindo um tempo de desenvolvimento mais curto\nMuitas dessas ambições foram realizadas desde então."
+    },
+    {
+      "id": "guido_van_rossum#7",
+      "index": 7,
+      "text": "Python cresceu e se tornou uma linguagem de programação popular, particularmente no meio da Internet. Em 2002, Guido recebeu o Prêmio por Avanços em Software Livre de 2001 concedido pela FSF na conferência FOSDEM em Bruxelas, Bélgica. De 2005 a 2012, Van Rossum foi empregado do Google, onde passava metade do tempo desenvolvendo a linguagem Python."
+    },
+    {
+      "id": "guido_van_rossum#8",
+      "index": 8,
+      "text": "De 2005 a 2012, Van Rossum foi empregado do Google, onde passava metade do tempo desenvolvendo a linguagem Python. Em janeiro de 2013, Van Rossum começou a trabalhar na área de armazenamento em nuvem na empresa Dropbox. Em outubro de 2019, Van Rossum deixou o Dropbox e se aposentou oficialmente. Em 12 de novembro de 2020, Van Rossum anunciou que estava saindo da aposentadoria para se juntar à Divisão de Desenvolvedores da Microsoft."
+    },
+    {
+      "id": "guido_van_rossum#9",
+      "index": 9,
+      "text": "Em 12 de novembro de 2020, Van Rossum anunciou que estava saindo da aposentadoria para se juntar à Divisão de Desenvolvedores da Microsoft. Atualmente, ele detém o título de Engenheiro Ilustre (\"Distinguished Engineer\") na Microsoft. Guido van Rossum é irmão de Just van Rossum, um conhecido designer de caracteres tipográficos, que fez a fonte que é usada no logo \"Python Powered\". Guido é casado com Kim Knapp,  e é pai de Orlijn."
+    }
+  ],
+  "entidades": [
+    {
+      "id": "organizacao:centrum_wiskunde_informatica",
+      "name": "Centrum Wiskunde & Informatica",
+      "type": "Organizacao",
+      "aliases": [
+        "CWI"
+      ],
+      "description": "Instituto de pesquisa em Amsterdã onde Guido trabalhou.",
+      "chunk_ids": [
+        "guido_van_rossum#4"
+      ]
+    },
+    {
+      "id": "organizacao:corporation_for_national_research_initiatives",
+      "name": "Corporation for National Research Initiatives",
+      "type": "Organizacao",
+      "aliases": [
+        "CNRI"
+      ],
+      "description": "Organização de pesquisa onde Guido trabalhou.",
+      "chunk_ids": [
+        "guido_van_rossum#4"
+      ]
+    },
+    {
+      "id": "organizacao:darpa",
+      "name": "DARPA",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Agência para a qual Guido submeteu proposta de financiamento em 1999.",
+      "chunk_ids": [
+        "guido_van_rossum#5"
+      ]
+    },
+    {
+      "id": "organizacao:dropbox",
+      "name": "Dropbox",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa onde Guido trabalhou de 2013 a 2019.",
+      "chunk_ids": [
+        "guido_van_rossum#8"
+      ]
+    },
+    {
+      "id": "organizacao:fsf",
+      "name": "FSF",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Free Software Foundation, concedente do prêmio.",
+      "chunk_ids": [
+        "guido_van_rossum#7"
+      ]
+    },
+    {
+      "id": "organizacao:google",
+      "name": "Google",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa onde Guido trabalhou de 2005 a 2012.",
+      "chunk_ids": [
+        "guido_van_rossum#7",
+        "guido_van_rossum#8"
+      ]
+    },
+    {
+      "id": "organizacao:microsoft",
+      "name": "Microsoft",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Empresa onde Guido se juntou em 2020 como Engenheiro Ilustre.",
+      "chunk_ids": [
+        "guido_van_rossum#9"
+      ]
+    },
+    {
+      "id": "organizacao:national_institute_of_standards_and_technology",
+      "name": "National Institute of Standards and Technology",
+      "type": "Organizacao",
+      "aliases": [
+        "NIST"
+      ],
+      "description": "Instituto de pesquisa dos EUA onde Guido trabalhou.",
+      "chunk_ids": [
+        "guido_van_rossum#4"
+      ]
+    },
+    {
+      "id": "organizacao:universidade_de_amsterda",
+      "name": "Universidade de Amsterdã",
+      "type": "Organizacao",
+      "aliases": [],
+      "description": "Universidade onde Guido obteve o mestrado em matemática.",
+      "chunk_ids": [
+        "guido_van_rossum#3"
+      ]
+    },
+    {
+      "id": "pessoa:guido_van_rossum",
+      "name": "Guido van Rossum",
+      "type": "Pessoa",
+      "aliases": [
+        "Van Rossum",
+        "Guido",
+        "ele"
+      ],
+      "description": "Programador holandês, criador da linguagem Python.",
+      "chunk_ids": [
+        "guido_van_rossum#0",
+        "guido_van_rossum#4",
+        "guido_van_rossum#5",
+        "guido_van_rossum#7",
+        "guido_van_rossum#8",
+        "guido_van_rossum#9"
+      ]
+    },
+    {
+      "id": "premio:premio_por_avancos_em_software_livre_de_2001",
+      "name": "Prêmio por Avanços em Software Livre de 2001",
+      "type": "Premio",
+      "aliases": [],
+      "description": "Prêmio concedido pela FSF em 2002.",
+      "chunk_ids": [
+        "guido_van_rossum#7"
+      ]
+    },
+    {
+      "id": "tecnologia:abc",
+      "name": "ABC",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação desenvolvida antes do Python.",
+      "chunk_ids": [
+        "guido_van_rossum#5"
+      ]
+    },
+    {
+      "id": "tecnologia:python",
+      "name": "Python",
+      "type": "Tecnologia",
+      "aliases": [
+        "Linguagem Python",
+        "Python 1.2",
+        "Python 1.4",
+        "Python 1.6",
+        "Python 2.0",
+        "Python 2.6",
+        "Python 3.0",
+        "Python 3000",
+        "linguagem",
+        "projeto Python",
+        "versão 0.9.0",
+        "versão 1.0",
+        "versão 3.0"
+      ],
+      "description": "Linguagem de programação criada por Guido van Rossum.",
+      "chunk_ids": [
+        "guido_van_rossum#0",
+        "guido_van_rossum#5",
+        "guido_van_rossum#7",
+        "guido_van_rossum#8"
+      ]
+    },
+    {
+      "id": "tecnologia:simula",
+      "name": "Simula",
+      "type": "Tecnologia",
+      "aliases": [],
+      "description": "Linguagem de programação que influenciou a ABC.",
+      "chunk_ids": [
+        "guido_van_rossum#5"
+      ]
+    }
+  ],
+  "relacoes": [
+    {
+      "origem": "pessoa:guido_van_rossum",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:python",
+      "chunk_id": "guido_van_rossum#0"
+    },
+    {
+      "origem": "pessoa:guido_van_rossum",
+      "tipo": "CRIOU",
+      "destino": "tecnologia:python",
+      "chunk_id": "guido_van_rossum#5"
+    },
+    {
+      "origem": "pessoa:guido_van_rossum",
+      "tipo": "RECEBEU",
+      "destino": "premio:premio_por_avancos_em_software_livre_de_2001",
+      "chunk_id": "guido_van_rossum#7"
+    },
+    {
+      "origem": "pessoa:guido_van_rossum",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:centrum_wiskunde_informatica",
+      "chunk_id": "guido_van_rossum#4"
+    },
+    {
+      "origem": "pessoa:guido_van_rossum",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:corporation_for_national_research_initiatives",
+      "chunk_id": "guido_van_rossum#4"
+    },
+    {
+      "origem": "pessoa:guido_van_rossum",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:dropbox",
+      "chunk_id": "guido_van_rossum#8"
+    },
+    {
+      "origem": "pessoa:guido_van_rossum",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:google",
+      "chunk_id": "guido_van_rossum#7"
+    },
+    {
+      "origem": "pessoa:guido_van_rossum",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:microsoft",
+      "chunk_id": "guido_van_rossum#9"
+    },
+    {
+      "origem": "pessoa:guido_van_rossum",
+      "tipo": "TRABALHOU_EM",
+      "destino": "organizacao:national_institute_of_standards_and_technology",
+      "chunk_id": "guido_van_rossum#4"
+    }
+  ]
+}

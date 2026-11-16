@@ -418,3 +418,94 @@ def test_so_relatorio_regenera_so_o_relatorio_sem_chamar_o_responder(tmp_path, m
     assert not arquivos["ARQUIVO_PLANILHA"].exists()
     for nome, conteudo in antes.items():
         assert arquivos[nome].read_bytes() == conteudo
+
+
+# --- i) --rodada: avaliação em arquivos próprios -------------------------------
+
+def test_caminhos_sem_rodada_sao_os_de_sempre():
+    assert comparar.caminhos(None) == {
+        "respostas": comparar.ARQUIVO_RESPOSTAS,
+        "classificacao": comparar.ARQUIVO_CLASSIFICACAO,
+        "relatorio": comparar.ARQUIVO_RELATORIO,
+        "planilha": comparar.ARQUIVO_PLANILHA,
+    }
+
+
+def test_caminhos_da_rodada_ficam_em_arquivos_proprios():
+    raiz = comparar.RAIZ
+    assert comparar.caminhos("completo") == {
+        "respostas": raiz / "data" / "avaliacao" / "resultados" / "completo" / "respostas.json",
+        "classificacao": raiz / "data" / "avaliacao" / "resultados" / "completo" / "classificacao.json",
+        "relatorio": raiz / "docs" / "avaliacao-resultados-completo.md",
+        "planilha": raiz / "docs" / "avaliacao-planilha-completo.md",
+    }
+
+
+@pytest.mark.parametrize("nome", ["", "a/b", "a.b", "../completo", "Completo"])
+def test_nome_de_rodada_invalido_levanta_erro(nome):
+    with pytest.raises(ValueError):
+        comparar.caminhos(nome)
+
+
+def _padrao_no_tmp(tmp_path, monkeypatch) -> dict:
+    """RAIZ e os quatro caminhos padrão apontados para tmp_path; devolve os padrão."""
+    monkeypatch.setattr(comparar, "RAIZ", tmp_path)
+    padrao = {
+        "ARQUIVO_RESPOSTAS": tmp_path / "data" / "avaliacao" / "resultados" / "respostas.json",
+        "ARQUIVO_CLASSIFICACAO": tmp_path / "data" / "avaliacao" / "classificacao.json",
+        "ARQUIVO_RELATORIO": tmp_path / "docs" / "avaliacao-resultados.md",
+        "ARQUIVO_PLANILHA": tmp_path / "docs" / "avaliacao-planilha.md",
+    }
+    for nome, caminho in padrao.items():
+        monkeypatch.setattr(comparar, nome, caminho)
+    return padrao
+
+
+def test_main_com_rodada_grava_so_os_arquivos_da_rodada(tmp_path, monkeypatch):
+    padrao = _padrao_no_tmp(tmp_path, monkeypatch)
+
+    def responder_falso(texto, modo):
+        return _resposta({"pergunta": texto}, modo, texto=MENSAGEM_SEM_INFORMACAO)
+
+    monkeypatch.setattr(comparar, "responder", responder_falso)
+
+    comparar.main(["--rodada", "teste"])
+
+    rodada = comparar.caminhos("teste", tmp_path)
+    for caminho in rodada.values():
+        assert caminho.exists(), caminho
+    for caminho in padrao.values():
+        assert not caminho.exists(), caminho
+    sem_resposta = {p["id"] for p in carregar_perguntas() if p["tipo"] == "sem_resposta"}
+    classificacao = carregar_classificacao(rodada["classificacao"])
+    assert set(classificacao) == sem_resposta
+    planilha = rodada["planilha"].read_text(encoding="utf-8")
+    assert "data/avaliacao/resultados/teste/classificacao.json" in planilha
+    assert "data/avaliacao/classificacao.json" not in planilha
+
+
+def test_so_relatorio_com_rodada_le_a_classificacao_da_rodada(tmp_path, monkeypatch):
+    padrao = _padrao_no_tmp(tmp_path, monkeypatch)
+    perguntas = tmp_path / "perguntas.json"
+    perguntas.write_text(
+        json.dumps({"perguntas": [UM_SALTO_COM_GABARITO, SEM_RESPOSTA_COM_GABARITO]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(comparar, "ARQUIVO_PERGUNTAS", perguntas)
+    rodada = comparar.caminhos("teste", tmp_path)
+    rodada["respostas"].parent.mkdir(parents=True)
+    rodada["respostas"].write_text(json.dumps(_respostas_salvas(), ensure_ascii=False), encoding="utf-8")
+    rodada["classificacao"].write_text(json.dumps({"P01": {"vetorial": "incompleta"}}), encoding="utf-8")
+    padrao["ARQUIVO_CLASSIFICACAO"].write_text(json.dumps({"P01": {"vetorial": "alucinada"}}), encoding="utf-8")
+
+    def responder_proibido(*args, **kwargs):
+        raise AssertionError("--so-relatorio não pode chamar o responder()")
+
+    monkeypatch.setattr(comparar, "responder", responder_proibido)
+
+    comparar.main(["--so-relatorio", "--rodada", "teste"])
+
+    linhas = rodada["relatorio"].read_text(encoding="utf-8").splitlines()
+    vetorial = next(l for l in linhas if l.startswith("| P01 | um_salto | vetorial |"))
+    assert vetorial.endswith("| incompleta |")
+    assert not padrao["ARQUIVO_RELATORIO"].exists()

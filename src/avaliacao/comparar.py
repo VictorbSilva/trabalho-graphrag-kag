@@ -19,14 +19,22 @@ docs/avaliacao-planilha.md. O resultado depende do que estiver carregado no banc
 
     python -m src.avaliacao.comparar
     python -m src.avaliacao.comparar --so-relatorio
+    python -m src.avaliacao.comparar --rodada completo
 
 Com --so-relatorio, o executor não chama o responder(): refaz só o relatório a
 partir de data/avaliacao/resultados/respostas.json e da classificação, sem gravar
 respostas, classificação nem planilha.
+
+Com --rodada NOME, respostas, classificação, relatório e planilha vão para arquivos
+próprios da rodada (ver caminhos()), e os da avaliação padrão não são lidos nem
+alterados. A rodada tem classificação manual própria, porque as classes de uma
+execução não valem para as respostas de outra. Combina com --so-relatorio.
 """
 
 import argparse
 import json
+import os
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -44,6 +52,45 @@ MODOS = ("vetorial", "graphrag")
 TIPOS = ("um_salto", "multi_hop", "sem_resposta")
 METRICAS = ("evidencia_recuperada", "caminho_completo", "recusa_correta")
 CLASSES = ("correta", "incompleta", "alucinada")
+NOME_DE_RODADA = re.compile(r"[a-z0-9-]+")
+
+
+def caminhos(rodada: str | None, raiz: Path = RAIZ) -> dict:
+    """Onde ficam respostas, classificação, relatório e planilha de uma rodada.
+
+    Sem rodada, os de sempre (ARQUIVO_RESPOSTAS, ARQUIVO_CLASSIFICACAO,
+    ARQUIVO_RELATORIO e ARQUIVO_PLANILHA). Com rodada, respostas e classificação em
+    data/avaliacao/resultados/<rodada>/ e relatório e planilha em
+    docs/avaliacao-resultados-<rodada>.md e docs/avaliacao-planilha-<rodada>.md.
+
+    Levanta ValueError se o nome tiver algo além de letras minúsculas, números e hífen.
+    """
+    if rodada is None:
+        return {
+            "respostas": ARQUIVO_RESPOSTAS,
+            "classificacao": ARQUIVO_CLASSIFICACAO,
+            "relatorio": ARQUIVO_RELATORIO,
+            "planilha": ARQUIVO_PLANILHA,
+        }
+    if not NOME_DE_RODADA.fullmatch(rodada):
+        raise ValueError(f"Nome de rodada inválido: {rodada!r}. Use só letras minúsculas, números e hífen.")
+    pasta = Path(raiz) / "data" / "avaliacao" / "resultados" / rodada
+    return {
+        "respostas": pasta / "respostas.json",
+        "classificacao": pasta / "classificacao.json",
+        "relatorio": Path(raiz) / "docs" / f"avaliacao-resultados-{rodada}.md",
+        "planilha": Path(raiz) / "docs" / f"avaliacao-planilha-{rodada}.md",
+    }
+
+
+def _no_repositorio(caminho: Path) -> str:
+    """O caminho a partir da raiz do repositório, com barras, para mostrar no texto."""
+    return Path(os.path.relpath(caminho, RAIZ)).as_posix()
+
+
+def _link(caminho: Path, documento: Path) -> str:
+    """Link relativo de um documento Markdown até o caminho."""
+    return Path(os.path.relpath(caminho, Path(documento).parent)).as_posix()
 
 
 def carregar_perguntas(caminho: Path = ARQUIVO_PERGUNTAS) -> list[dict]:
@@ -274,8 +321,16 @@ def _tabelas_de_resumo(resumo: dict) -> list[str]:
 
 
 def _relatorio(
-    linhas: list[dict], resumo: dict, gerado_em: datetime, classificacao: dict | None = None
+    linhas: list[dict],
+    resumo: dict,
+    gerado_em: datetime,
+    classificacao: dict | None = None,
+    arquivos: dict | None = None,
 ) -> str:
+    """O relatório em Markdown. arquivos são os de caminhos() (padrão: os de sempre)."""
+    arquivos = arquivos or caminhos(None)
+    respostas, classes, planilha = arquivos["respostas"], arquivos["classificacao"], arquivos["planilha"]
+    relatorio = arquivos["relatorio"]
     erros = [l for l in linhas if l["erro"] is not None]
     saida = [
         "# Avaliação: RAG vetorial vs GraphRAG",
@@ -283,13 +338,13 @@ def _relatorio(
         f"Gerado por `python -m src.avaliacao.comparar` em {gerado_em:%Y-%m-%d %H:%M}, "
         "com as 15 perguntas de [data/avaliacao/perguntas.json](../data/avaliacao/perguntas.json) "
         "nos modos `vetorial` e `graphrag`. As respostas completas ficam em "
-        "[data/avaliacao/resultados/respostas.json](../data/avaliacao/resultados/respostas.json). "
+        f"[{_no_repositorio(respostas)}]({_link(respostas, relatorio)}). "
         "Os números dependem do que estava carregado no Neo4j quando o executor rodou.",
         "",
         "A classificação manual fica em "
-        "[data/avaliacao/classificacao.json](../data/avaliacao/classificacao.json) e sobrevive "
+        f"[{_no_repositorio(classes)}]({_link(classes, relatorio)}) e sobrevive "
         "a novas execuções do executor. A planilha para preenchê-la está em "
-        "[docs/avaliacao-planilha.md](avaliacao-planilha.md).",
+        f"[{_no_repositorio(planilha)}]({_link(planilha, relatorio)}).",
         "",
         "## Como ler",
         "",
@@ -302,7 +357,7 @@ def _relatorio(
         f"\"{MENSAGEM_SEM_INFORMACAO}\"",
         "- **n/a**: a métrica não se aplica ao tipo da pergunta. **n/d**: sem dados para calcular.",
         "- **Classificação (manual)**: correta, incompleta ou alucinada, lida de "
-        "`data/avaliacao/classificacao.json` e preenchida por quem conferir a resposta contra "
+        f"`{_no_repositorio(classes)}` e preenchida por quem conferir a resposta contra "
         "o gabarito. Nas perguntas `sem_resposta`, cujo gabarito é recusar, a recusa correta "
         "vira correta e qualquer outra resposta vira alucinada.",
         "",
@@ -347,23 +402,28 @@ def _citacao(texto: str) -> list[str]:
     return [f"> {linha}".rstrip() for linha in texto.splitlines()] or [">"]
 
 
-def gerar_planilha(linhas: list[dict], perguntas: list[dict], respostas: list[dict]) -> str:
+def gerar_planilha(
+    linhas: list[dict], perguntas: list[dict], respostas: list[dict], arquivos: dict | None = None
+) -> str:
     """Markdown com, para cada pergunta e modo, o gabarito, a resposta do sistema,
     as métricas automáticas e uma linha "Classificação: ____" para preencher.
 
     linhas são as de avaliar() e respostas as de main(): {"id", "modo", "resposta", "erro"}.
+    arquivos são os de caminhos() (padrão: os de sempre).
     """
+    arquivos = arquivos or caminhos(None)
+    salvas, classes, planilha = arquivos["respostas"], arquivos["classificacao"], arquivos["planilha"]
     por_linha = {(l["id"], l["modo"]): l for l in linhas}
     por_resposta = {(r["id"], r["modo"]): r for r in respostas}
     saida = [
         "# Planilha de classificação manual",
         "",
         "Gerada por `python -m src.avaliacao.comparar`, a partir das respostas em "
-        "[data/avaliacao/resultados/respostas.json](../data/avaliacao/resultados/respostas.json). "
+        f"[{_no_repositorio(salvas)}]({_link(salvas, planilha)}). "
         "Para cada pergunta e modo, compare a resposta do sistema com a resposta esperada e "
         "escreva correta, incompleta ou alucinada.",
         "",
-        "As classes ficam em [data/avaliacao/classificacao.json](../data/avaliacao/classificacao.json), "
+        f"As classes ficam em [{_no_repositorio(classes)}]({_link(classes, planilha)}), "
         'no formato `{"P01": {"vetorial": "correta", "graphrag": "incompleta"}}`. As perguntas '
         "`sem_resposta` já entram nesse arquivo pela regra: recusa correta vira correta, e "
         "qualquer outra resposta vira alucinada. Rodar o executor de novo regenera esta planilha, "
@@ -403,17 +463,22 @@ def gerar_planilha(linhas: list[dict], perguntas: list[dict], respostas: list[di
     return "\n".join(saida)
 
 
-def so_relatorio() -> None:
-    """Refaz só o relatório a partir das respostas salvas e da classificação."""
+def so_relatorio(arquivos: dict | None = None) -> None:
+    """Refaz só o relatório a partir das respostas salvas e da classificação.
+
+    arquivos são os de caminhos() (padrão: os de sempre).
+    """
+    arquivos = arquivos or caminhos(None)
     perguntas = carregar_perguntas(ARQUIVO_PERGUNTAS)
-    respostas = json.loads(ARQUIVO_RESPOSTAS.read_text(encoding="utf-8"))
-    classificacao = carregar_classificacao(ARQUIVO_CLASSIFICACAO)
+    respostas = json.loads(arquivos["respostas"].read_text(encoding="utf-8"))
+    classificacao = carregar_classificacao(arquivos["classificacao"])
     linhas = avaliar_respostas_salvas(perguntas, respostas)
-    ARQUIVO_RELATORIO.write_text(
-        _relatorio(linhas, resumir(linhas, classificacao), datetime.now(), classificacao) + "\n",
+    arquivos["relatorio"].parent.mkdir(parents=True, exist_ok=True)
+    arquivos["relatorio"].write_text(
+        _relatorio(linhas, resumir(linhas, classificacao), datetime.now(), classificacao, arquivos) + "\n",
         encoding="utf-8",
     )
-    print(f"Relatório em {ARQUIVO_RELATORIO}")
+    print(f"Relatório em {arquivos['relatorio']}")
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -423,12 +488,20 @@ def main(argv: list[str] | None = None) -> None:
         action="store_true",
         help="refaz só o relatório a partir das respostas salvas, sem chamar o responder()",
     )
-    if parser.parse_args(argv).so_relatorio:
-        so_relatorio()
+    parser.add_argument(
+        "--rodada",
+        metavar="NOME",
+        help="grava respostas, classificação, relatório e planilha em arquivos próprios da rodada "
+        "(letras minúsculas, números e hífen), sem tocar nos da avaliação padrão",
+    )
+    args = parser.parse_args(argv)
+    arquivos = caminhos(args.rodada, RAIZ)
+    if args.so_relatorio:
+        so_relatorio(arquivos)
         return
 
     perguntas = carregar_perguntas()
-    existente = carregar_classificacao()  # antes de rodar: uma classe inválida para já aqui
+    existente = carregar_classificacao(arquivos["classificacao"])  # antes de rodar: uma classe inválida para já aqui
     linhas, respostas = [], []
     for pergunta in perguntas:
         for modo in MODOS:
@@ -445,20 +518,25 @@ def main(argv: list[str] | None = None) -> None:
 
     classificacao = acrescentar_classificacao(existente, classificar_sem_resposta(linhas))
 
-    ARQUIVO_RESPOSTAS.parent.mkdir(parents=True, exist_ok=True)
-    ARQUIVO_RESPOSTAS.write_text(json.dumps(respostas, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    ARQUIVO_CLASSIFICACAO.write_text(
+    for caminho in arquivos.values():
+        caminho.parent.mkdir(parents=True, exist_ok=True)
+    arquivos["respostas"].write_text(
+        json.dumps(respostas, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    arquivos["classificacao"].write_text(
         json.dumps(classificacao, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    ARQUIVO_RELATORIO.write_text(
-        _relatorio(linhas, resumir(linhas, classificacao), datetime.now(), classificacao) + "\n",
+    arquivos["relatorio"].write_text(
+        _relatorio(linhas, resumir(linhas, classificacao), datetime.now(), classificacao, arquivos) + "\n",
         encoding="utf-8",
     )
-    ARQUIVO_PLANILHA.write_text(gerar_planilha(linhas, perguntas, respostas) + "\n", encoding="utf-8")
-    print(f"Respostas em {ARQUIVO_RESPOSTAS.relative_to(RAIZ)}")
-    print(f"Classificação em {ARQUIVO_CLASSIFICACAO.relative_to(RAIZ)}")
-    print(f"Relatório em {ARQUIVO_RELATORIO.relative_to(RAIZ)}")
-    print(f"Planilha em {ARQUIVO_PLANILHA.relative_to(RAIZ)}")
+    arquivos["planilha"].write_text(
+        gerar_planilha(linhas, perguntas, respostas, arquivos) + "\n", encoding="utf-8"
+    )
+    print(f"Respostas em {_no_repositorio(arquivos['respostas'])}")
+    print(f"Classificação em {_no_repositorio(arquivos['classificacao'])}")
+    print(f"Relatório em {_no_repositorio(arquivos['relatorio'])}")
+    print(f"Planilha em {_no_repositorio(arquivos['planilha'])}")
 
 
 if __name__ == "__main__":

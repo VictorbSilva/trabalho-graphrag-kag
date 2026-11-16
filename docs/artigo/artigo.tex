@@ -338,44 +338,31 @@ PageRank, que convergiu dentro do limite de 100 iterações, é gravado em cada 
 recuperação para desempatar caminhos; as comunidades do Louvain são gravadas para a
 análise do grafo.
 
-A Tabela~\ref{tab:grafo} resume o grafo carregado com os 17 primeiros artigos extraídos
-pelo pipeline, antes da curadoria, e a Tabela~\ref{tab:pagerank} lista as entidades de
-maior PageRank. Das 265 comunidades encontradas pelo Louvain, 27 têm mais de uma entidade,
-e as maiores correspondem a temas reconhecíveis: Tim Berners-Lee, o CERN e a Web; a família
-C, C++, Java e Simula; a Sun Microsystems; e Dennis Ritchie, Ken Thompson, o Bell Labs e o
-Unix. Nenhuma relação ficou sem trecho de origem. O relatório de validação também apontou
-pontos a melhorar na extração: 9 pares de prováveis duplicatas (por exemplo, ``MIT'' e
-``Instituto de Tecnologia de Massachusetts''), 238 das 467 entidades sem nenhuma relação
-de domínio e 228 dos 567 trechos sem nenhuma entidade mencionada.
+A Tabela~\ref{tab:grafo} resume o grafo carregado com 31 dos
+32 artigos previstos, a partir da extração, antes da curadoria.
+A ingestão resultou em 1.440 trechos, 1.298 entidades e 745
+relações distintas entre entidades. Nenhuma relação ficou sem
+referência aos trechos de origem.
+
+O PageRank convergiu após 90 iterações, e o algoritmo Louvain
+identificou 719 comunidades, com modularidade aproximada de
+0,8424. As duas métricas foram atribuídas às 1.298 entidades.
+
+A resolução de entidades e a curadoria semântica identificaram
+47 relações aceitas, 10 rejeitadas e 907 pendentes de revisão.
+O banco carregado com os 31 artigos mantém as relações da
+extração completa, uma vez que a curadoria ainda é parcial.
 
 \begin{table}[ht]
 \centering
-\caption{Grafo carregado com os 17 artigos processados.}
+\caption{Grafo carregado com os 31 artigos processados.}
 \label{tab:grafo}
 \small
 \begin{tabular}{ccccc}
 \toprule
 \textbf{Documentos} & \textbf{Trechos} & \textbf{Entidades} & \textbf{Relações} & \textbf{Comunidades} \\
 \midrule
-17 & 567 & 467 & 259 & 265 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[ht]
-\centering
-\caption{As cinco entidades de maior PageRank.}
-\label{tab:pagerank}
-\small
-\begin{tabular}{clll}
-\toprule
-\textbf{\#} & \textbf{Entidade} & \textbf{Rótulo} & \textbf{PageRank} \\
-\midrule
-1 & Tim Berners-Lee & Pessoa & 11,24 \\
-2 & Sun Microsystems & Organizacao & 10,51 \\
-3 & Linus Torvalds & Pessoa & 5,99 \\
-4 & Alan Kay & Pessoa & 5,95 \\
-5 & James Gosling & Pessoa & 5,59 \\
+31 & 1440 & 1298 & 745 & 719 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -396,21 +383,52 @@ entre frases, com a última frase de cada trecho repetida no início do seguinte
 frase que sozinha passa do limite é quebrada, entre palavras. Com essa regra, 17 dos
 1.633 trechos do dataset (1\%) ainda passam de 128 \textit{tokens}.
 
-\textbf{Extração.} As entidades e relações são extraídas por um LLM, com o Groq
-(\texttt{openai/gpt-oss-120b}) e o Gemini (\texttt{gemini-3.5-flash-lite}). Os trechos de
-cada artigo são enviados em lotes de até cinco, e o prompt traz o schema do domínio. A
-resposta do modelo é validada contra o domínio: o que não respeita os tipos é descartado, e
-relações com a direção invertida são corrigidas. As respostas ficam em cache, para que uma
-nova execução não repita chamadas já feitas, e os limites de uso das APIs são tratados com
-novas tentativas espaçadas.
+\textbf{Extração.} As entidades e relações foram extraídas
+com modelos de linguagem de grande porte (LLMs), utilizando
+dois provedores: Groq (\texttt{openai/gpt-oss-120b}) e
+Google Gemini (\texttt{gemini-3.5-flash-lite}). A adoção do segundo provedor
+permitiu continuar o processamento após o esgotamento da
+cota de requisições do Groq.
 
-\textbf{Resolução de entidades.} A resolução atribui o identificador canônico e une
-entidades equivalentes a partir de mapeamentos explícitos. Uma triagem semântica
-conservadora sinaliza relações suspeitas para revisão manual, sem removê-las nem
-invertê-las automaticamente. Até a escrita deste texto, 31 dos 32 artigos tinham passado
-pela extração, e todos passaram na validação do ingestor. A resolução e a curadoria rodam
-sobre essa saída, mas ainda não são aplicadas ao banco: o grafo da
-Seção~\ref{sec:grafo-carregado} foi carregado com 17 artigos, antes delas.
+Os trechos foram enviados em pequenos lotes, acompanhados
+por um prompt que define os tipos de entidade, as relações
+permitidas, suas direções e as regras de extração de fatos
+sustentados pelo texto.
+
+As respostas foram validadas contra o schema do domínio.
+Entidades malformadas e relações com tipos incompatíveis
+foram descartadas, e relações com a direção invertida foram
+corrigidas. As respostas foram armazenadas em cache,
+preservando o progresso entre execuções e evitando
+requisições repetidas.
+
+\textbf{Resolução de entidades.} A resolução atribui
+identificadores canônicos e une entidades equivalentes
+por meio de mapeamentos explícitos. A triagem semântica
+conservadora identifica relações suspeitas para revisão
+manual, sem aprová-las automaticamente.
+
+Foram concluídos 31 dos 32 artigos previstos, correspondendo
+a 96,9\% do dataset. O artigo do Instituto de Tecnologia
+de Massachusetts (MIT) permaneceu incompleto devido ao
+limite diário de requisições da API Gemini.
+
+A avaliação da extração encontrou 21 das 24 relações esperadas
+(87,5\%), com caminhos completos em 10 das 12 perguntas
+utilizadas nessa verificação. Todos os 31 arquivos concluídos
+passaram pela validação do ingestor.
+
+\textbf{Testes do pipeline.} Foram implementados testes
+automatizados para a divisão dos documentos em trechos,
+a validação das saídas da extração e a resolução de
+entidades. Os testes de extração utilizam respostas
+simuladas, sem depender de chamadas reais às APIs dos
+modelos de linguagem.
+
+A suíte completa, executada com o Neo4j disponível,
+registrou 515 testes aprovados, nenhuma falha e nenhum
+teste ignorado. A execução apresentou apenas um aviso
+de depreciação de uma dependência do pytest.
 
 % =====================================================================
 \section{Recuperação}
@@ -585,16 +603,31 @@ seguida até o texto original. Na avaliação, o GraphRAG respondeu corretamente
 multi-hop a mais que o RAG vetorial, um indício que precisa ser confirmado com o corpus
 completo, e nenhum dos modos produziu resposta alucinada.
 
-As principais limitações são o dataset ainda parcial, com 31 dos 32 artigos extraídos e
-17 carregados no banco, ainda sem a curadoria, as duplicatas e lacunas apontadas pelo relatório de validação, a checagem
-de citações, que confere se o identificador existe, mas não se o trecho sustenta a
-afirmação, e a dependência do LLM na geração das consultas Cypher. Como trabalhos futuros,
-ficam o processamento de todo o dataset, uma resolução de entidades mais ampla, o uso de
-embeddings das entidades na recuperação, a verificação de que cada citação sustenta a
-afirmação e a repetição da avaliação com o dataset completo carregado e com mais perguntas.
+As principais limitações são a conclusão parcial do
+processamento, com 31 dos 32 artigos previstos, e a
+necessidade de ampliar a curadoria semântica. Das 964
+ocorrências de relações extraídas, 907 permanecem
+pendentes de revisão, o que impede considerar todo o
+grafo semanticamente validado. Também são limitações a
+checagem de citações, que confere se o identificador
+existe, mas não se o trecho sustenta a afirmação, e a
+dependência do LLM na geração das consultas Cypher.
+
+A avaliação inicial da recuperação também foi limitada
+pela quantidade de documentos disponíveis no momento
+de sua execução. Embora o banco tenha sido posteriormente
+ampliado, a comparação entre RAG vetorial e GraphRAG
+precisa ser repetida com os 31 artigos carregados.
+
+Como trabalhos futuros, destacam-se a conclusão do
+artigo restante, a ampliação da resolução de entidades,
+a revisão das relações pendentes, o uso de embeddings das
+entidades na recuperação, a verificação semântica das
+citações e uma nova avaliação com o grafo ampliado e com
+mais perguntas.
 
 % =====================================================================
-\section*{Créditos}
+\section{Créditos}
 
 O código está no repositório do projeto,
 \url{https://github.com/VictorbSilva/trabalho-graphrag-kag}, com instruções de reprodução.
